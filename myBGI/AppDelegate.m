@@ -1,12 +1,17 @@
 //
 //  AppDelegate.m
-//  myBGI
+//  InfoCapture
 //
-//  Created by lx on 2017/5/9.
-//  Copyright © 2017年 feng. All rights reserved.
+//  Created by feng on 14/04/2017.
+//  Copyright © 2017 feng. All rights reserved.
 //
 
 #import "AppDelegate.h"
+#import "UserManager.h"
+
+#import "IQKeyboardManager.h"
+
+#import "LoginNaviController.h"
 
 @interface AppDelegate ()
 
@@ -17,7 +22,42 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [self registerLoginNoti];
+    [IQKeyboardManager sharedManager].enable = YES;
+    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
+    [IQKeyboardManager sharedManager].shouldPlayInputClicks = YES;
+    [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
+    
     return YES;
+}
+
+- (void)registerLoginNoti{
+    //注册登录状态监听
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginStateChange:) name:KNOTIFICATION_LOGINCHANGE object:nil];
+    
+    if (kUserManager.userModel.isLogin == YES) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
+    }
+}
+
+#pragma mark - login changed
+
+- (void)loginStateChange:(NSNotification *)notification
+{
+    BOOL loginSuccess = [notification.object boolValue];
+    if (loginSuccess) {//登陆成功加载主窗口控制器
+        if (self.mainController == nil) {
+            self.mainController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MainTabBarController"];
+        }
+        self.window.rootViewController = self.mainController;
+    } else {//登陆失败加载登陆页面控制器
+        self.mainController = nil;
+        
+        LoginNaviController *loginNavigationController = [[UIStoryboard storyboardWithName:@"Login" bundle:nil] instantiateViewControllerWithIdentifier:@"LoginNaviController"];
+        self.window.rootViewController = loginNavigationController;
+    }
 }
 
 

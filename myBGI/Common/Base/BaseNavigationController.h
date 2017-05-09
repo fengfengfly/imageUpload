@@ -1,0 +1,13 @@
+//
+//  BaseNavigationController.h
+//  InfoCapture
+//
+//  Created by feng on 18/04/2017.
+//  Copyright © 2017 feng. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface BaseNavigationController : UINavigationController
+
+@end

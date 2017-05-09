@@ -1,17 +1,17 @@
 //
 //  AppDelegate.h
-//  myBGI
+//  InfoCapture
 //
-//  Created by lx on 2017/5/9.
-//  Copyright © 2017年 feng. All rights reserved.
+//  Created by feng on 14/04/2017.
+//  Copyright © 2017 feng. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MainTabBarController.h"
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
+@property (strong, nonatomic) MainTabBarController *mainController;
 
 @end
 
