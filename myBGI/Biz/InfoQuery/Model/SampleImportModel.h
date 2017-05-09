@@ -17,6 +17,7 @@
 @property (assign, nonatomic) NSInteger status;
 @property (strong, nonatomic) NSString *result;
 @property (strong, nonatomic) NSString *step;
+@property (strong, nonatomic) NSString *reportPath;
 /*
  {"addTest":null,
  "addTestUser":null,

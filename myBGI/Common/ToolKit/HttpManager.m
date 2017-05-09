@@ -158,5 +158,41 @@
     
 }
 
+//文件下载
+-(void)downloadFileWithUrlStr:(NSString *)urlString SavePath:(NSString *)docPath fileName:(NSString *)fileName progress:(void(^)(NSProgress * downloadProgress))progress complete:(void(^)(NSURLResponse *response, NSURL  *filePath, NSError *error))complete{
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
+        if (progress) {
+            progress(downloadProgress);
+        }
+        
+    } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+        NSString *path = [docPath stringByAppendingPathComponent:fileName];
+#if DEBUG
+        NSLog(@"filPath -- %@", path);
+#endif
+
+        return [NSURL fileURLWithPath:path];//这里返回的是文件下载到哪里的路径 要注意的是必须是携带协议file://
+    } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
+        
+        if (error) {
+
+        }else {
+            NSString *name = [filePath path];
+#if DEBUG
+            NSLog(@"finish_filePath -- %@", name);
+#endif
+        }
+        if (complete) {
+            complete(response, filePath, error);
+        }
+    }];
+    [task resume];//开始下载 要不然不会进行下载的
+    
+}
+
 
 @end

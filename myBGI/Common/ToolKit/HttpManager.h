@@ -36,5 +36,6 @@ typedef void (^HttpFailureResult)(id mError);
                        success:(HttpSuccessResult)successResult
                        failure:(HttpFailureResult)failureResult;
 
+-(void)downloadFileWithUrlStr:(NSString *)urlString SavePath:(NSString *)docPath fileName:(NSString *)fileName progress:(void(^)(NSProgress * downloadProgress))progress complete:(void(^)(NSURLResponse *response, NSURL  *filePath, NSError *error))complete;
 
 @end

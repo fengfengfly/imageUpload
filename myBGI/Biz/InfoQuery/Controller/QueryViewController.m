@@ -22,7 +22,7 @@
 #import "SimplePopupView.h"
 #import "UIView+SimplePopupView.h"
 #import "NSString+NilString.h"
-@interface QueryViewController ()<UITableViewDelegate, UITableViewDataSource, SimplePopupViewDelegate>
+@interface QueryViewController ()<UITableViewDelegate, UITableViewDataSource, SimplePopupViewDelegate, UIDocumentInteractionControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *searchBtn;
 @property (weak, nonatomic) IBOutlet UIButton *moreBtn;
 @property (weak, nonatomic) IBOutlet UITextField *searchTF;
@@ -363,11 +363,104 @@ static NSString *QueryCellID = @"QueryCellID";
 
 #pragma -mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    SampleImportModel *model = self.dataSource[indexPath.row];
+    NSString *urlPath = model.reportPath;
+    if (urlPath.length > 0) {
+        [self downloadUrlStr:urlPath fileName:nil];
+    }else{
+        [self showStatusBarWarningWithStatus:@"所选样本没有报告"];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 148;
+}
+
+
+#pragma mark Download Open Report
+- (void)downloadUrlStr:(NSString *)urlStr fileName:(NSString *)fileName{
+    NSString *httpStr = @"http:";
+    urlStr = [httpStr stringByAppendingString:urlStr];
+    urlStr = [urlStr stringByReplacingOccurrencesOfString:@"\\" withString:@"/"];
+    if (fileName == nil) {
+        fileName = [urlStr lastPathComponent];
+    }
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths lastObject];
+    
+    NSString *documentsDirectory = NSTemporaryDirectory();
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:fileName]; //docPath为文件名
+    
+    if ([fileManager fileExistsAtPath:filePath]) {
+        //文件已经存在,直接打开
+        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"是否打开报告" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * cancelAction  =[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        
+        [alertController addAction:cancelAction];
+        
+        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self openDocxWithPath:filePath];
+        }]];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+    }else {
+        //文件不存在,要下载
+        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"是否下载并打开报告" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * cancelAction  =[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        
+        [alertController addAction:cancelAction];
+        
+        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self hudSelfWithMessage:@"正在下载..."];
+            [[HttpManager sharedManager] downloadFileWithUrlStr:urlStr SavePath:documentsDirectory fileName:fileName progress:^(NSProgress *downloadProgress) {
+                
+            } complete:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                [self hideSelfHUD];
+                if (error) {
+                    [self showStatusBarWarningWithStatus:@"下载失败"];
+        
+                }else {
+                    NSString *pathStr = [filePath path];
+                    [self openDocxWithPath:pathStr];
+                }
+
+            }];
+            
+        }]];
+        
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+    }
+}
+
+-(void)openDocxWithPath:(NSString *)filePath {
+    
+    UIDocumentInteractionController *doc= [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:filePath]];
+    
+    doc.delegate = self;
+    [doc presentPreviewAnimated:YES];
+}
+
+#pragma mark - UIDocumentInteractionControllerDelegate
+//必须实现的代理方法 预览窗口以模式窗口的形式显示，因此需要在该方法中返回一个view controller ，作为预览窗口的父窗口。如果你不实现该方法，或者在该方法中返回 nil，或者你返回的 view controller 无法呈现模式窗口，则该预览窗口不会显示。
+
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller{
+    
+    return self;
+}
+
+- (UIView*)documentInteractionControllerViewForPreview:(UIDocumentInteractionController*)controller {
+    
+    return self.view;
+}
+
+- (CGRect)documentInteractionControllerRectForPreview:(UIDocumentInteractionController*)controller {
+    
+    return CGRectMake(0, 30, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 /*
