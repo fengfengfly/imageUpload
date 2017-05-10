@@ -7,10 +7,20 @@
 //
 
 #import "BaseView.h"
+#import "DeliverCountModel.h"
+
+typedef NS_ENUM(NSInteger, DeliverCountType){
+    DeliverCountTypeProduct = 0,
+    DeliverCountTypeCustomer
+};;
 
 @interface DeliverCountView : BaseView<UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *beginTimeTF;
 @property (weak, nonatomic) IBOutlet UITextField *endTimeTF;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *searchBtn;
+
+@property (assign, nonatomic) NSInteger dataPage;
 @property (strong, nonatomic) NSMutableArray *dataSource;
+@property (assign, nonatomic) DeliverCountType countType;
 @end

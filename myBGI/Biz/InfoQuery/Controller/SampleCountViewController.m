@@ -47,6 +47,7 @@
     if (_productView == nil) {
         _productView = [[[NSBundle mainBundle] loadNibNamed:@"SampleCountView" owner:nil options:nil] firstObject];
         _productView.frame = self.carouselView.frame;
+        _productView.countType = SampleCountTypeProduct;
     }
     return _productView;
 }
@@ -55,11 +56,13 @@
     if (_customerView == nil) {
         _customerView = [[[NSBundle mainBundle] loadNibNamed:@"SampleCountView" owner:nil options:nil] firstObject];
         _customerView.frame = self.carouselView.frame;
+        _customerView.countType = SampleCountTypeCustomer;
     }
     return _customerView;
 }
 
 - (IBAction)segmentClick:(UISegmentedControl *)sender {
+    [self.carouselView scrollToItemAtIndex:sender.selectedSegmentIndex animated:YES];
 }
 
 #pragma mark iCarouselDataSource
@@ -111,15 +114,8 @@
     //    NSLog(@"%s", __func__);
     [carousel.visibleItemViews enumerateObjectsUsingBlock:^(UIView *obj, NSUInteger idx, BOOL *stop) {
         
-        
     }];
-    if (carousel.currentItemIndex == 1) {
-        
-        
-    }else if(carousel.currentItemIndex == 2){
-        
-    }
-    
+    self.segment.selectedSegmentIndex = carousel.currentItemIndex;
 }
 
 

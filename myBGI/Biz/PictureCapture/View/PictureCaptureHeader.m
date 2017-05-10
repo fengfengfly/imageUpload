@@ -14,11 +14,11 @@
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
-    if (self.userInteractionEnabled == NO && [self pointInside:point withEvent:event]) {
-        if (self.userInterectBlock) {
-            self.userInterectBlock();
-        }
-    }
+//    if (self.userInteractionEnabled == NO && [self pointInside:point withEvent:event]) {
+//        if (self.userInterectBlock) {
+//            self.userInterectBlock();
+//        }
+//    }
     return [super hitTest:point withEvent:event];
 }
 

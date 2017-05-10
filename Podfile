@@ -19,7 +19,7 @@ pod 'KMNavigationBarTransition'
 pod 'MJRefresh'
 #pod 'PopoverView'
 #pod 'XLForm', '3.2' #个人资料填写UI
-#pod 'FSCalendar' #日历
+pod 'FSCalendar' #日历
 
 #pod 'YYText'
 #pod 'SVProgressHUD'

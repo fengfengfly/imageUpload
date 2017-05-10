@@ -13,6 +13,8 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.badgeLabel.layer.masksToBounds = YES;
+    self.badgeLabel.layer.cornerRadius = self.badgeLabel.frame.size.height/2;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

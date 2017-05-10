@@ -9,6 +9,7 @@
 #import "PictureCaptureViewcontroller.h"
 #import "UIImage+Compression.h"
 #import "TZImagePickerController.h"
+#import "TZImageManager.h"
 #import<AVFoundation/AVCaptureDevice.h>
 #import <AVFoundation/AVMediaFormat.h>
 
@@ -440,7 +441,6 @@ static NSString *PicCellID = @"PicCellID";
 
 #pragma mark - UIImagePickerControllerDelegate
 
-
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
@@ -473,7 +473,6 @@ static NSString *PicCellID = @"PicCellID";
 }
 
 #pragma mark TZImagePickerControllerDelegate
-
 // 用户点击了取消
 - (void)imagePickerControllerDidCancel:(TZImagePickerController *)picker
 {
@@ -492,10 +491,13 @@ static NSString *PicCellID = @"PicCellID";
 //    model.customerName=@"123";
 //    model.customerCode=@"123";
 //    self.addingModel.customer = model;
-    [self.addingModel savePicture:photos.firstObject];
-    [self addModelToDataSource];
-    [self.collectionView reloadData];
+    [[TZImageManager manager] getOriginalPhotoWithAsset:assets.firstObject completion:^(UIImage *photo, NSDictionary *info) {
+        [self.addingModel savePicture:photo];
+        [self addModelToDataSource];
+        [self.collectionView reloadData];
+    }];
     [picker dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 #pragma mark UICollectionViewDataSource
@@ -609,19 +611,18 @@ static NSString *PicCellID = @"PicCellID";
 
 #pragma mark UIPickerView DataSource Method
 
-//指定pickerview有几个表盘
+
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    return 1;//第一个展示字母、第二个展示数字
+    return 1;
 }
 
-//指定每个表盘上有几行数据
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     NSInteger result = 0;
     switch (component) {
         case 0:
-            result = self.inputStyles.count;//根据数组的元素个数返回几行数据
+            result = self.inputStyles.count;
             break;
         default:
             break;
@@ -632,7 +633,6 @@ static NSString *PicCellID = @"PicCellID";
 
 #pragma mark UIPickerView Delegate Method
 
-//指定每行如何展示数据（此处和tableview类似）
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     NSString * title = nil;

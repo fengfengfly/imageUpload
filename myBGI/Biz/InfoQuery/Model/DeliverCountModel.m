@@ -6,8 +6,8 @@
 //  Copyright © 2017 feng. All rights reserved.
 //
 
-#import "DeliverInfoModel.h"
+#import "DeliverCountModel.h"
 
-@implementation DeliverInfoModel
+@implementation DeliverCountModel
 
 @end
