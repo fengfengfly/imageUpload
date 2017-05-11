@@ -35,7 +35,7 @@
         self.imgV.image = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:[model.picSmallStr lastPathComponent]];
     }else{
         UIImage *image = [UIImage imageWithContentsOfFile:model.picSmallStr];
-        [[SDImageCache sharedImageCache] storeImage:image forKey:[model.picSmallStr lastPathComponent]  toDisk:NO];
+        [[SDImageCache sharedImageCache] storeImage:image forKey:[model.picSmallStr lastPathComponent] toDisk:NO completion:nil];
         self.imgV.image = image;
     }
     model.uploadDelegate = self;

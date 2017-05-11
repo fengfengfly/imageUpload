@@ -111,7 +111,7 @@
                         </mask>
                     </variation>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bIR-ez-DID">
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bIR-ez-DID">
                     <rect key="frame" x="10" y="101" width="399" height="0.5"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     <constraints>
@@ -126,8 +126,7 @@
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <inset key="titleEdgeInsets" minX="-25" minY="34" maxX="0.0" maxY="0.0"/>
-                    <inset key="imageEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" title="相机" image="camera">
+                    <state key="normal" image="camera">
                         <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </state>
                 </button>
@@ -142,8 +141,7 @@
                     <rect key="frame" x="80" y="121" width="50" height="50"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <inset key="titleEdgeInsets" minX="-25" minY="34" maxX="0.0" maxY="0.0"/>
-                    <inset key="imageEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" title="相册" image="camera">
+                    <state key="normal" image="picture">
                         <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </state>
                 </button>
@@ -202,6 +200,7 @@
     </objects>
     <resources>
         <image name="arrowRight" width="11" height="18"/>
-        <image name="camera" width="20" height="20"/>
+        <image name="camera" width="56" height="55"/>
+        <image name="picture" width="44" height="44"/>
     </resources>
 </document>

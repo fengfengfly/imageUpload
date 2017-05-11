@@ -180,8 +180,9 @@
         }
         
     }
-    [[SDImageCache sharedImageCache] removeImageForKey:[self.picBigStr lastPathComponent]];
-    [[SDImageCache sharedImageCache] removeImageForKey:[self.picSmallStr lastPathComponent]];
+    
+    [[SDImageCache sharedImageCache] removeImageForKey:[self.picBigStr lastPathComponent] withCompletion:nil];
+    [[SDImageCache sharedImageCache] removeImageForKey:[self.picSmallStr lastPathComponent] withCompletion:nil];
 
 }
 

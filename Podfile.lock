@@ -14,17 +14,18 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - FSCalendar (2.0.1)
-  - iCarousel (1.8.2)
-  - IQKeyboardManager (4.0.1)
-  - JDStatusBarNotification (1.5.3)
-  - KMNavigationBarTransition (0.0.5)
-  - MBProgressHUD (0.9.2)
-  - MJExtension (3.0.10)
-  - MJRefresh (3.1.0)
-  - SDWebImage (3.7.5):
-    - SDWebImage/Core (= 3.7.5)
-  - SDWebImage/Core (3.7.5)
+  - FSCalendar (2.7.6)
+  - iCarousel (1.8.3)
+  - IQKeyboardManager (4.0.9)
+  - JDStatusBarNotification (1.5.5)
+  - KMNavigationBarTransition (1.0.0)
+  - Masonry (1.0.2)
+  - MBProgressHUD (1.0.0)
+  - MJExtension (3.0.13)
+  - MJRefresh (3.1.12)
+  - SDWebImage (4.0.0):
+    - SDWebImage/Core (= 4.0.0)
+  - SDWebImage/Core (4.0.0)
 
 DEPENDENCIES:
   - AFNetworking
@@ -33,6 +34,7 @@ DEPENDENCIES:
   - IQKeyboardManager
   - JDStatusBarNotification
   - KMNavigationBarTransition
+  - Masonry
   - MBProgressHUD
   - MJExtension
   - MJRefresh
@@ -40,16 +42,17 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  FSCalendar: 18117308f5876a8f6f0fe572085d543580c2c5e5
-  iCarousel: 67c8a43da5a46795b56aadfc96cd36a16f6149b2
-  IQKeyboardManager: 0c11a0cb402a621f7aa1aff506f60ab6d2388969
-  JDStatusBarNotification: 29413865af11c862c17180610b0f46a21118b412
-  KMNavigationBarTransition: b379ae613164f5bb60fe87403888569aaf9b1e94
-  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
-  MJExtension: d86aacb740c87519d20e3cca55b6fa4be6cc7548
-  MJRefresh: 743e6404967d1c2c688472ea3ecfde247d872db4
-  SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
+  FSCalendar: feef792968ca0166bafc93e02fcd840b07d256e5
+  iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
+  IQKeyboardManager: 322c7405df3eb5f7e50dede32ea937bf3d4364e0
+  JDStatusBarNotification: 2b4f29bd68a60d7aa2f190b5265f1ce59c18aaf8
+  KMNavigationBarTransition: b3fb8337f7a1e4542add07fd6c45fb9980794d59
+  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  MJExtension: 5932755f451458eefa24239358817f8d291240c7
+  MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
+  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
 
-PODFILE CHECKSUM: e91fa0b3cb2a4162bd60e95dd81863f300d49acc
+PODFILE CHECKSUM: ecbafcd2f4c37dfb57f9bba5551c8c0a91b475a7
 
 COCOAPODS: 1.2.1

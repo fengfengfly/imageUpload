@@ -19,5 +19,7 @@ typedef void(^expandChange)(NSInteger section, BOOL isExpand);
 @property (weak, nonatomic) PicSectionModel *sectionModel;
 @property (copy, nonatomic) expandChange statusBlock;
 @property (assign, nonatomic) NSInteger section;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *indicatorBtnWidthConstraint;
+
 - (void)configHeaderSectionModel:(PicSectionModel *)sectionModel isExpand:(BOOL)isExpand section:(NSInteger)section block:(expandChange)block;
 @end

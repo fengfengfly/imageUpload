@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *userNameTF;
 @property (weak, nonatomic) IBOutlet UITextField *pwdTF;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
+@property (weak, nonatomic) IBOutlet UIImageView *loginIcon;
 
 @end
 
@@ -29,6 +30,8 @@
     [self.loginBtn setBackgroundImage:backImage forState:UIControlStateNormal];
     self.loginBtn.layer.masksToBounds = YES;
     self.loginBtn.layer.cornerRadius = self.loginBtn.bounds.size.height / 2;
+    self.loginIcon.layer.masksToBounds = YES;
+    self.loginIcon.layer.cornerRadius = self.loginIcon.frame.size.width/2;
 }
 
 //状态栏颜色

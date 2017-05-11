@@ -234,6 +234,7 @@ static NSString *PicCellID = @"PicCellID";
         cell.userInteractionEnabled = NO;
         cell.indicatorBtn.hidden = YES;
         cell.uploadBtn.hidden = YES;
+        cell.indicatorBtnWidthConstraint.constant = 0;
     }
     
     PicSectionModel *sectionModel = self.dataSource[self.expandSection];

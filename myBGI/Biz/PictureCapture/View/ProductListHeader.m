@@ -8,7 +8,6 @@
 
 #import "ProductListHeader.h"
 
-
 @implementation ProductListHeader
 static NSString *CellID = @"CellID";
 - (void)awakeFromNib{

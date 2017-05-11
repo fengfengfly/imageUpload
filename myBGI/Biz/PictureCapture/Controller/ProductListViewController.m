@@ -254,9 +254,7 @@ static NSString *ProductCellID = @"ProductCellID";
     if (self.allowMultiSelect) {
         BOOL checkResult = [self containModel:model inArray:self.selectedArray remove:NO];
         if (checkResult) {
-            cell.selected = YES;
-        }else{
-            cell.selected = NO;
+            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
         }
     }
     return cell;

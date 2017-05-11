@@ -31,18 +31,24 @@
 - (void)setViewControllrs
 {
     //导航
-    NSArray *navNameArr = @[@"PictureCaptureNavigationController", @"InfoQueryNavigationController"];
+    NSArray *navNameArr = @[@"PictureCaptureNavigationController",
+                            @"InfoQueryNavigationController",
+                            @"UserCenterNavigationController"];
     NSArray *sbNameArr = @[@"PictureCapture",
-                           @"InfoQuery"];
+                           @"InfoQuery",
+                           @"UserCenter"];
     //控制器名称
     NSArray *vcTitleArr = @[@"拍照采集",
-                            @"查询/统计"];
+                            @"查询统计",
+                            @"我的"];
     //tabBarItem未选中时的图片
     NSArray *vcImgArr = @[@"拍照采集",
-                          @"查询统计"];
+                          @"查询统计",
+                          @"我的"];
     //tabBarItem选中时的图片
     NSArray *vcSelectedImgArr = @[@"拍照采集选中",
-                                  @"查询统计选中"];
+                                  @"查询统计选中",
+                                  @"我的选中"];
     //tabBarItem未选中时的文字颜色
     UIColor *titleColor = GrayFontColor;
     //tabBarItem选中时的文字颜色

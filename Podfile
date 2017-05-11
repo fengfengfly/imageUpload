@@ -7,8 +7,8 @@ pod 'MJExtension' #转换速度快、使用简单方便的字典转模型框架
 pod 'AFNetworking' #网络通讯
 pod 'SDWebImage' #图片缓存和异步加载
 #pod 'SDWebImage-ProgressView' #图片加载进度条
-#pod 'FMDB' #SQLite
-#pod 'Masonry' #autolayout
+#pod 'FMDB' #SQLite
+pod 'Masonry' #autolayout
 pod 'iCarousel' #左右滑动
 pod 'MBProgressHUD' #提示
 pod 'JDStatusBarNotification' #状态栏提示

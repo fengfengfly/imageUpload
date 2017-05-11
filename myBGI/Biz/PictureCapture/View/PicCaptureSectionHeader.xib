@@ -46,13 +46,13 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Fr-9p-cl5">
-                    <rect key="frame" x="280" y="19" width="30" height="30"/>
+                    <rect key="frame" x="280" y="19.5" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="437-Ou-cE4"/>
                         <constraint firstAttribute="width" constant="30" id="9Mu-Nv-i4S"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <state key="normal" title="上传">
+                    <state key="normal" image="uploadBtn">
                         <color key="titleColor" red="0.0" green="0.58823529409999997" blue="0.58823529409999997" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                 </button>
@@ -85,6 +85,7 @@
             </constraints>
             <connections>
                 <outlet property="indicatorBtn" destination="BYe-5L-A8N" id="amX-px-mYO"/>
+                <outlet property="indicatorBtnWidthConstraint" destination="bpm-xH-CNB" id="vTr-Uv-CCh"/>
                 <outlet property="numL" destination="ffS-1u-Dxc" id="pDu-1I-bz4"/>
                 <outlet property="sectionTitleL" destination="yH4-Dy-Bp1" id="Hjz-VR-rWF"/>
                 <outlet property="uploadBtn" destination="7Fr-9p-cl5" id="6Zk-ws-bxK"/>
@@ -95,5 +96,6 @@
     <resources>
         <image name="arrowDown" width="17" height="11"/>
         <image name="arrowUp" width="17" height="11"/>
+        <image name="uploadBtn" width="17" height="17"/>
     </resources>
 </document>

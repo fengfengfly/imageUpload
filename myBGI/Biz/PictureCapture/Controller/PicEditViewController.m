@@ -115,7 +115,7 @@ static NSString *PicCellID = @"PicCellID";
 
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.captureHeader.frame = CGRectMake(0, -kCaptureHeaderH, SCREEN_WIDTH, kCaptureHeaderH);
+    self.captureHeader.frame = CGRectMake(0, -kCaptureHeaderH + 60, SCREEN_WIDTH, kCaptureHeaderH - 60);
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -143,7 +143,7 @@ static NSString *PicCellID = @"PicCellID";
 
 - (void)setCurrentModel:(PicCaptureModel *)currentModel{
     self.captureHeader.customerTF.text = currentModel.customer.customerName;
-    self.captureHeader.productTF.text = currentModel.productNameStr;
+    self.captureHeader.productTF.text = currentModel.productCodeStr;
     if (currentModel.readNum > 0) {
         
         self.captureHeader.inputStyleTF.text = self.inputStyles[currentModel.readNum - 1];
@@ -167,7 +167,7 @@ static NSString *PicCellID = @"PicCellID";
 - (PictureCaptureHeader *)captureHeader{
     if (_captureHeader == nil) {
         PictureCaptureHeader *header = [[[NSBundle mainBundle] loadNibNamed:@"PictureCaptureHeader" owner:nil options:nil] firstObject];
-        header.frame = CGRectMake(0, 0, SCREEN_WIDTH, kCaptureHeaderH);
+        header.frame = CGRectMake(0, - kCaptureHeaderH + 60, SCREEN_WIDTH, kCaptureHeaderH - 60);
         _captureHeader = header;
     }
     return _captureHeader;
@@ -180,7 +180,7 @@ static NSString *PicCellID = @"PicCellID";
     [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass([PicCaptureSectionHeader class]) bundle:[NSBundle mainBundle]] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SectionHeaderID];
     [self.collectionView registerNib:[UINib nibWithNibName:@"PicCaptureCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:PicCellID];
     
-    self.collectionView.contentInset = UIEdgeInsetsMake(kCaptureHeaderH, 0, 0 ,0);
+    self.collectionView.contentInset = UIEdgeInsetsMake(kCaptureHeaderH - 60, 0, 0 ,0);
     [self.collectionView addSubview:self.captureHeader];
 }
 
@@ -199,7 +199,7 @@ static NSString *PicCellID = @"PicCellID";
     
     customerListVC.chooseBlock = ^(CustomerModel *model){
         
-        if (![model.customerCode isEqualToString:self.currentModel.customer.customerCode]) {
+        if (![model.customerCode isEqualToString:self.captureHeader.customerTF.text]) {
             self.captureHeader.customerTF.text = model.customerName;
 //            self.currentModel.customer = model;
 //            [self changeSection];
@@ -219,9 +219,14 @@ static NSString *PicCellID = @"PicCellID";
     
     ProductListViewController *productListVC = [[UIStoryboard storyboardWithName:@"PictureCapture" bundle:nil] instantiateViewControllerWithIdentifier:@"ProductListViewController"];
     productListVC.allowMultiSelect = YES;
+    if (self.currentModel.productArray.count > 0) {
+        
+        productListVC.selectedArray = self.currentModel.productArray;
+    }
     productListVC.chooseBlock = ^(NSMutableArray *productArray){
-//        self.currentModel.productArray = productArray;
+        self.currentModel.productArray = productArray;
         self.captureHeader.productTF.text = [self.currentModel productCodeStr];
+        
         [self changeAllProduct:productArray];
     };
     
@@ -242,6 +247,10 @@ static NSString *PicCellID = @"PicCellID";
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         cell = (PicCaptureSectionHeader *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SectionHeaderID forIndexPath:indexPath];
+        cell.userInteractionEnabled = NO;
+        cell.indicatorBtn.hidden = YES;
+        cell.uploadBtn.hidden = YES;
+        cell.indicatorBtnWidthConstraint.constant = 0;
     }
     PicSectionModel *sectionModel = self.dataSource[indexPath.section];
     

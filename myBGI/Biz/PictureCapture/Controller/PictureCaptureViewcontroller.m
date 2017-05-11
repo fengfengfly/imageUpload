@@ -330,6 +330,10 @@ static NSString *PicCellID = @"PicCellID";
     
     ProductListViewController *productListVC = [[UIStoryboard storyboardWithName:@"PictureCapture" bundle:nil] instantiateViewControllerWithIdentifier:@"ProductListViewController"];
     productListVC.allowMultiSelect = YES;
+    if (self.addingModel.productArray.count > 0) {
+        
+        productListVC.selectedArray = self.addingModel.productArray;
+    }
     productListVC.chooseBlock = ^(NSMutableArray *productArray){
         self.addingModel.productArray = productArray;
         self.captureHeader.productTF.text = [self.addingModel productCodeStr];

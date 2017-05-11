@@ -15,6 +15,9 @@
 #import "NSString+NilString.h"
 #import "NSMutableDictionary+Safe.h"
 
+#import "UIView+SelfController.h"
+#import "CalendarView.h"
+
 #import "QueryCountCell.h"
 
 @implementation DeliverCountView
@@ -37,11 +40,48 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf reloadDataSource];
     }];
+    self.beginTimeTF.text = [self makeTodayStr];
+    self.endTimeTF.text = [self makeTodayStr];
 }
+- (NSString *)makeTodayStr{
+    NSString *dateStr = nil;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd";
+    NSDate *today = [NSDate date];
+    dateStr = [dateFormatter stringFromDate:today];
+    return dateStr;
+}
+- (void)showCalendarDateStr:(NSString *)date willSelected:(BOOL (^)(NSString *willDaetStr))willBlock finishBlock:(void(^)(NSString *dateStr))finishBlock{
+    UIViewController *controller = [self getCurrentViewController];
+    CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds];
+    calendarV.willSelectBlock = willBlock;
+    calendarV.selectedBlock = finishBlock;
+    [calendarV.calendar selectDate:[calendarV.dateFormatter dateFromString:date] scrollToDate:YES];
+    [controller.view addSubview:calendarV];
+    
+}
+
 - (IBAction)chooseBeginTimeClick:(UIButton *)sender {
+    
+    [self showCalendarDateStr:self.beginTimeTF.text willSelected:^BOOL(NSString *willDateStr) {
+        
+        return YES;
+    } finishBlock:^(NSString *dateStr) {
+        
+        self.beginTimeTF.text = dateStr;
+        
+    }];
 }
 
 - (IBAction)chooseEndTimeClick:(UIButton *)sender {
+    
+    [self showCalendarDateStr:self.endTimeTF.text willSelected:^BOOL(NSString *willDateStr){
+        
+        return YES;
+    } finishBlock:^(NSString *dateStr) {
+        
+        self.endTimeTF.text = dateStr;
+    }];
 }
 
 - (IBAction)searchBtnClick:(UIButton *)sender {
@@ -58,6 +98,11 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
 }
 
 - (void)reloadDataSource{
+    NSComparisonResult result = [self.beginTimeTF.text compare:self.self.endTimeTF.text];
+    if (result == NSOrderedDescending) {
+        [self showStatusBarWarningWithStatus:@"开始时间不能晚于结束时间"];
+        return;
+    }
     [MBProgressHUD showAnimotionHUDOnView:self];
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                   kUserManager.userModel.token, @"token",
@@ -110,6 +155,7 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     QueryCountCell *cell = [tableView dequeueReusableCellWithIdentifier:DeliverCountCellID];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     DeliverCountModel *model = self.dataSource[indexPath.row];
     if (self.countType == DeliverCountTypeProduct) {
         cell.CodeLabel.text = model.productCode;

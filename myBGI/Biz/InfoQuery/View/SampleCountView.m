@@ -16,6 +16,9 @@
 #import "NSString+NilString.h"
 #import "NSMutableDictionary+Safe.h"
 
+#import "UIView+SelfController.h"
+#import "CalendarView.h"
+
 #import "QueryCountCell.h"
 
 @implementation SampleCountView
@@ -73,7 +76,17 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
     // the middle button is to make the Done button align to right
     [toolBar setItems:@[cancelButton,flexibleButton,titleButton,flexibleButton,doneButton]];
     self.timeTypeTF.inputAccessoryView = toolBar;
-    
+    self.beginTimeTF.text = [self makeTodayStr];
+    self.endTimeTF.text = [self makeTodayStr];
+}
+
+- (NSString *)makeTodayStr{
+    NSString *dateStr = nil;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd";
+    NSDate *today = [NSDate date];
+    dateStr = [dateFormatter stringFromDate:today];
+    return dateStr;
 }
 
 
@@ -86,15 +99,39 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
     [self.timeTypeTF resignFirstResponder];
 }
 
-- (IBAction)timeTypeClick:(UIButton *)sender {
-   
+- (void)showCalendarDateStr:(NSString *)date willSelected:(BOOL (^)(NSString *willDaetStr))willBlock finishBlock:(void(^)(NSString *dateStr))finishBlock{
+    UIViewController *controller = [self getCurrentViewController];
+    CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds];
+    calendarV.willSelectBlock = willBlock;
+    calendarV.selectedBlock = finishBlock;
+    [calendarV.calendar selectDate:[calendarV.dateFormatter dateFromString:date] scrollToDate:YES];
+    [controller.view addSubview:calendarV];
 }
+
 - (IBAction)beginTimeClick:(UIButton *)sender {
+   
+    [self showCalendarDateStr:self.beginTimeTF.text willSelected:^BOOL(NSString *willDateStr) {
+       
+        return YES;
+    } finishBlock:^(NSString *dateStr) {
+        
+        self.beginTimeTF.text = dateStr;
+        
+    }];
     
 }
 - (IBAction)endTimeClick:(UIButton *)sender {
     
+    [self showCalendarDateStr:self.endTimeTF.text willSelected:^BOOL(NSString *willDateStr){
+        
+        return YES;
+    } finishBlock:^(NSString *dateStr) {
+        
+        self.endTimeTF.text = dateStr;
+        
+    }];
 }
+
 
 - (IBAction)searchBtnClick:(UIButton *)sender {
     self.dataPage = 1;
@@ -117,6 +154,11 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
 }
 
 - (void)reloadDataSource{
+    NSComparisonResult result = [self.beginTimeTF.text compare:self.self.endTimeTF.text];
+    if (result == NSOrderedDescending) {
+        [self showStatusBarWarningWithStatus:@"开始时间不能晚于结束时间"];
+        return;
+    }
     [MBProgressHUD showAnimotionHUDOnView:self];
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                   kUserManager.userModel.token, @"token",
@@ -171,6 +213,7 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     QueryCountCell *cell = [tableView dequeueReusableCellWithIdentifier:SampleCountCellID];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     DeliverCountModel *model = self.dataSource[indexPath.row];
     if (self.countType == SampleCountTypeProduct) {
         cell.CodeLabel.text = model.productCode;

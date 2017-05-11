@@ -31,6 +31,6 @@
 #define BaseBarbackgroundColor RGBColor(41, 169, 255, 1)
 #define ScreenColor RGBColor(239, 239, 244, 1)
 #define GrayFontColor RGBColor(105, 105, 105, 1)
-#define ProjectSubjectColor RGBColor(253, 71, 60, 1)
+#define ProjectSubjectColor RGBColor(50, 156, 151, 1)
 
 #endif /* AppMacro_h */
