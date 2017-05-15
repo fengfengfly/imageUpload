@@ -19,7 +19,7 @@
     
     return _sharedManager;
 }
-//不带缓存
+//不带缓存Json请求头
 - (NSURLSessionDataTask *)sendPostJsonRequestWithBodyURLString:(NSString *)bodyURLString
                                                          parameters:(id)parameters
                                                             success:(HttpSuccessResult)successResult
@@ -28,7 +28,7 @@
     return [self postHttpRequestWithBaseURLString:domainURL bodyURLString:bodyURLString isCache:NO isHttpReq:NO parameters:parameters success:successResult failure:failureResult];
 }
 
-//不带缓存
+//不带缓存请求头x-www-form-urlencoded
 - (NSURLSessionDataTask *)sendPostUrlRequestWithBodyURLString:(NSString *)bodyURLString
                                                    parameters:(id)parameters
                                                       success:(HttpSuccessResult)successResult
@@ -92,7 +92,7 @@
         
     }];
 }
-
+//上传
 -(void)uploadWithBaseURLString:(NSString *)baseURLString
                      BodyURLString:(NSString *)bodyURLString
                     parameters:(id)parameters

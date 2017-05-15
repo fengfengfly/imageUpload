@@ -14,6 +14,8 @@
 
 //登录
 #define kLoginUrl @"/Front/app/appLogin.action"
+//退出登录
+#define kLogoutUrl @"/Front/app/appLogout.action"
 //查询医院
 #define kQueryCustomer @"/Front/app/queryCustomerForApp.action"
 //查询产品

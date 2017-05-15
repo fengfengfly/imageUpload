@@ -52,7 +52,7 @@
     //tabBarItem未选中时的文字颜色
     UIColor *titleColor = GrayFontColor;
     //tabBarItem选中时的文字颜色
-    UIColor *selectedTitleColor = ProjectSubjectColor;
+    UIColor *selectedTitleColor = kSubjectColor;
     
     //放置viewControllers
     NSMutableArray *vcArr = [NSMutableArray array];

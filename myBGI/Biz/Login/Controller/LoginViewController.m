@@ -8,7 +8,9 @@
 
 #import "LoginViewController.h"
 #import "UIImage+GradientColor.h"
+#import "UIImage+Corner.h"
 #import "MBProgressHUD+HYExtension.h"
+
 #import "UserManager.h"
 
 @interface LoginViewController ()
@@ -26,12 +28,34 @@
     // Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden = YES;
     
-     UIImage *backImage = [UIImage gradientImageRect:self.loginBtn.bounds inputPoint0:CGPointMake(0, 0) inputPoint1:CGPointMake(1, 1) inputColor0:RGBColor(0, 120, 155, 1) inputColor1:RGBColor(2, 161, 155, 1)];
-    [self.loginBtn setBackgroundImage:backImage forState:UIControlStateNormal];
-    self.loginBtn.layer.masksToBounds = YES;
-    self.loginBtn.layer.cornerRadius = self.loginBtn.bounds.size.height / 2;
     self.loginIcon.layer.masksToBounds = YES;
     self.loginIcon.layer.cornerRadius = self.loginIcon.frame.size.width/2;
+    
+     UIImage *backImage = [UIImage gradientImageRect:self.loginBtn.bounds inputPoint0:CGPointMake(0, 0) inputPoint1:CGPointMake(1, 1) inputColor0:RGBColor(0, 120, 155, 1) inputColor1:RGBColor(2, 161, 155, 1)];
+    
+//    [self.loginBtn setBackgroundImage:backImage forState:UIControlStateNormal];
+    
+    CALayer *sublayer =[CALayer layer];
+    sublayer.backgroundColor =[UIColor whiteColor].CGColor;
+    sublayer.shadowOffset = CGSizeMake(3, 10);
+    sublayer.shadowRadius =22;
+    sublayer.shadowColor =[UIColor blackColor].CGColor;
+    sublayer.shadowOpacity =0.8;
+    sublayer.frame = self.loginBtn.bounds;
+    sublayer.cornerRadius =22;
+    [self.loginBtn.layer addSublayer:sublayer];
+    
+    CALayer *imageLayer =[CALayer layer];
+    imageLayer.frame = sublayer.bounds;
+    imageLayer.cornerRadius =self.loginBtn.bounds.size.height / 2;
+    imageLayer.contents =(id)backImage.CGImage;
+    imageLayer.masksToBounds =YES;
+    [sublayer addSublayer:imageLayer];
+    
+//    self.loginBtn.imageView.backgroundColor = [UIColor clearColor];
+//    self.loginBtn.layer.shadowOffset =  CGSizeMake(1, 10);
+//    self.loginBtn.layer.shadowOpacity = 0.8;
+//    self.loginBtn.layer.shadowColor =  [UIColor blackColor].CGColor;
 }
 
 //状态栏颜色

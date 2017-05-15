@@ -23,4 +23,5 @@ typedef NS_ENUM(NSInteger, DeliverCountType){
 @property (assign, nonatomic) NSInteger dataPage;
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (assign, nonatomic) DeliverCountType countType;
+
 @end

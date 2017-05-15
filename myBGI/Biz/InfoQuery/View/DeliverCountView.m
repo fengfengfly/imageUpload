@@ -22,9 +22,11 @@
 
 @implementation DeliverCountView
 static NSString *DeliverCountCellID = @"DeliverCountCellID";
+
 -(void)awakeFromNib{
     [super awakeFromNib];
     self.dataPage = 1;
+    self.tableView.backgroundColor = kBgColor;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -43,6 +45,8 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
     self.beginTimeTF.text = [self makeTodayStr];
     self.endTimeTF.text = [self makeTodayStr];
 }
+
+
 - (NSString *)makeTodayStr{
     NSString *dateStr = nil;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -53,11 +57,13 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
 }
 - (void)showCalendarDateStr:(NSString *)date willSelected:(BOOL (^)(NSString *willDaetStr))willBlock finishBlock:(void(^)(NSString *dateStr))finishBlock{
     UIViewController *controller = [self getCurrentViewController];
-    CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds];
+    CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds contentFrame:[self convertRect:self.tableView.frame toView:controller.view]];
     calendarV.willSelectBlock = willBlock;
     calendarV.selectedBlock = finishBlock;
     [calendarV.calendar selectDate:[calendarV.dateFormatter dateFromString:date] scrollToDate:YES];
     [controller.view addSubview:calendarV];
+    [calendarV showContent];
+    
     
 }
 

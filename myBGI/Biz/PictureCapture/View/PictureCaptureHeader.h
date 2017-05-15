@@ -7,7 +7,7 @@
 //
 
 #import "BaseView.h"
-#define kCaptureHeaderH 210
+#define kCaptureHeaderH 200
 
 typedef void(^UserInterectBlock)();
 @interface PictureCaptureHeader : BaseView

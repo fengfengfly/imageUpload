@@ -27,10 +27,9 @@
 #define SCREEN_WIDTH          [[UIScreen mainScreen] bounds].size.width
 
 #define RGBColor(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
-#define BarColor RGBColor(41, 169, 255, 1)
-#define BaseBarbackgroundColor RGBColor(41, 169, 255, 1)
-#define ScreenColor RGBColor(239, 239, 244, 1)
+
+#define kBgColor RGBColor(235, 235, 241, 1)
 #define GrayFontColor RGBColor(105, 105, 105, 1)
-#define ProjectSubjectColor RGBColor(50, 156, 151, 1)
+#define kSubjectColor RGBColor(50, 156, 151, 1)
 
 #endif /* AppMacro_h */

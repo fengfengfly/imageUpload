@@ -8,7 +8,9 @@
 
 #import "UserCenterVC.h"
 
-
+#import "UserManager.h"
+#import "Masonry.h"
+#import "HttpManager.h"
 
 @interface UserCenterVC ()<UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -41,7 +43,7 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
 #pragma mark Seter Geter
 - (NSArray *)menuList{
     if (_menuList == nil) {
-        _menuList = @[@[@"当前版本"], @[@"设置"]];
+        _menuList = @[@[@"当前版本"], @[@"退出当前账号"]];
     }
     return _menuList;
 }
@@ -59,10 +61,35 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
     }else if(indexPath.section == 1){
         switch (indexPath.row) {
             case 0:
+            {
+                UIAlertController *alertCtrler = [UIAlertController alertControllerWithTitle:@"确定退出当前用户?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
                 
+                UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self hudSelfWithMessage:@"正在退出登录..."];
+                    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:kUserManager.userModel.userName, @"user",kUserManager.userModel.token,@"token", nil];
+                    [[HttpManager sharedManager] sendPostUrlRequestWithBodyURLString:kLogoutUrl parameters:param success:^(id mResponseObject) {
+                        [self hideSelfHUD];
+                        [kUserManager userLogout];
+                    } failure:^(id mError) {
+                        NSString *msg = [mError isKindOfClass:[NSString class]]? mError:@"网络错误";
+                        [self showStatusBarWarningWithStatus:msg];
+                        [self hideSelfHUD];
+                    }];
+                    
+                }];
+                [alertCtrler addAction:cancelAction];
+                [alertCtrler addAction:confirmAction];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [self presentViewController:alertCtrler animated:YES completion:nil];
+                });
+            }
                 break;
             case 1:
-                
                 break;
                 
             default:
@@ -93,12 +120,40 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:UserCenterCellID];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:UserCenterCellID];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:UserCenterCellID];
     }
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    NSString  *imageStr = self.menuIconList[indexPath.section][indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:imageStr];
-    cell.textLabel.text = self.menuList[indexPath.section][indexPath.row];
+    
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    
+    if (indexPath.section == 0){
+        if (indexPath.row == 0) {
+            cell.textLabel.text = self.menuList[indexPath.section][indexPath.row];
+            
+            NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"v%@", versionString];
+            
+        }
+    }
+    
+    if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            UILabel *titleLabel = [[UILabel alloc] init];
+            titleLabel.textAlignment = NSTextAlignmentCenter;
+            titleLabel.font = [UIFont systemFontOfSize:17];
+            titleLabel.textColor = kSubjectColor;
+            titleLabel.text = @"退出当前账号";
+            [titleLabel sizeToFit];
+            [cell addSubview:titleLabel];
+            [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.center.equalTo(cell);
+            }];
+        }
+    }
+    
+//    NSString  *imageStr = self.menuIconList[indexPath.section][indexPath.row];
+//    cell.imageView.image = [UIImage imageNamed:imageStr];
+//    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

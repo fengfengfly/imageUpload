@@ -133,9 +133,9 @@ static float edgeWidth = 12;
 
 - (void)show  //show方法
 {
-    UIView *currentView = [[UIApplication sharedApplication].delegate window];
+    UIView *currentView = [UIApplication sharedApplication].keyWindow;
     _backView = [[UIView alloc]initWithFrame:currentView.bounds];
-    _backView.backgroundColor = [UIColor clearColor];
+    _backView.backgroundColor = self.bgColor? self.bgColor:[UIColor clearColor];
     UITapGestureRecognizer *tagGR = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickBackView:)];
     [_backView addGestureRecognizer:tagGR];
     

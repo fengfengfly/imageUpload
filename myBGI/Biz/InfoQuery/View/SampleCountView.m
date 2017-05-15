@@ -18,6 +18,7 @@
 
 #import "UIView+SelfController.h"
 #import "CalendarView.h"
+#import "TimeTypeSelectView.h"
 
 #import "QueryCountCell.h"
 
@@ -33,7 +34,9 @@
 static NSString *SampleCountCellID = @"SampleCountCellID";
 -(void)awakeFromNib{
     [super awakeFromNib];
+    self.selectTypeIndex = 0;
     self.dataPage = 1;
+    self.tableView.backgroundColor = kBgColor;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -51,10 +54,16 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
         [weakSelf reloadDataSource];
     }];
     
-    //初始化pickerView
-    self.selectTypeIndex = 0;
+    self.beginTimeTF.text = [self makeTodayStr];
+    self.endTimeTF.text = [self makeTodayStr];
     NSString *type = self.timeTypes[self.selectTypeIndex];
     self.timeTypeTF.text = type;
+}
+
+//方案一滚动选择录入时间类型
+- (void)addTimeTypePicker{
+    //初始化pickerView
+    
     UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
     pickerView.showsSelectionIndicator = YES;
     pickerView.dataSource = self;
@@ -76,8 +85,6 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
     // the middle button is to make the Done button align to right
     [toolBar setItems:@[cancelButton,flexibleButton,titleButton,flexibleButton,doneButton]];
     self.timeTypeTF.inputAccessoryView = toolBar;
-    self.beginTimeTF.text = [self makeTodayStr];
-    self.endTimeTF.text = [self makeTodayStr];
 }
 
 - (NSString *)makeTodayStr{
@@ -101,11 +108,12 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
 
 - (void)showCalendarDateStr:(NSString *)date willSelected:(BOOL (^)(NSString *willDaetStr))willBlock finishBlock:(void(^)(NSString *dateStr))finishBlock{
     UIViewController *controller = [self getCurrentViewController];
-    CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds];
+    CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds contentFrame:[self convertRect:self.tableView.frame toView:controller.view]];
     calendarV.willSelectBlock = willBlock;
     calendarV.selectedBlock = finishBlock;
     [calendarV.calendar selectDate:[calendarV.dateFormatter dateFromString:date] scrollToDate:YES];
     [controller.view addSubview:calendarV];
+    [calendarV showContent];
 }
 
 - (IBAction)beginTimeClick:(UIButton *)sender {
@@ -119,6 +127,17 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
         
     }];
     
+}
+- (IBAction)timeTypeClick:(UIButton *)sender {
+    UIViewController *controller = [self getCurrentViewController];
+    TimeTypeSelectView *timeTypeView = [[TimeTypeSelectView alloc] initWithFrame:controller.view.bounds contentFrame:[self convertRect:self.tableView.frame toView:controller.view]];
+    timeTypeView.selectedIndex = self.selectTypeIndex;
+    timeTypeView.selectedBlock = ^(NSIndexPath *indexPath){
+        self.selectTypeIndex = indexPath.row;
+        self.timeTypeTF.text = self.timeTypes[indexPath.row];
+    };
+    [controller.view addSubview:timeTypeView];
+    [timeTypeView showWithDataSource:self.timeTypes];
 }
 - (IBAction)endTimeClick:(UIButton *)sender {
     

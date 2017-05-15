@@ -81,6 +81,7 @@ static UserManager *defaultManager = nil;
     [userDefaults removeObjectForKey:@"passWord"];
     [userDefaults removeObjectForKey:@"realName"];
     [userDefaults removeObjectForKey:@"userName"];
+    [userDefaults removeObjectForKey:@"isLogin"];
     [userDefaults synchronize];
     //发送自动登陆状态通知
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];

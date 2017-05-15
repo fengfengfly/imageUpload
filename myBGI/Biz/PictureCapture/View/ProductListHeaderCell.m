@@ -14,7 +14,7 @@
     [super awakeFromNib];
     // Initialization code
     self.backgroundColor = [UIColor whiteColor];
-    self.layer.borderColor = ProjectSubjectColor.CGColor;
+    self.layer.borderColor = kSubjectColor.CGColor;
     self.layer.borderWidth = 1;
 }
 

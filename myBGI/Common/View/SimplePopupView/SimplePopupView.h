@@ -41,6 +41,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) UIColor *popColor;  //背景颜色
 
 @property (nonatomic, strong) UIColor *popTintColor;  //title颜色
+@property (strong, nonatomic) UIColor *bgColor;//背景色
 @property (nonatomic, strong) UIColor *cellColor;
 @property (nonatomic, assign) float edgeLength; //三角边长
 

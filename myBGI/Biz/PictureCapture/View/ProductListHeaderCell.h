@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ProductModel.h"
 #define kProductCellH 30
-#define kProductCellW 80
+#define kProductCellW 85
 
 @interface ProductListHeaderCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UILabel *title;

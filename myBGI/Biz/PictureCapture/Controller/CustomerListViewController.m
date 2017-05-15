@@ -41,7 +41,7 @@ static NSString *CustomerCellID = @"customerCellID";
     [self reloadDataSource];
     [self configTableView];
     
-    self.searchBtn.layer.cornerRadius = 15;
+    self.searchBtn.layer.cornerRadius = 5;
     self.searchBtn.layer.masksToBounds = YES;
 }
 
@@ -168,6 +168,7 @@ static NSString *CustomerCellID = @"customerCellID";
     cell.textLabel.text = model.customerCode;
     cell.detailTextLabel.text = model.customerName;
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
+    cell.textLabel.textColor = [UIColor blackColor];
     cell.detailTextLabel.textColor = [UIColor blackColor];
     return cell;
 }

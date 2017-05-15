@@ -10,7 +10,7 @@
 #import "ProductModel.h"
 #import "ProductListHeaderCell.h"
 
-#define kListHeaderH 90
+#define kListHeaderH 70
 
 @interface ProductListHeader : BaseView<UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;

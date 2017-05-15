@@ -14,14 +14,16 @@
     [super awakeFromNib];
     // Initialization code
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-    self.productNameL.textColor = RGBColor(0, 150, 150, 150);
-    self.statusL.backgroundColor = RGBColor(0, 150, 150, 150);
+    self.productNameL.textColor = RGBColor(0, 150, 150, 1);
+    self.statusL.backgroundColor = RGBColor(0, 150, 150, 1);
     self.statusL.textColor = [UIColor whiteColor];
 }
 

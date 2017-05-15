@@ -17,6 +17,8 @@
 #import "ProductListHeader.h"
 #import "ProductSearchVC.h"
 
+#import "Masonry.h"
+
 @interface ProductListViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *searchTF;
 @property (weak, nonatomic) IBOutlet UIButton *searchBtn;
@@ -47,7 +49,7 @@ static NSString *ProductCellID = @"ProductCellID";
     [self reloadDataSource];
     [self configTableView];
     
-    self.searchBtn.layer.cornerRadius = 15;
+    self.searchBtn.layer.cornerRadius = 5;
     self.searchBtn.layer.masksToBounds = YES;
     
     //自定义navigationBar右边的按钮
@@ -60,7 +62,9 @@ static NSString *ProductCellID = @"ProductCellID";
     [rightBtn addTarget:self action:@selector(confirmBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = rightBarItem;
     rightBtn.hidden = !self.allowMultiSelect;
+    
 }
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     //    [super touchesBegan:touches withEvent:event];
 }
@@ -100,6 +104,7 @@ static NSString *ProductCellID = @"ProductCellID";
 - (void)configTableView{
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     if (self.allowMultiSelect) {
         self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
         UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, kListHeaderH)];
@@ -115,10 +120,17 @@ static NSString *ProductCellID = @"ProductCellID";
         };
         [header addSubview:listHeader];
         self.listHeader = listHeader;
+        [listHeader mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(header);
+            make.top.equalTo(header);
+            make.right.equalTo(header);
+            make.bottom.equalTo(header);
+        }];
     }
     
     self.tableView.allowsMultipleSelection = self.allowMultiSelect;
-    self.tableView.editing = self.allowMultiSelect;
+//    self.tableView.editing = self.allowMultiSelect;
+    
     __weak typeof(self) weakSelf = self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         weakSelf.dataPage = 1;
@@ -205,6 +217,11 @@ static NSString *ProductCellID = @"ProductCellID";
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (!self.allowMultiSelect) {
+        ProductModel *model = self.dataSource[indexPath.row];
+        BOOL checkResult = [self containModel:model inArray:self.selectedArray remove:NO];
+        if (!checkResult) {
+            [self.selectedArray addObject:model];
+        }
         [self confirmBtnClick:nil];
     }else{
         ProductModel *model = self.dataSource[indexPath.row];
@@ -212,6 +229,7 @@ static NSString *ProductCellID = @"ProductCellID";
         if (!checkResult) {
             [self.selectedArray addObject:model];
             [self.listHeader.collectionView reloadData];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
 }
@@ -222,6 +240,7 @@ static NSString *ProductCellID = @"ProductCellID";
         BOOL checkResult = [self containModel:model inArray:self.selectedArray remove:YES];
         if (checkResult) {
             [self.listHeader.collectionView reloadData];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
     
@@ -244,17 +263,25 @@ static NSString *ProductCellID = @"ProductCellID";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ProductCellID];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:(UITableViewCellStyleValue2) reuseIdentifier:ProductCellID];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.tintColor = kSubjectColor;
     }
     
     ProductModel *model = self.dataArray[indexPath.row];
     cell.textLabel.text = model.productCode;
     cell.detailTextLabel.text = model.productName;
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
+    cell.textLabel.textColor = [UIColor blackColor];
     cell.detailTextLabel.textColor = [UIColor blackColor];
     if (self.allowMultiSelect) {
         BOOL checkResult = [self containModel:model inArray:self.selectedArray remove:NO];
         if (checkResult) {
             [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.textLabel.textColor = kSubjectColor;
+            cell.detailTextLabel.textColor = kSubjectColor;
+        }else{
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
     return cell;
