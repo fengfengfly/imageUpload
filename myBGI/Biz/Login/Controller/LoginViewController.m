@@ -10,6 +10,7 @@
 #import "UIImage+GradientColor.h"
 #import "UIImage+Corner.h"
 #import "MBProgressHUD+HYExtension.h"
+#import "Masonry.h"
 
 #import "UserManager.h"
 
@@ -17,7 +18,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *userNameTF;
 @property (weak, nonatomic) IBOutlet UITextField *pwdTF;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
-@property (weak, nonatomic) IBOutlet UIImageView *loginIcon;
+@property (weak, nonatomic) IBOutlet UIView *loginIcon;
 
 @end
 
@@ -27,35 +28,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden = YES;
-    
     self.loginIcon.layer.masksToBounds = YES;
     self.loginIcon.layer.cornerRadius = self.loginIcon.frame.size.width/2;
     
-     UIImage *backImage = [UIImage gradientImageRect:self.loginBtn.bounds inputPoint0:CGPointMake(0, 0) inputPoint1:CGPointMake(1, 1) inputColor0:RGBColor(0, 120, 155, 1) inputColor1:RGBColor(2, 161, 155, 1)];
+    self.pwdTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"密码" attributes:@{NSForegroundColorAttributeName:RGBColor(153, 153, 153, 1)}];
+    self.userNameTF.attributedPlaceholder =  [[NSAttributedString alloc] initWithString:@"邮箱/登录名" attributes:@{NSForegroundColorAttributeName:RGBColor(153, 153, 153, 1)}];
     
-//    [self.loginBtn setBackgroundImage:backImage forState:UIControlStateNormal];
-    
-    CALayer *sublayer =[CALayer layer];
-    sublayer.backgroundColor =[UIColor whiteColor].CGColor;
-    sublayer.shadowOffset = CGSizeMake(3, 10);
-    sublayer.shadowRadius =22;
-    sublayer.shadowColor =[UIColor blackColor].CGColor;
-    sublayer.shadowOpacity =0.8;
-    sublayer.frame = self.loginBtn.bounds;
-    sublayer.cornerRadius =22;
-    [self.loginBtn.layer addSublayer:sublayer];
-    
-    CALayer *imageLayer =[CALayer layer];
-    imageLayer.frame = sublayer.bounds;
-    imageLayer.cornerRadius =self.loginBtn.bounds.size.height / 2;
-    imageLayer.contents =(id)backImage.CGImage;
-    imageLayer.masksToBounds =YES;
-    [sublayer addSublayer:imageLayer];
-    
-//    self.loginBtn.imageView.backgroundColor = [UIColor clearColor];
-//    self.loginBtn.layer.shadowOffset =  CGSizeMake(1, 10);
-//    self.loginBtn.layer.shadowOpacity = 0.8;
-//    self.loginBtn.layer.shadowColor =  [UIColor blackColor].CGColor;
 }
 
 //状态栏颜色
@@ -64,6 +42,40 @@
     
     return UIStatusBarStyleDefault;
     
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear: animated];
+    
+}
+
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    UIImage *backImage = [UIImage gradientImageRect:self.loginBtn.bounds inputPoint0:CGPointMake(0, 0) inputPoint1:CGPointMake(1, 1) inputColor0:RGBColor(0, 120, 155, 0.8) inputColor1:RGBColor(2, 161, 155, 0.8)];
+    
+    CALayer *sublayer =[CALayer layer];
+    sublayer.backgroundColor =[UIColor clearColor].CGColor;
+    sublayer.shadowOffset = CGSizeMake(0, 10);
+    sublayer.shadowRadius =25;
+    sublayer.shadowColor =RGBColor(167, 183, 184, 1).CGColor;
+    sublayer.shadowOpacity =0.9;
+    sublayer.frame = self.loginBtn.bounds;
+    sublayer.cornerRadius =25;
+    [self.loginBtn.layer addSublayer:sublayer];
+    
+    CALayer *imageLayer =[CALayer layer];
+    imageLayer.frame = sublayer.bounds;
+    imageLayer.cornerRadius =self.loginBtn.bounds.size.height / 2;
+    imageLayer.contents =(id)backImage.CGImage;
+    imageLayer.masksToBounds =YES;
+    [sublayer addSublayer:imageLayer];
+    [self.loginBtn bringSubviewToFront:self.loginBtn.titleLabel];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -87,7 +99,7 @@
     
     [MBProgressHUD showAnimationHUDWithImages:nil title:@"正在登录..."];
     [kUserManager loginUser:userName password:password success:^{
-        
+        [MBProgressHUD hiddenWithMessage:@"登录成功"];
         
     } fail:^(id mError) {
         if ([mError isKindOfClass:[NSString class]]) {

@@ -54,6 +54,7 @@ static NSString *ProductCellID = @"ProductCellID";
     
     //自定义navigationBar右边的按钮
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    rightBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     [rightBtn setTitle:@"确定" forState:(UIControlStateNormal)];
     [rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [rightBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
@@ -63,6 +64,7 @@ static NSString *ProductCellID = @"ProductCellID";
     self.navigationItem.rightBarButtonItem = rightBarItem;
     rightBtn.hidden = !self.allowMultiSelect;
     
+    self.originSelectedArray = self.selectedArray.mutableCopy;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
@@ -71,6 +73,13 @@ static NSString *ProductCellID = @"ProductCellID";
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)backBtnClick{
+    [super backBtnClick];
+    if (self.chooseBlock) {
+        self.chooseBlock(self.originSelectedArray, YES);
+    }
 }
 
 #pragma mark set-getProperty
@@ -204,8 +213,14 @@ static NSString *ProductCellID = @"ProductCellID";
     productSearchVC.chooseBlock = ^(ProductModel *model){
         if (![self containModel:model inArray:self.selectedArray remove:NO]) {
             [self.selectedArray addObject:model];
-            [self.listHeader.collectionView reloadData];
-            [self.tableView reloadData];
+            
+            if (self.allowMultiSelect == YES) {//如果多选刷新界面
+                
+                [self.listHeader.collectionView reloadData];
+                [self.tableView reloadData];
+            }else{//如果单选直接确定选择
+                [self confirmBtnClick:nil];
+            }
         }
         
     };
@@ -216,14 +231,14 @@ static NSString *ProductCellID = @"ProductCellID";
 
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (!self.allowMultiSelect) {
+    if (!self.allowMultiSelect) {//如果单选直接跳回
         ProductModel *model = self.dataSource[indexPath.row];
         BOOL checkResult = [self containModel:model inArray:self.selectedArray remove:NO];
         if (!checkResult) {
             [self.selectedArray addObject:model];
         }
         [self confirmBtnClick:nil];
-    }else{
+    }else{//如果多选刷新界面
         ProductModel *model = self.dataSource[indexPath.row];
         BOOL checkResult = [self containModel:model inArray:self.selectedArray remove:NO];
         if (!checkResult) {
@@ -299,7 +314,7 @@ static NSString *ProductCellID = @"ProductCellID";
 //        [selArray addObject:self.dataSource[indexpath.row]];
 //    }
     if (self.chooseBlock) {
-        self.chooseBlock(self.selectedArray);
+        self.chooseBlock(self.selectedArray, YES);
     }
     
     [self.navigationController popViewControllerAnimated:YES];

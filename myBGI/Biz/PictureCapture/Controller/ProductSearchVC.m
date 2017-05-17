@@ -99,12 +99,15 @@ static NSString *ProductCellID = @"ProductCellID";
     self.searchBar.tintColor = [UIColor blueColor];
     self.searchBar.placeholder = @"输入您想要搜索的内容";
     self.searchBar.delegate = self;
+    [self.searchBar setImage:[UIImage imageNamed:@"search"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
+    [self.searchBar setContentMode:UIViewContentModeLeft];
     self.navigationItem.titleView = self.searchBar;
+    
 }
 
 - (void)rightBarButtonItem
 {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController dismissViewControllerAnimated:NO completion:nil];
 }
 
 #pragma mark Setter -- Getter

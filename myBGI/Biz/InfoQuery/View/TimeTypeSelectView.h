@@ -13,7 +13,7 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSArray *dataSource;
 @property (copy, nonatomic) BOOL(^willSelectBlock)(NSIndexPath *indexPath);
-@property (copy, nonatomic) void(^selectedBlock)(NSIndexPath *indexPath);
+@property (copy, nonatomic) void(^selectedBlock)(NSIndexPath *indexPath, BOOL isConfirm);
 @property (strong, nonatomic) UIView *contentView;
 @property (assign, nonatomic) CGRect dropBeginFrame;
 @property (assign, nonatomic) CGRect dropEndFrame;

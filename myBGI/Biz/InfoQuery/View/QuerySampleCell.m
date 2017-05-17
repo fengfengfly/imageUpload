@@ -15,7 +15,6 @@
     // Initialization code
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -36,13 +35,15 @@
     
     if (model.result.length > 0) {
         self.resultL.hidden = NO;
+        self.resultBgv.hidden = NO;
         self.resultL.text = model.result;
         UIColor *bgColor = [UIColor yellowColor];
         if ([model.result containsString:@"高"]) {
             bgColor = [UIColor redColor];
         }
-        self.resultL.backgroundColor = bgColor;
+        self.resultBgv.backgroundColor = bgColor;
     }else{
+        self.resultBgv.hidden = YES;
         self.resultL.hidden = YES;
     }
 }

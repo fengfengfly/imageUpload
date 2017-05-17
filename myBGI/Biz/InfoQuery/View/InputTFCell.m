@@ -16,6 +16,7 @@
     // Initialization code
    
     self.textField.delegate = self;
+    self.textField.textColor = kSubjectColor;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

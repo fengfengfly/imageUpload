@@ -8,6 +8,7 @@
 
 #import "PictureCaptureViewcontroller.h"
 #import "UIImage+Compression.h"
+#import "UIImage+FixOrientation.h"
 #import "TZImagePickerController.h"
 #import "TZImageManager.h"
 #import<AVFoundation/AVCaptureDevice.h>
@@ -230,6 +231,11 @@ static NSString *PicCellID = @"PicCellID";
 -(PicCaptureModel *)addingModel{
     if (_addingModel == nil) {
         _addingModel = [[PicCaptureModel alloc] init];
+#if kOffLineDebug
+        _addingModel.customer = [CustomerModel new];
+        _addingModel.customer.customerCode = @"123";
+        _addingModel.customer.customerName = @"OffLineDebug";
+#endif
     }
     return _addingModel;
 }
@@ -334,9 +340,11 @@ static NSString *PicCellID = @"PicCellID";
         
         productListVC.selectedArray = self.addingModel.productArray;
     }
-    productListVC.chooseBlock = ^(NSMutableArray *productArray){
+    productListVC.chooseBlock = ^(NSMutableArray *productArray, BOOL isConfirm){
         self.addingModel.productArray = productArray;
-        self.captureHeader.productTF.text = [self.addingModel productCodeStr];
+        if (isConfirm == YES) {
+            self.captureHeader.productTF.text = [self.addingModel productCodeStr];
+        }
         
     };
     
@@ -399,7 +407,9 @@ static NSString *PicCellID = @"PicCellID";
 - (void)albumClick:(UIButton *)sender {
     if (self.captureHeader.customerTF.text.length == 0) {
         [self showStatusBarWarningWithStatus:@"请先选择表单的医院"];
+#if kOffLineDebug == 0
         return;
+#endif
     }
     TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
 //    imagePickerVc.isSelectOriginalPhoto = _isSelectLogoOriginalPhoto;
@@ -454,7 +464,8 @@ static NSString *PicCellID = @"PicCellID";
 //    UIImage *nowImage = [UIImage imageWithData:imageData];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"继续添加?" message:@"继续添加所选医院和产品的表单" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *finishAction = [UIAlertAction actionWithTitle:@"完成" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [self.addingModel savePicture:image];
+        UIImage *fixedOrientImg = [UIImage fixOrientation:image];
+        [self.addingModel savePicture:fixedOrientImg];
         [self addModelToDataSource];
         [self.collectionView reloadData];
         [picker dismissViewControllerAnimated:YES completion:nil];
@@ -760,6 +771,8 @@ static NSString *PicCellID = @"PicCellID";
         UICollectionViewCell *cell = (UICollectionViewCell *)longPress.self.view;
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
         picSelectionVC.dataSource = [NSMutableArray arrayWithObject:self.dataSource[indexPath.section]];
+        picSelectionVC.defaultSelRow = indexPath.row;
+        
         picSelectionVC.finishBlock = ^(){
             [self.collectionView reloadData];
         };
@@ -1042,6 +1055,7 @@ static NSString *PicCellID = @"PicCellID";
     newModel.readNum = self.selectStyleIndex + 1;
     self.addingModel = newModel;
 }
+
 
 
 /*

@@ -35,8 +35,6 @@ static NSString *CustomerCellID = @"customerCellID";
     [self configTableView];
     self.isResult = YES;
     self.dataPage = 1;
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -100,12 +98,14 @@ static NSString *CustomerCellID = @"customerCellID";
     self.searchBar.tintColor = [UIColor blueColor];
     self.searchBar.placeholder = @"输入您想要搜索的内容";
     self.searchBar.delegate = self;
+    [self.searchBar setImage:[UIImage imageNamed:@"search"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
     self.navigationItem.titleView = self.searchBar;
+    
 }
 
 - (void)rightBarButtonItem
 {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController dismissViewControllerAnimated:NO completion:nil];
 }
 
 #pragma mark Setter -- Getter
@@ -285,7 +285,7 @@ static NSString *CustomerCellID = @"customerCellID";
 {
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 60)];
     UIButton *clearHistoryBtn = [[UIButton alloc] initWithFrame:CGRectMake(50, 20, SCREEN_WIDTH - 100, 40)];
-    [clearHistoryBtn setTitleColor:GrayFontColor forState:(UIControlStateNormal)];
+    [clearHistoryBtn setTitleColor:kGrayFontColor forState:(UIControlStateNormal)];
     [clearHistoryBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [clearHistoryBtn setTitle:@"清空历史搜索" forState:(UIControlStateNormal)];
     clearHistoryBtn.layer.borderColor = [UIColor lightGrayColor].CGColor;

@@ -14,8 +14,8 @@
     [super awakeFromNib];
     // Initialization code
     self.backgroundColor = [UIColor whiteColor];
-    self.layer.borderColor = kSubjectColor.CGColor;
-    self.layer.borderWidth = 1;
+    self.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.layer.borderWidth = 0.5;
 }
 
 - (void)configCellModel:(ProductModel *)model{

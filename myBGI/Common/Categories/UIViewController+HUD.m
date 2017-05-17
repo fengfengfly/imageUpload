@@ -16,11 +16,11 @@
 //    HUD.contentColor=[UIColor whiteColor];
 //    HUD.bezelView.color=[UIColor blackColor];
     HUD.mode=MBProgressHUDModeText;
-    HUD.labelText=message;
+    HUD.label.text=message;
     HUD.removeFromSuperViewOnHide=YES;
     [[self getView] addSubview:HUD];
-    [HUD show:YES];
-    [HUD hide:YES afterDelay:1];
+    [HUD showAnimated:YES];
+    [HUD hideAnimated:YES afterDelay:1];
 }
 
 -(void)hudSelfWithMessage:(NSString *)message
@@ -29,10 +29,10 @@
     HUD.backgroundColor = [UIColor colorWithWhite:0.f alpha:.2f];
 //    HUD.bezelView.color = [UIColor blackColor];
 //    HUD.contentColor=[UIColor whiteColor];
-    HUD.labelText=message;
+    HUD.label.text=message;
     HUD.removeFromSuperViewOnHide=YES;
     [[self getView] addSubview:HUD];
-    [HUD show:YES];
+    [HUD showAnimated:YES];
 }
 
 -(void)hideSelfHUD
@@ -41,13 +41,13 @@
 }
 -(UIView *)getView
 {
-    UIView *view;
-    if (self.navigationController.view) {
-        view=self.navigationController.view;
-    }else
-    {
-        view=self.view;
-    }
-    return view;
+//    UIView *view;
+//    if (self.navigationController.view) {
+//        view=self.navigationController.view;
+//    }else
+//    {
+//        view=self.view;
+//    }
+    return self.view;
 }
 @end

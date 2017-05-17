@@ -66,6 +66,7 @@ static NSString *QueryCellID = @"QueryCellID";
     [self.searchBar setBarTintColor:[UIColor whiteColor]];
     [self.searchBar setSearchTextFieldBackgroundColor:kBgColor];
     self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
+    [self.searchBar setImage:[UIImage imageNamed:@"search"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -125,6 +126,7 @@ static NSString *QueryCellID = @"QueryCellID";
 }
 
 - (void)configTableView{
+    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
     self.tableView.backgroundColor = kBgColor;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -299,6 +301,13 @@ static NSString *QueryCellID = @"QueryCellID";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 148;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (self.dataSource.count > 0 && section == 0) {
+        return 15;
+    }
+    return 0;
 }
 
 

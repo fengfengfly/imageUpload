@@ -11,6 +11,7 @@
 #import "UserManager.h"
 #import "Masonry.h"
 #import "HttpManager.h"
+#import "Masonry.h"
 
 @interface UserCenterVC ()<UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -69,13 +70,15 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
                 
                 UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     [self hudSelfWithMessage:@"正在退出登录..."];
-                    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:kUserManager.userModel.userName, @"user",kUserManager.userModel.token,@"token", nil];
+                    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithObjectsAndKeys:kUserManager.userModel.token,@"user.token", nil];
+                    
                     [[HttpManager sharedManager] sendPostUrlRequestWithBodyURLString:kLogoutUrl parameters:param success:^(id mResponseObject) {
                         [self hideSelfHUD];
                         [kUserManager userLogout];
                     } failure:^(id mError) {
                         NSString *msg = [mError isKindOfClass:[NSString class]]? mError:@"网络错误";
                         [self showStatusBarWarningWithStatus:msg];
+                        
                         [self hideSelfHUD];
                     }];
                     
@@ -121,6 +124,7 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:UserCenterCellID];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:UserCenterCellID];
+        cell.textLabel.textColor = kBlackFontColor;
     }
     
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -131,7 +135,14 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
             
             NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
             cell.detailTextLabel.text = [NSString stringWithFormat:@"v%@", versionString];
-            
+            [cell.detailTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.right.equalTo(cell).offset(-12);
+                make.centerY.equalTo(cell);
+            }];
+            [cell.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(cell).offset(12);
+                make.centerY.equalTo(cell);
+            }];
         }
     }
     

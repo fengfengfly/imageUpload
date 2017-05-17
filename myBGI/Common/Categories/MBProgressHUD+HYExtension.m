@@ -208,26 +208,26 @@ static char ReLoadingBtnKey;
 + (instancetype)showMessage:(NSString *)message detail:(NSString *)detail showView:(UIView *)view img:(NSString *)imgName isCustomImage:(BOOL)isCustomImage time:(float)time aplhaBackground:(BOOL)bg isAutoDismis:(BOOL)dismiss
 {
    MBProgressHUD *hud = view ?  [self showHUDAddedTo:view animated:YES] :[self showHUDAddedTo:kKeyWindowView animated:YES];
-    hud.labelText = message;
+    hud.label.text = message;
     if (!isCustomImage) {
         hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"MBProgressHUD.bundle/%@", imgName]]];
     } else {
         hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imgName]];
     }
     hud.mode = MBProgressHUDModeCustomView;
-    hud.labelFont = kSystemFontOfSize(15);
+    hud.label.font = kSystemFontOfSize(15);
     hud.removeFromSuperViewOnHide = YES;
     if (detail) {
-        hud.detailsLabelText = detail;
+        hud.detailsLabel.text = detail;
     }
     if (bg) {
-        hud.dimBackground = YES;
+        hud.customView.backgroundColor = [UIColor colorWithWhite:0.f alpha:.2f];
         hud.animationType = MBProgressHUDAnimationFade;
     } else {
         hud.animationType = MBProgressHUDAnimationZoomOut;
     }
     if (dismiss) {
-        [hud hide:YES afterDelay:time];
+        [hud hideAnimated:YES afterDelay:time];
     }
     return hud;
 }
@@ -238,14 +238,14 @@ static char ReLoadingBtnKey;
 
 +(void)showText:(NSString *)text onView:(UIView *)view {
     MBProgressHUD *hud = view ?  [self showHUDAddedTo:view animated:YES] :[self showHUDAddedTo:kKeyWindowView animated:YES];
-    hud.detailsLabelFont = kSystemFontOfSize(15);
-    hud.detailsLabelText = text;
+    hud.detailsLabel.font = kSystemFontOfSize(15);
+    hud.detailsLabel.text = text;
     hud.mode = MBProgressHUDModeText;
     hud.margin = margin;
     hud.removeFromSuperViewOnHide = YES;
     hud.userInteractionEnabled = NO;
     hud.animationType = MBProgressHUDAnimationZoom;
-    [hud hide:YES afterDelay:1.5];
+    [hud hideAnimated:YES afterDelay:1.5];
 }
 
 + (void)showAnimationHUDWithImages:(NSArray *)images title:(NSString *)title showView:(UIView *)view aplhaBackground:(BOOL)bg {
@@ -256,15 +256,15 @@ static char ReLoadingBtnKey;
     [actionImage setAnimationDuration:images.count * 0.1];
     [actionImage startAnimating];
     MBProgressHUD *hud = view ?  [self showHUDAddedTo:view animated:YES] :[self showHUDAddedTo:kKeyWindowView animated:YES];
-    hud.dimBackground = bg;
+    hud.backgroundColor = bg ? RGBColor(115, 115, 115, 0.4):[UIColor clearColor];
     hud.customView = actionImage;
     if (!title) {
         title = @"努力加载中...";
     }
-    hud.labelText = title;
-    hud.labelFont = kSystemFontOfSize(18);
-    hud.labelColor = [UIColor darkGrayColor];
-    hud.opacity = 0.0;
+    hud.label.text = title;
+    hud.label.font = kSystemFontOfSize(18);
+    hud.label.textColor = [UIColor darkGrayColor];
+    hud.bezelView.backgroundColor = [UIColor clearColor];
     hud.removeFromSuperViewOnHide = YES;
     hud.mode = MBProgressHUDModeCustomView;
     hud.animationType = MBProgressHUDAnimationZoomOut;

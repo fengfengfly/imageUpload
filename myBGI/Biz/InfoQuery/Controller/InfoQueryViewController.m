@@ -10,6 +10,7 @@
 #import "QueryViewController.h"
 #import "DeliverCountViewController.h"
 #import "SampleCountViewController.h"
+#import "Masonry.h"
 
 @interface InfoQueryViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -110,8 +111,20 @@ static NSString *InfoQueryCellID = @"InfoQueryCellID";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoQueryCellID];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:InfoQueryCellID];
+        [cell.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(cell).offset(10);
+            make.centerY.equalTo(cell);
+        }];
+        UIImageView *imageV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrowRight"]];
+        [imageV sizeToFit];
+        [cell addSubview:imageV];
+        [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(cell).offset(-10);
+            make.centerY.equalTo(cell);
+        }];
+        cell.textLabel.textColor = kBlackFontColor;
     }
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//    cell.accessoryType = UITableViewCellAccessoryNone;
     NSString  *imageStr = self.menuIconList[indexPath.section][indexPath.row];
     cell.imageView.image = [UIImage imageNamed:imageStr];
     cell.textLabel.text = self.menuList[indexPath.section][indexPath.row];

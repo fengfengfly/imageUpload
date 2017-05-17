@@ -50,7 +50,7 @@
                                   @"查询统计选中",
                                   @"我的选中"];
     //tabBarItem未选中时的文字颜色
-    UIColor *titleColor = GrayFontColor;
+    UIColor *titleColor = kGrayFontColor;
     //tabBarItem选中时的文字颜色
     UIColor *selectedTitleColor = kSubjectColor;
     
@@ -75,8 +75,20 @@
         [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:selectedTitleColor, NSForegroundColorAttributeName, nil] forState:(UIControlStateSelected)];
         
     }
-    
     self.viewControllers = vcArr;
+    //改变tabbar 线条颜色
+    CGRect rect = CGRectMake(0, 0, SCREEN_WIDTH, 0.2);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context,
+                                   kSeprateLineColor.CGColor);
+    CGContextFillRect(context, rect);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [self.tabBar setShadowImage:img];
+    [self.tabBar setBackgroundImage:[[UIImage alloc]init]];
+    
 }
 
 /*

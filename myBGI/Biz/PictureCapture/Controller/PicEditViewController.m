@@ -223,11 +223,13 @@ static NSString *PicCellID = @"PicCellID";
         
         productListVC.selectedArray = self.currentModel.productArray;
     }
-    productListVC.chooseBlock = ^(NSMutableArray *productArray){
+    productListVC.chooseBlock = ^(NSMutableArray *productArray, BOOL isConfirm){
         self.currentModel.productArray = productArray;
-        self.captureHeader.productTF.text = [self.currentModel productCodeStr];
         
-        [self changeAllProduct:productArray];
+        if (isConfirm == YES) {
+            self.captureHeader.productTF.text = [self.currentModel productCodeStr];
+            [self changeAllProduct:productArray];
+        }
     };
     
     [self.navigationController pushViewController:productListVC animated:YES];

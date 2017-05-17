@@ -9,6 +9,8 @@
 #ifndef AppMacro_h
 #define AppMacro_h
 
+#define kOffLineDebug 0
+
 /******************NotificationString****************/
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
 
@@ -29,7 +31,9 @@
 #define RGBColor(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
 #define kBgColor RGBColor(235, 235, 241, 1)
-#define GrayFontColor RGBColor(105, 105, 105, 1)
-#define kSubjectColor RGBColor(50, 156, 151, 1)
-
+#define kGrayFontColor RGBColor(153, 153, 153, 1)
+#define kBlackFontColor RGBColor(51, 51, 51, 1)
+#define kSubjectColor RGBColor(77, 163, 169, 1)
+#define kPlaceHolderColor RGBColor(153, 153, 153, 1)
+#define kSeprateLineColor RGBColor(220, 220, 220, 1)
 #endif /* AppMacro_h */

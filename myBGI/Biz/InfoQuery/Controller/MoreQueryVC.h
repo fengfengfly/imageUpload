@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 
-#define kLeftSpace 80
+#define kLeftSpace 60
 
 typedef void(^CallBackBlock)(BOOL doConfirm, NSArray *keyValues);
 

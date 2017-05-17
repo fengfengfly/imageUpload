@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface QueryCountCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *CodeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *codeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIView *badgeBgV;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
 
 @end

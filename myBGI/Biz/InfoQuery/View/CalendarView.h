@@ -14,7 +14,7 @@
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSString *selectedDate;
 @property (copy, nonatomic) BOOL(^willSelectBlock)(NSString *dateStr);
-@property (copy, nonatomic) void(^selectedBlock)(NSString * dateStr);
+@property (copy, nonatomic) void(^selectedBlock)(NSString * dateStr, BOOL isConfirm);
 @property (strong, nonatomic) UIView *contentView;
 @property (assign, nonatomic) CGRect dropBeginFrame;
 @property (assign, nonatomic) CGRect dropEndFrame;

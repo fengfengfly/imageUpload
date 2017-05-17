@@ -35,7 +35,7 @@
     calendar.scrollDirection = FSCalendarScrollDirectionHorizontal;
     calendar.backgroundColor = [UIColor whiteColor];
     calendar.appearance.todayColor = [UIColor whiteColor];
-    calendar.appearance.titleTodayColor = [UIColor blackColor];
+    calendar.appearance.headerMinimumDissolvedAlpha = 0;
     calendar.appearance.headerTitleColor = kSubjectColor;
     calendar.appearance.weekdayTextColor = kSubjectColor;
     [self.contentView addSubview:calendar];
@@ -56,11 +56,15 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    if (self.selectedBlock) {
+        self.selectedBlock(nil, NO);
+    }
     [UIView animateWithDuration:0.2 animations:^{
         self.calendar.frame = self.dropBeginFrame;
     } completion:^(BOOL finished) {
         [super removeFromSuperview];
     }];
+    
 }
 
 #pragma mark - <FSCalendarDelegate>
@@ -89,7 +93,7 @@
         [super removeFromSuperview];
     }];
     if (self.selectedBlock) {
-        self.selectedBlock([self.dateFormatter stringFromDate:date]);
+        self.selectedBlock([self.dateFormatter stringFromDate:date], YES);
     }
 }
 

@@ -19,6 +19,25 @@
     
     return _sharedManager;
 }
+
+- (void)sendUrlGetRequest:(NSString *)action params:(NSDictionary *)params success:(HttpSuccessResult)successResult failure:(HttpFailureResult)failureResult
+{
+    AFHTTPSessionManager *client = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString: domainURL]];
+    client.requestSerializer=[AFHTTPRequestSerializer serializer];
+    client.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    [client GET:(NSString *)action parameters:(id)params progress:^(NSProgress * downloadProgress){
+        
+    }success:^(NSURLSessionDataTask *task, id responseObject){
+        if (successResult) {
+            successResult(responseObject);
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error){
+        if (failureResult) {
+            failureResult(error);
+        }
+    }];
+}
 //不带缓存Json请求头
 - (NSURLSessionDataTask *)sendPostJsonRequestWithBodyURLString:(NSString *)bodyURLString
                                                          parameters:(id)parameters
@@ -52,7 +71,7 @@
     
     // 设置超时时间
     [sessionManager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
-    sessionManager.requestSerializer.timeoutInterval = 15.f;
+    sessionManager.requestSerializer.timeoutInterval = 10.f;
     [sessionManager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
     
 //    if (!isData) {

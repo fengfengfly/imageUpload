@@ -11,6 +11,7 @@
 #import "PicCaptureModel.h"
 
 @interface PictureCaptureSelectionVC : BaseViewController
+@property (assign, nonatomic) NSInteger defaultSelRow;
 @property (strong, nonatomic) NSMutableArray<PicSectionModel *> *dataSource;
 @property (strong, nonatomic) NSMutableArray<PicSectionModel *> *origDataSource;
 @property (copy, nonatomic) void(^finishBlock)();

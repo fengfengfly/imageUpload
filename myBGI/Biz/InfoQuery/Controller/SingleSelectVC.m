@@ -54,6 +54,7 @@ static NSString *CellID = @"CellID";
     NSString *title = self.dataSource[indexPath.row];
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
     cell.textLabel.text = title;
+    cell.textLabel.font = [UIFont systemFontOfSize:14];
     return cell;
 }
 

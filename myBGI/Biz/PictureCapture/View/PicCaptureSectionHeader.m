@@ -14,8 +14,8 @@
     [super awakeFromNib];
     // Initialization code
     self.numL.textColor = [UIColor whiteColor];
-    self.numL.layer.masksToBounds = YES;
-    self.numL.layer.cornerRadius = 12;
+    self.numBgV.layer.masksToBounds = YES;
+    self.numBgV.layer.cornerRadius = 12;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
@@ -30,10 +30,10 @@
 
 - (void)checkShrink{
     if (self.isExpand) {
-        self.numL.backgroundColor = [UIColor redColor];
+        self.numBgV.backgroundColor = [UIColor redColor];
         self.indicatorBtn.selected = YES;
     }else{
-        self.numL.backgroundColor = [UIColor grayColor];
+        self.numBgV.backgroundColor = [UIColor grayColor];
         self.indicatorBtn.selected = NO;
     }
 }

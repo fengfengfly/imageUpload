@@ -95,7 +95,7 @@ static NSString *CustomerCellID = @"customerCellID";
         }
     };
     BaseNavigationController *navigationController = [[BaseNavigationController alloc] initWithRootViewController:customerSearchVC];
-    [controller.navigationController presentViewController:navigationController animated:YES completion:nil];
+    [controller.navigationController presentViewController:navigationController animated:NO completion:nil];
 }
 
 - (void)configTableView{

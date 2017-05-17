@@ -20,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *menuList;
 @property (strong, nonatomic) NSArray *placeholderList;
+@property (weak, nonatomic) IBOutlet UIButton *confirmBtn;
+@property (weak, nonatomic) IBOutlet UIButton *resetBtn;
 
 @end
 
@@ -34,58 +36,11 @@ static NSString *CellIDDetail = @"CellIDDetail";
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"InputTFCell" bundle:nil] forCellReuseIdentifier:CellIDTF];
-    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 40)];
-    self.tableView.tableFooterView = footer;
-    footer.backgroundColor = [UIColor whiteColor];
     
-    UIButton *resetBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIButton *confirmBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    [resetBtn setTitle:@"重置" forState:UIControlStateNormal];
-    [confirmBtn setTitle:@"确认" forState:UIControlStateNormal];
-    
-    [resetBtn setTitleColor:GrayFontColor forState:UIControlStateHighlighted];
-    [confirmBtn setTitleColor:GrayFontColor forState:UIControlStateHighlighted];
-    
-    [resetBtn setTitleColor:kSubjectColor forState:UIControlStateNormal];
-    [confirmBtn setTitleColor:kSubjectColor forState:UIControlStateNormal];
-    
-    
-    [resetBtn sizeToFit];
-    [confirmBtn sizeToFit];
-    
-    
-    [resetBtn addTarget:self action:@selector(resetClick:) forControlEvents:UIControlEventTouchUpInside];
-    [confirmBtn addTarget:self action:@selector(confirmClick:) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    [footer addSubview:resetBtn];
-    [footer addSubview:confirmBtn];
-    
-    UIView *lineView = [[UIView alloc] init];
-    lineView.backgroundColor = [UIColor lightGrayColor];
-    [footer addSubview:lineView];
-    
-    [resetBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(footer);
-        make.left.equalTo(footer);
-        make.centerY.equalTo(footer);
-        make.width.equalTo(resetBtn);
-    }];
-    
-    [confirmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(resetBtn.mas_right).offset(20);
-        make.right.equalTo(footer);
-        make.centerY.equalTo(footer);
-        make.width.equalTo(resetBtn);
-        make.height.equalTo(footer);
-    }];
-    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(footer).offset(14);
-        make.right.equalTo(footer).offset(0);
-        make.top.equalTo(footer);
-        make.height.mas_equalTo(0.5);
-    }];
+    [self.resetBtn addTarget:self action:@selector(resetClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.confirmBtn addTarget:self action:@selector(confirmClick:) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
@@ -169,10 +124,13 @@ static NSString *CellIDDetail = @"CellIDDetail";
     
     ProductListViewController *productListVC = [[UIStoryboard storyboardWithName:@"PictureCapture" bundle:nil] instantiateViewControllerWithIdentifier:@"ProductListViewController"];
     productListVC.allowMultiSelect = NO;
-    productListVC.chooseBlock = ^(NSMutableArray *productArray){
-        ProductModel *model = productArray.firstObject;
-        self.productCode = model.productCode;
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    productListVC.chooseBlock = ^(NSMutableArray *productArray, BOOL isConfirm){
+        if (isConfirm == YES) {
+            
+            ProductModel *model = productArray.firstObject;
+            self.productCode = model.productCode;
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
     };
     
     [self.navigationController pushViewController:productListVC animated:YES];
@@ -251,12 +209,21 @@ static NSString *CellIDDetail = @"CellIDDetail";
         inputCell.titleL.text = title;
         inputCell.textField.text = value;
         inputCell.textField.placeholder = placeholder;
-        [inputCell.textField setValue:GrayFontColor forKeyPath:@"_placeholderLabel.textColor"];
+        [inputCell.textField setValue:kGrayFontColor forKeyPath:@"_placeholderLabel.textColor"];
         cell = inputCell;
         
     }else{
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIDDetail];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIDDetail];
+            cell.textLabel.font = [UIFont systemFontOfSize:15];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:15];
+            cell.detailTextLabel.textColor = kGrayFontColor;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
         NSString *detailText = nil;
         if (value.length > 0) {
+            cell.detailTextLabel.textColor = kSubjectColor;
             if (indexPath.row == 4) {
                 detailText = self.stepsListUp[value.integerValue + 1];
             }else{
@@ -265,15 +232,9 @@ static NSString *CellIDDetail = @"CellIDDetail";
             }
         }else{
             detailText = placeholder;
+            cell.detailTextLabel.textColor = kGrayFontColor;
         }
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIDDetail];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIDDetail];
-            cell.textLabel.font = [UIFont systemFontOfSize:15];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:15];
-            cell.detailTextLabel.textColor = GrayFontColor;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
+        
         cell.textLabel.text = title;
         cell.detailTextLabel.text = detailText;
     }
@@ -284,6 +245,7 @@ static NSString *CellIDDetail = @"CellIDDetail";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 50;
 }
+
 
 /*
 #pragma mark - Navigation

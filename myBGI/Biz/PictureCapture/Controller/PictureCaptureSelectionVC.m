@@ -21,6 +21,8 @@
 @property (assign, nonatomic) NSInteger expandSection;
 @property (strong, nonatomic) PicCaptureModel *addingModel;
 @property (assign, nonatomic) NSInteger selectStyleIndex;
+@property (strong, nonatomic) UIButton *selectedAllBtn;
+
 @end
 
 @implementation PictureCaptureSelectionVC
@@ -30,8 +32,7 @@ static NSString *PicCellID = @"PicCellID";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"选择编辑";
-    [self configCollectionView];
-    [self turnMultiEditMode];
+    [self configCollectionView];//已默认多选
     
     self.selectStyleIndex = 1;//双输
     //自定义navigationBar右边的按钮
@@ -44,7 +45,18 @@ static NSString *PicCellID = @"PicCellID";
     UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     [rightBtn addTarget:self action:@selector(selectAllClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = rightBarItem;
-   
+    self.selectedAllBtn = rightBtn;
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    NSIndexPath *defaultSelIndex = [NSIndexPath indexPathForRow:self.defaultSelRow inSection:0];
+    PicSectionModel *model = self.dataSource.firstObject;
+    if (model.itemArray.count == 1) {
+        self.selectedAllBtn.selected = YES;
+    }
+    [self.collectionView selectItemAtIndexPath:defaultSelIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,6 +80,9 @@ static NSString *PicCellID = @"PicCellID";
 
 - (void)selectAllClick:(UIButton *)sender{
     sender.selected = !sender.selected;
+    if (self.dataSource.count == 0) {
+        return;
+    }
     if (sender.selected == YES) {
         [self selectItemsOfSection:self.expandSection];
     }else{
@@ -89,17 +104,19 @@ static NSString *PicCellID = @"PicCellID";
         [self showStatusBarWarningWithStatus:@"请选择删除对象"];
         return;
     }
+    
     [self deleteCell:indexPaths];
 }
 
 - (void)configCollectionView{
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    self.collectionView.allowsMultipleSelection = NO;
+    self.collectionView.allowsMultipleSelection = YES;
     [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass([PicCaptureSectionHeader class]) bundle:[NSBundle mainBundle]] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SectionHeaderID];
     [self.collectionView registerNib:[UINib nibWithNibName:@"PicCaptureCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:PicCellID];
 }
 
+//选择整个section
 - (void)selectItemsOfSection:(NSInteger)section{
     NSInteger num = [self.collectionView numberOfItemsInSection:section];
     for (int i = 0; i < num; i ++) {
@@ -107,7 +124,7 @@ static NSString *PicCellID = @"PicCellID";
         [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:(UICollectionViewScrollPositionNone)];
     }
 }
-
+//反选整个section
 - (void)deSelectItemsOfSection:(NSInteger)section{
     NSInteger num = [self.collectionView numberOfItemsInSection:section];
     for (int i = 0; i < num; i ++) {
@@ -119,14 +136,23 @@ static NSString *PicCellID = @"PicCellID";
 
 //删除多个
 - (void)deleteCell: (NSArray<NSIndexPath *> *)senders{
-    
+    //删除数据
+    [self deleteDatas:senders];
+    [self.collectionView reloadData];
+    if(self.dataSource.count == 0){
+        [self hudSelfTextMessage:@"已删除所选全部"];
+        [self backBtnClick];
+    }
+}
+
+- (void)deleteDatas:(NSArray<NSIndexPath *> *)senders{
     NSIndexPath *indexPath = senders.firstObject;
-    NSInteger sectionFlag = indexPath.section;
+    NSInteger sectionFlag = indexPath.section;//初始section
     
     NSMutableArray *sectionModelArray = [NSMutableArray array];
     [sectionModelArray addObject:self.dataSource[sectionFlag]];
     NSMutableArray *indexSetArray = [NSMutableArray array];
-    NSMutableIndexSet *muIndexSetFlag = [NSMutableIndexSet indexSet];
+    NSMutableIndexSet *muIndexSetFlag = [NSMutableIndexSet indexSet];//初始下标组
     [indexSetArray addObject:muIndexSetFlag];
     for (NSIndexPath *indexPath in senders) {//遍历需要删除的path
 #if DEBUG
@@ -160,26 +186,21 @@ static NSString *PicCellID = @"PicCellID";
     
     //移除空section
     [self.dataSource removeObjectsAtIndexes:nullSectionIndexSet];
-    [self.collectionView reloadData];
     
 }
 
+
+
 //编辑多个
 - (void)editCell:(NSArray<NSIndexPath *> *)senders{
+    
     NSMutableArray *muArray = [NSMutableArray array];
     for (NSIndexPath *indexPath in senders) {//取出section中的item
         
         PicSectionModel *sectionModel = [self.dataSource objectAtIndex:indexPath.section];
         [muArray addObject:sectionModel.itemArray[indexPath.row]];
     }
-    for (NSIndexPath *indepath in senders) {//从数据源中移除要编辑的item
-        PicSectionModel *sectionModel = self.dataSource[indepath.section];
-        [sectionModel.itemArray removeObjectAtIndex:indepath.row];
-        if (sectionModel.itemArray.count == 0) {//移除整个section
-            [self.dataSource removeObject:sectionModel];
-            [self.origDataSource removeObject:sectionModel];
-        }
-    }
+    [self deleteDatas:senders];
     
     PicSectionModel *sectionModel = [PicSectionModel new];
     sectionModel.itemArray = muArray;
@@ -304,7 +325,21 @@ static NSString *PicCellID = @"PicCellID";
 //    [self presentViewController:alertController animated:YES completion:^{
 //        
 //    }];
+    PicSectionModel *sectionModel = self.dataSource.firstObject;
+    if (self.collectionView.indexPathsForSelectedItems.count == sectionModel.itemArray.count) {
+        self.selectedAllBtn.selected = YES;
+    }
+
+
     
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (self.selectedAllBtn.selected == YES) {
+        
+        self.selectedAllBtn.selected = NO;
+    }
     
 }
 

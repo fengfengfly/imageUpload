@@ -32,7 +32,7 @@
         [self initBackBarButtonItemVC:viewController];
         
     }
-    // 这个方法才是真正执行跳转
+    // 跳转
     [super pushViewController:viewController animated:animated];
     
 }
@@ -47,7 +47,7 @@
         [backBtn addTarget:viewController action:@selector(backBtnClick) forControlEvents:(UIControlEventTouchUpInside)];
     }
     [backBtn sizeToFit];
-//    backBtn.contentEdgeInsets = UIEdgeInsetsMake(0, -25, 0, 0);
+    backBtn.contentEdgeInsets = UIEdgeInsetsMake(0, -13, 0, 0);
     UIBarButtonItem *backBbi = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
     viewController.navigationItem.leftBarButtonItem = backBbi;
 }

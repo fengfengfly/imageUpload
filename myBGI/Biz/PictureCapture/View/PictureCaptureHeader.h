@@ -6,8 +6,9 @@
 //  Copyright © 2017年 feng. All rights reserved.
 //
 
+
 #import "BaseView.h"
-#define kCaptureHeaderH 200
+#define kCaptureHeaderH 215
 
 typedef void(^UserInterectBlock)();
 @interface PictureCaptureHeader : BaseView

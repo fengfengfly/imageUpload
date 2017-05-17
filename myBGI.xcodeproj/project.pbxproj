@@ -13,9 +13,11 @@
 		E90D5D0E1EC863CB006B191D /* TimeTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = E90D5D0D1EC863CB006B191D /* TimeTypeSelectView.m */; };
 		E90D5D111EC86FD1006B191D /* SelectLineHideBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = E90D5D101EC86FD1006B191D /* SelectLineHideBtn.m */; };
 		E91163901EC2C1040088CD72 /* UIView+SelfController.m in Sources */ = {isa = PBXBuildFile; fileRef = E911638F1EC2C1040088CD72 /* UIView+SelfController.m */; };
-		E91CECB51EC40EC800941393 /* UIImage+Corner.m in Sources */ = {isa = PBXBuildFile; fileRef = E91CECB41EC40EC800941393 /* UIImage+Corner.m */; };
+		E91ADE551ECAA17B00DE18C2 /* UIImage+Corner.m in Sources */ = {isa = PBXBuildFile; fileRef = E91ADE541ECAA17B00DE18C2 /* UIImage+Corner.m */; };
+		E91ADE581ECAD58100DE18C2 /* MyPlaceholderTF.m in Sources */ = {isa = PBXBuildFile; fileRef = E91ADE571ECAD58100DE18C2 /* MyPlaceholderTF.m */; };
 		E91CECC11EC457DC00941393 /* InputTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E91CECBF1EC457DC00941393 /* InputTFCell.m */; };
 		E91CECC21EC457DC00941393 /* InputTFCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E91CECC01EC457DC00941393 /* InputTFCell.xib */; };
+		E9241C441ECA89870009C5C7 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = E9241C431ECA89870009C5C7 /* UIImage+FixOrientation.m */; };
 		E94089701EC164300003A8C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E940896F1EC164300003A8C0 /* main.m */; };
 		E940897B1EC164300003A8C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E940897A1EC164300003A8C0 /* Assets.xcassets */; };
 		E940897E1EC164300003A8C0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E940897C1EC164300003A8C0 /* LaunchScreen.storyboard */; };
@@ -83,9 +85,6 @@
 		E9408A7E1EC1656C0003A8C0 /* UIViewController+HUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E9408A561EC1656C0003A8C0 /* UIViewController+HUD.m */; };
 		E9408A7F1EC1656C0003A8C0 /* BaseHttpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9408A591EC1656C0003A8C0 /* BaseHttpManager.m */; };
 		E9408A801EC1656C0003A8C0 /* HttpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9408A5B1EC1656C0003A8C0 /* HttpManager.m */; };
-		E9408A811EC1656C0003A8C0 /* MTreeNode+ExpandNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E9408A5F1EC1656C0003A8C0 /* MTreeNode+ExpandNode.m */; };
-		E9408A821EC1656C0003A8C0 /* MTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E9408A611EC1656C0003A8C0 /* MTreeNode.m */; };
-		E9408A831EC1656C0003A8C0 /* MTreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = E9408A631EC1656C0003A8C0 /* MTreeView.m */; };
 		E9408A841EC1656C0003A8C0 /* CustomPopOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = E9408A661EC1656C0003A8C0 /* CustomPopOverView.m */; };
 		E9408A851EC1656C0003A8C0 /* SimplePopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = E9408A691EC1656C0003A8C0 /* SimplePopupView.m */; };
 		E9408A861EC1656C0003A8C0 /* UIView+SetRect.m in Sources */ = {isa = PBXBuildFile; fileRef = E9408A6B1EC1656C0003A8C0 /* UIView+SetRect.m */; };
@@ -137,12 +136,16 @@
 		E90D5D101EC86FD1006B191D /* SelectLineHideBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectLineHideBtn.m; sourceTree = "<group>"; };
 		E911638E1EC2C1040088CD72 /* UIView+SelfController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SelfController.h"; sourceTree = "<group>"; };
 		E911638F1EC2C1040088CD72 /* UIView+SelfController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SelfController.m"; sourceTree = "<group>"; };
-		E91CECB31EC40EC800941393 /* UIImage+Corner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Corner.h"; sourceTree = "<group>"; };
-		E91CECB41EC40EC800941393 /* UIImage+Corner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Corner.m"; sourceTree = "<group>"; };
+		E91ADE531ECAA17B00DE18C2 /* UIImage+Corner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Corner.h"; sourceTree = "<group>"; };
+		E91ADE541ECAA17B00DE18C2 /* UIImage+Corner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Corner.m"; sourceTree = "<group>"; };
+		E91ADE561ECAD58100DE18C2 /* MyPlaceholderTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPlaceholderTF.h; sourceTree = "<group>"; };
+		E91ADE571ECAD58100DE18C2 /* MyPlaceholderTF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPlaceholderTF.m; sourceTree = "<group>"; };
 		E91CECBB1EC4536900941393 /* MoreQueryVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreQueryVC.h; sourceTree = "<group>"; };
 		E91CECBE1EC457DC00941393 /* InputTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTFCell.h; sourceTree = "<group>"; };
 		E91CECBF1EC457DC00941393 /* InputTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputTFCell.m; sourceTree = "<group>"; };
 		E91CECC01EC457DC00941393 /* InputTFCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InputTFCell.xib; sourceTree = "<group>"; };
+		E9241C421ECA89870009C5C7 /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
+		E9241C431ECA89870009C5C7 /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
 		E940896B1EC164300003A8C0 /* myBGI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myBGI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E940896F1EC164300003A8C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E940897A1EC164300003A8C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -264,12 +267,6 @@
 		E9408A591EC1656C0003A8C0 /* BaseHttpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseHttpManager.m; sourceTree = "<group>"; };
 		E9408A5A1EC1656C0003A8C0 /* HttpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpManager.h; sourceTree = "<group>"; };
 		E9408A5B1EC1656C0003A8C0 /* HttpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpManager.m; sourceTree = "<group>"; };
-		E9408A5E1EC1656C0003A8C0 /* MTreeNode+ExpandNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MTreeNode+ExpandNode.h"; sourceTree = "<group>"; };
-		E9408A5F1EC1656C0003A8C0 /* MTreeNode+ExpandNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MTreeNode+ExpandNode.m"; sourceTree = "<group>"; };
-		E9408A601EC1656C0003A8C0 /* MTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTreeNode.h; sourceTree = "<group>"; };
-		E9408A611EC1656C0003A8C0 /* MTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTreeNode.m; sourceTree = "<group>"; };
-		E9408A621EC1656C0003A8C0 /* MTreeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTreeView.h; sourceTree = "<group>"; };
-		E9408A631EC1656C0003A8C0 /* MTreeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTreeView.m; sourceTree = "<group>"; };
 		E9408A651EC1656C0003A8C0 /* CustomPopOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPopOverView.h; sourceTree = "<group>"; };
 		E9408A661EC1656C0003A8C0 /* CustomPopOverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPopOverView.m; sourceTree = "<group>"; };
 		E9408A681EC1656C0003A8C0 /* SimplePopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimplePopupView.h; sourceTree = "<group>"; };
@@ -499,10 +496,10 @@
 		E94089B91EC165560003A8C0 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				E94089C41EC165560003A8C0 /* QuerySampleCell.h */,
 				E94089C11EC165560003A8C0 /* QueryCountCell.h */,
 				E94089C21EC165560003A8C0 /* QueryCountCell.m */,
 				E94089C31EC165560003A8C0 /* QueryCountCell.xib */,
+				E94089C41EC165560003A8C0 /* QuerySampleCell.h */,
 				E94089C51EC165560003A8C0 /* QuerySampleCell.m */,
 				E94089C61EC165560003A8C0 /* QuerySampleCell.xib */,
 				E94089BA1EC165560003A8C0 /* DeliverCountView.h */,
@@ -690,6 +687,8 @@
 				E9408A3F1EC1656C0003A8C0 /* BaseView.m */,
 				E9408A401EC1656C0003A8C0 /* BaseViewController.h */,
 				E9408A411EC1656C0003A8C0 /* BaseViewController.m */,
+				E91ADE561ECAD58100DE18C2 /* MyPlaceholderTF.h */,
+				E91ADE571ECAD58100DE18C2 /* MyPlaceholderTF.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -697,8 +696,6 @@
 		E9408A421EC1656C0003A8C0 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				E91CECB31EC40EC800941393 /* UIImage+Corner.h */,
-				E91CECB41EC40EC800941393 /* UIImage+Corner.m */,
 				E9417DDC1EC5A4E70038294C /* UISearchBar+CustomColor.h */,
 				E9417DDD1EC5A4E70038294C /* UISearchBar+CustomColor.m */,
 				E9408A431EC1656C0003A8C0 /* MBProgressHUD+HYExtension.h */,
@@ -711,6 +708,8 @@
 				E9408A4A1EC1656C0003A8C0 /* NSString+UrlStringEncode.m */,
 				E9408A4B1EC1656C0003A8C0 /* UIColor+HexColor.h */,
 				E9408A4C1EC1656C0003A8C0 /* UIColor+HexColor.m */,
+				E91ADE531ECAA17B00DE18C2 /* UIImage+Corner.h */,
+				E91ADE541ECAA17B00DE18C2 /* UIImage+Corner.m */,
 				E9408A4D1EC1656C0003A8C0 /* UIImage+Compression.h */,
 				E9408A4E1EC1656C0003A8C0 /* UIImage+Compression.m */,
 				E9408A4F1EC1656C0003A8C0 /* UIImage+GradientColor.h */,
@@ -723,6 +722,8 @@
 				E911638F1EC2C1040088CD72 /* UIView+SelfController.m */,
 				E9408A551EC1656C0003A8C0 /* UIViewController+HUD.h */,
 				E9408A561EC1656C0003A8C0 /* UIViewController+HUD.m */,
+				E9241C421ECA89870009C5C7 /* UIImage+FixOrientation.h */,
+				E9241C431ECA89870009C5C7 /* UIImage+FixOrientation.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -741,24 +742,10 @@
 		E9408A5C1EC1656C0003A8C0 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				E9408A5D1EC1656C0003A8C0 /* MTreeView */,
 				E9408A641EC1656C0003A8C0 /* PopMenu */,
 				E9408A671EC1656C0003A8C0 /* SimplePopupView */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		E9408A5D1EC1656C0003A8C0 /* MTreeView */ = {
-			isa = PBXGroup;
-			children = (
-				E9408A5E1EC1656C0003A8C0 /* MTreeNode+ExpandNode.h */,
-				E9408A5F1EC1656C0003A8C0 /* MTreeNode+ExpandNode.m */,
-				E9408A601EC1656C0003A8C0 /* MTreeNode.h */,
-				E9408A611EC1656C0003A8C0 /* MTreeNode.m */,
-				E9408A621EC1656C0003A8C0 /* MTreeView.h */,
-				E9408A631EC1656C0003A8C0 /* MTreeView.m */,
-			);
-			path = MTreeView;
 			sourceTree = "<group>";
 		};
 		E9408A641EC1656C0003A8C0 /* PopMenu */ = {
@@ -1088,7 +1075,6 @@
 				E9408A771EC1656C0003A8C0 /* NSString+NilString.m in Sources */,
 				E9408A721EC1656C0003A8C0 /* BaseNavigationController.m in Sources */,
 				E9408A8C1EC165870003A8C0 /* MainTabBarController.m in Sources */,
-				E9408A821EC1656C0003A8C0 /* MTreeNode.m in Sources */,
 				E9408A261EC165560003A8C0 /* PictureCaptureViewcontroller.m in Sources */,
 				E9408A0B1EC165560003A8C0 /* InfoQueryNavigationController.m in Sources */,
 				E9408A281EC165560003A8C0 /* ProductSearchVC.m in Sources */,
@@ -1097,7 +1083,6 @@
 				E9408A801EC1656C0003A8C0 /* HttpManager.m in Sources */,
 				E9408A0C1EC165560003A8C0 /* InfoQueryViewController.m in Sources */,
 				E9408A861EC1656C0003A8C0 /* UIView+SetRect.m in Sources */,
-				E9408A831EC1656C0003A8C0 /* MTreeView.m in Sources */,
 				E9408A1A1EC165560003A8C0 /* SampleCountView.m in Sources */,
 				E9408A2E1EC165560003A8C0 /* EditMenuListView.m in Sources */,
 				E9408A871EC1656C0003A8C0 /* UIView+SimplePopupView.m in Sources */,
@@ -1116,17 +1101,17 @@
 				E9408A2A1EC165560003A8C0 /* PicCaptureModel.m in Sources */,
 				E9408A241EC165560003A8C0 /* PictureCaptureNavigationController.m in Sources */,
 				E9408A181EC165560003A8C0 /* QuerySampleCell.m in Sources */,
-				E91CECB51EC40EC800941393 /* UIImage+Corner.m in Sources */,
 				E9408AA51EC165B60003A8C0 /* TZImageManager.m in Sources */,
 				E90D5D091EC8336E006B191D /* SingleSelectVC.m in Sources */,
 				E9408A291EC165560003A8C0 /* CustomerModel.m in Sources */,
 				E94089A31EC165310003A8C0 /* AppDelegate.m in Sources */,
 				E90D5D0B1EC8385F006B191D /* MoreQueryVC.m in Sources */,
-				E9408A811EC1656C0003A8C0 /* MTreeNode+ExpandNode.m in Sources */,
 				E9417DDE1EC5A4E70038294C /* UISearchBar+CustomColor.m in Sources */,
 				E9408A0E1EC165560003A8C0 /* SampleCountViewController.m in Sources */,
 				E9E87F9C1EC3171700C132B0 /* UserCenterVC.m in Sources */,
 				E9408A221EC165560003A8C0 /* CustomerSearchVC.m in Sources */,
+				E91ADE551ECAA17B00DE18C2 /* UIImage+Corner.m in Sources */,
+				E91ADE581ECAD58100DE18C2 /* MyPlaceholderTF.m in Sources */,
 				E9408A231EC165560003A8C0 /* PicEditViewController.m in Sources */,
 				E9408AA91EC165B60003A8C0 /* TZPhotoPreviewCell.m in Sources */,
 				E9408A741EC1656C0003A8C0 /* BaseViewController.m in Sources */,
@@ -1155,6 +1140,7 @@
 				E9408A7F1EC1656C0003A8C0 /* BaseHttpManager.m in Sources */,
 				E9408A321EC165560003A8C0 /* PicCaptureSectionHeader.m in Sources */,
 				E9408A161EC165560003A8C0 /* QueryCountCell.m in Sources */,
+				E9241C441ECA89870009C5C7 /* UIImage+FixOrientation.m in Sources */,
 				E90D5D111EC86FD1006B191D /* SelectLineHideBtn.m in Sources */,
 				E9408A761EC1656C0003A8C0 /* NSMutableDictionary+Safe.m in Sources */,
 				E9408A731EC1656C0003A8C0 /* BaseView.m in Sources */,

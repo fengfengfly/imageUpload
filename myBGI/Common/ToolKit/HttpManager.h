@@ -17,6 +17,9 @@ typedef void (^HttpFailureResult)(id mError);
 
 @interface HttpManager : BaseHttpManager
 + (instancetype)sharedManager;
+
+//get请求
+- (void)sendUrlGetRequest:(NSString *)action params:(NSDictionary *)params success:(HttpSuccessResult)successResult failure:(HttpFailureResult)failureResult;
 //不带缓存请求头json
 - (NSURLSessionDataTask *)sendPostJsonRequestWithBodyURLString:(NSString *)bodyURLString
                                                          parameters:(id)parameters

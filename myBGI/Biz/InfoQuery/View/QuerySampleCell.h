@@ -15,7 +15,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *phoneNumL;
 @property (weak, nonatomic) IBOutlet UILabel *productNameL;
 @property (weak, nonatomic) IBOutlet UILabel *customerCodeL;
+@property (weak, nonatomic) IBOutlet UIView *statusBgV;
 @property (weak, nonatomic) IBOutlet UILabel *statusL;
+@property (weak, nonatomic) IBOutlet UIView *resultBgv;
 @property (weak, nonatomic) IBOutlet UILabel *resultL;
 
 - (void)configCellWithModel:(SampleImportModel *)model;

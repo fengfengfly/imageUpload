@@ -11,6 +11,7 @@
 
 typedef void(^expandChange)(NSInteger section, BOOL isExpand);
 @interface PicCaptureSectionHeader : UICollectionReusableView
+@property (weak, nonatomic) IBOutlet UIView *numBgV;
 @property (weak, nonatomic) IBOutlet UILabel *numL;
 @property (weak, nonatomic) IBOutlet UILabel *sectionTitleL;
 @property (weak, nonatomic) IBOutlet UIButton *indicatorBtn;

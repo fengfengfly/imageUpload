@@ -106,7 +106,7 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
     [self.timeTypeTF resignFirstResponder];
 }
 
-- (void)showCalendarDateStr:(NSString *)date willSelected:(BOOL (^)(NSString *willDaetStr))willBlock finishBlock:(void(^)(NSString *dateStr))finishBlock{
+- (void)showCalendarDateStr:(NSString *)date willSelected:(BOOL (^)(NSString *willDaetStr))willBlock finishBlock:(void(^)(NSString *dateStr, BOOL isConfirm))finishBlock{
     UIViewController *controller = [self getCurrentViewController];
     CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds contentFrame:[self convertRect:self.tableView.frame toView:controller.view]];
     calendarV.willSelectBlock = willBlock;
@@ -117,36 +117,47 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
 }
 
 - (IBAction)beginTimeClick:(UIButton *)sender {
-   
+    sender.selected = YES;
     [self showCalendarDateStr:self.beginTimeTF.text willSelected:^BOOL(NSString *willDateStr) {
        
         return YES;
-    } finishBlock:^(NSString *dateStr) {
-        
-        self.beginTimeTF.text = dateStr;
+    } finishBlock:^(NSString *dateStr, BOOL isConfirm) {
+        if (isConfirm == YES) {
+            
+            self.beginTimeTF.text = dateStr;
+        }
+        sender.selected = NO;
         
     }];
-    
 }
+
 - (IBAction)timeTypeClick:(UIButton *)sender {
+    sender.selected = YES;
     UIViewController *controller = [self getCurrentViewController];
     TimeTypeSelectView *timeTypeView = [[TimeTypeSelectView alloc] initWithFrame:controller.view.bounds contentFrame:[self convertRect:self.tableView.frame toView:controller.view]];
     timeTypeView.selectedIndex = self.selectTypeIndex;
-    timeTypeView.selectedBlock = ^(NSIndexPath *indexPath){
-        self.selectTypeIndex = indexPath.row;
-        self.timeTypeTF.text = self.timeTypes[indexPath.row];
+    timeTypeView.selectedBlock = ^(NSIndexPath *indexPath, BOOL isConfirm){
+        if (isConfirm == YES) {
+            
+            self.selectTypeIndex = indexPath.row;
+            self.timeTypeTF.text = self.timeTypes[indexPath.row];
+        }
+        sender.selected = NO;
     };
     [controller.view addSubview:timeTypeView];
     [timeTypeView showWithDataSource:self.timeTypes];
 }
 - (IBAction)endTimeClick:(UIButton *)sender {
-    
+    sender.selected = YES;
     [self showCalendarDateStr:self.endTimeTF.text willSelected:^BOOL(NSString *willDateStr){
         
         return YES;
-    } finishBlock:^(NSString *dateStr) {
-        
-        self.endTimeTF.text = dateStr;
+    } finishBlock:^(NSString *dateStr, BOOL isConfirm) {
+        if (isConfirm == YES) {
+            
+            self.endTimeTF.text = dateStr;
+        }
+        sender.selected = NO;
         
     }];
 }
@@ -235,11 +246,11 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     DeliverCountModel *model = self.dataSource[indexPath.row];
     if (self.countType == SampleCountTypeProduct) {
-        cell.CodeLabel.text = model.productCode;
+        cell.codeLabel.text = model.productCode;
         cell.titleLabel.text = model.productName;
         cell.badgeLabel.text = model.countNumber;
     }else{
-        cell.CodeLabel.text = model.customerCode;
+        cell.codeLabel.text = model.customerCode;
         cell.titleLabel.text = model.customerName;
         cell.badgeLabel.text = model.countNumber;
     }

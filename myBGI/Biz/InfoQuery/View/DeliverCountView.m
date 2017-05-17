@@ -55,7 +55,7 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
     dateStr = [dateFormatter stringFromDate:today];
     return dateStr;
 }
-- (void)showCalendarDateStr:(NSString *)date willSelected:(BOOL (^)(NSString *willDaetStr))willBlock finishBlock:(void(^)(NSString *dateStr))finishBlock{
+- (void)showCalendarDateStr:(NSString *)date willSelected:(BOOL (^)(NSString *willDaetStr))willBlock finishBlock:(void(^)(NSString *dateStr, BOOL isConfirm))finishBlock{
     UIViewController *controller = [self getCurrentViewController];
     CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds contentFrame:[self convertRect:self.tableView.frame toView:controller.view]];
     calendarV.willSelectBlock = willBlock;
@@ -68,25 +68,31 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
 }
 
 - (IBAction)chooseBeginTimeClick:(UIButton *)sender {
-    
+    sender.selected = YES;
     [self showCalendarDateStr:self.beginTimeTF.text willSelected:^BOOL(NSString *willDateStr) {
         
         return YES;
-    } finishBlock:^(NSString *dateStr) {
-        
-        self.beginTimeTF.text = dateStr;
+    } finishBlock:^(NSString *dateStr, BOOL isConfirm) {
+        if (isConfirm) {
+            
+            self.beginTimeTF.text = dateStr;
+        }
+        sender.selected = NO;
         
     }];
 }
 
 - (IBAction)chooseEndTimeClick:(UIButton *)sender {
-    
+    sender.selected = YES;
     [self showCalendarDateStr:self.endTimeTF.text willSelected:^BOOL(NSString *willDateStr){
         
         return YES;
-    } finishBlock:^(NSString *dateStr) {
-        
-        self.endTimeTF.text = dateStr;
+    } finishBlock:^(NSString *dateStr, BOOL isConfirm) {
+        if (isConfirm == YES) {
+            
+            self.endTimeTF.text = dateStr;
+        }
+        sender.selected = NO;
     }];
 }
 
@@ -164,11 +170,11 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     DeliverCountModel *model = self.dataSource[indexPath.row];
     if (self.countType == DeliverCountTypeProduct) {
-        cell.CodeLabel.text = model.productCode;
+        cell.codeLabel.text = model.productCode;
         cell.titleLabel.text = model.productName;
         cell.badgeLabel.text = model.countNumber;
     }else{
-        cell.CodeLabel.text = model.customerCode;
+        cell.codeLabel.text = model.customerCode;
         cell.titleLabel.text = model.customerName;
         cell.badgeLabel.text = model.countNumber;
     }

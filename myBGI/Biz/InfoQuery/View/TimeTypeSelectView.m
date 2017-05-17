@@ -24,6 +24,9 @@ static NSString *CellID = @"CellID";
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    self.selectedBlock(nil, NO);
+    
     [UIView animateWithDuration:0.3 animations:^{
         self.tableView.frame = self.dropBeginFrame;
     } completion:^(BOOL finished) {
@@ -60,7 +63,7 @@ static NSString *CellID = @"CellID";
         }
     }];
     if (self.selectedBlock) {
-        self.selectedBlock(indexPath);
+        self.selectedBlock(indexPath, YES);
     }
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -95,6 +98,12 @@ static NSString *CellID = @"CellID";
     return kTimeTypeCellH;
 }
 
+- (void)dealloc{
+#if DEBUG
+    NSLog(@"%s", __func__);
+#endif
+
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.
