@@ -50,7 +50,6 @@
         [self addSubview:button];
     }
     
-    
 }
 
 - (IBAction)buttonClick:(UIButton *)sender{

@@ -32,6 +32,8 @@
 @property (strong, nonatomic) NSArray *inputStyles;
 @property (assign, nonatomic) NSInteger selectStyleIndex;
 
+@property (assign, nonatomic) BOOL hasChange;
+
 @end
 
 @implementation PicEditViewController
@@ -42,6 +44,7 @@ static NSString *PicCellID = @"PicCellID";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"编辑数据";
+    self.hasChange = NO;
     self.selectStyleIndex = 1;
     self.currentSection = self.dataSource.firstObject;
     self.currentModel = self.currentSection.itemArray.firstObject;
@@ -52,6 +55,16 @@ static NSString *PicCellID = @"PicCellID";
     
     [self configCollectionView];
     
+    //自定义navigationBar右边的按钮
+    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    rightBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+    [rightBtn setTitle:@"确定" forState:(UIControlStateNormal)];
+    [rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [rightBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
+    [rightBtn sizeToFit];
+    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    [rightBtn addTarget:self action:@selector(confirmBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = rightBarItem;
     //captureHeader Action
     //    self.captureHeader.customerTF.inputView = [[UIView alloc]initWithFrame:CGRectZero];
     //    self.captureHeader.productTF.inputView = [[UIView alloc]initWithFrame:CGRectZero];
@@ -115,7 +128,7 @@ static NSString *PicCellID = @"PicCellID";
 
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.captureHeader.frame = CGRectMake(0, -kCaptureHeaderH + 60, SCREEN_WIDTH, kCaptureHeaderH - 60);
+    self.captureHeader.frame = CGRectMake(0, -kCaptureEditHeaderH, SCREEN_WIDTH, kCaptureEditHeaderH);
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -131,12 +144,35 @@ static NSString *PicCellID = @"PicCellID";
     [self.captureHeader.customerTF removeObserver:self forKeyPath:@"text" context:nil];
 }
 
-- (void)backBtnClick{
-    [self.navigationController popToRootViewControllerAnimated:YES];
-    if (self.resultBlock) {
-        self.resultBlock(YES, self.dataSource);
-    }
+- (void)willPop{//pop时检测是否有改变
     
+    if (self.resultBlock) {
+        self.resultBlock(self.hasChange, self.dataSource);
+    }
+}
+
+- (void)backBtnClick{
+    UIAlertController *alertCtrller = [UIAlertController alertControllerWithTitle:@"是否放弃所做修改并返回?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"继续修改" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction *notCancelAction = [UIAlertAction actionWithTitle:@"放弃修改" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        PicSectionModel *section = self.dataSource.firstObject;
+        for (PicCaptureModel *model in section.itemArray) {
+            [model restoreSelf];
+        }
+        self.hasChange = NO;
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    [alertCtrller addAction:cancelAction];
+    [alertCtrller addAction:notCancelAction];
+    [self presentViewController:alertCtrller animated:YES completion:nil];
+    
+}
+
+- (void)confirmBtnClick:(UIButton *)btn{
+    self.hasChange = YES;
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark get-setProperty
@@ -167,7 +203,7 @@ static NSString *PicCellID = @"PicCellID";
 - (PictureCaptureHeader *)captureHeader{
     if (_captureHeader == nil) {
         PictureCaptureHeader *header = [[[NSBundle mainBundle] loadNibNamed:@"PictureCaptureHeader" owner:nil options:nil] firstObject];
-        header.frame = CGRectMake(0, - kCaptureHeaderH + 60, SCREEN_WIDTH, kCaptureHeaderH - 60);
+        header.frame = CGRectMake(0, - kCaptureEditHeaderH, SCREEN_WIDTH, kCaptureEditHeaderH);
         _captureHeader = header;
     }
     return _captureHeader;
@@ -176,11 +212,11 @@ static NSString *PicCellID = @"PicCellID";
 - (void)configCollectionView{
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    
+    self.collectionView.backgroundColor = kBgColor;
     [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass([PicCaptureSectionHeader class]) bundle:[NSBundle mainBundle]] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SectionHeaderID];
     [self.collectionView registerNib:[UINib nibWithNibName:@"PicCaptureCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:PicCellID];
     
-    self.collectionView.contentInset = UIEdgeInsetsMake(kCaptureHeaderH - 60, 0, 0 ,0);
+    self.collectionView.contentInset = UIEdgeInsetsMake(kCaptureEditHeaderH, 0, 0 ,0);
     [self.collectionView addSubview:self.captureHeader];
 }
 
@@ -198,7 +234,6 @@ static NSString *PicCellID = @"PicCellID";
     CustomerListViewController *customerListVC = [[UIStoryboard storyboardWithName:@"PictureCapture" bundle:nil] instantiateViewControllerWithIdentifier:@"CustomerListViewController"];
     
     customerListVC.chooseBlock = ^(CustomerModel *model){
-        
         if (![model.customerCode isEqualToString:self.captureHeader.customerTF.text]) {
             self.captureHeader.customerTF.text = model.customerName;
 //            self.currentModel.customer = model;
@@ -254,6 +289,7 @@ static NSString *PicCellID = @"PicCellID";
         cell.uploadBtn.hidden = YES;
         cell.indicatorBtnWidthConstraint.constant = 0;
     }
+    cell.bottomSeparate.hidden = YES;
     PicSectionModel *sectionModel = self.dataSource[indexPath.section];
     
     [cell configHeaderSectionModel:sectionModel isExpand:YES section:indexPath.section block:^void(NSInteger section, BOOL isExpand) {

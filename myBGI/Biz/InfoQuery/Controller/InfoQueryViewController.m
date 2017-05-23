@@ -31,8 +31,8 @@ static NSString *InfoQueryCellID = @"InfoQueryCellID";
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
-    [self.tableView setSeparatorColor:[UIColor groupTableViewBackgroundColor]];
-    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    [self.tableView setSeparatorColor:kSeparateLineColor];
+    self.tableView.backgroundColor = kBgColor;
     
 }
 
@@ -124,6 +124,9 @@ static NSString *InfoQueryCellID = @"InfoQueryCellID";
         }];
         cell.textLabel.textColor = kBlackFontColor;
     }
+    if (indexPath.section == 1 && indexPath.row == self.menuList.count - 1) {
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
 //    cell.accessoryType = UITableViewCellAccessoryNone;
     NSString  *imageStr = self.menuIconList[indexPath.section][indexPath.row];
     cell.imageView.image = [UIImage imageNamed:imageStr];
@@ -132,6 +135,9 @@ static NSString *InfoQueryCellID = @"InfoQueryCellID";
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
+    view.backgroundColor = kBgColor;
+}
 
 
 

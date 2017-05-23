@@ -85,20 +85,20 @@ static char ReLoadingBtnKey;
     [self showHUDWithMessage:message deltail:deltail onView:nil];
 }
 + (void)showHUDWithMessage:(NSString *)message deltail:(NSString *)deltail onView:(UIView *)view {
-    MBProgressHUD *hud = [self showMessage:message detail:deltail showView:view img:nil isCustomImage:NO time:0.0 aplhaBackground:NO isAutoDismis:NO];
+    MBProgressHUD *hud = [self showMessage:message detail:deltail showView:view img:nil isCustomImage:NO time:0.0 dimBackground:NO isAutoDismis:NO];
     hud.mode = MBProgressHUDModeIndeterminate;
 }
 + (void)showError:(NSString *)error {
     [self showError:error onView:nil];
 }
 + (void)showError:(NSString *)error onView:(UIView *)view {
-    [self showMessage:error detail:nil showView:view img:@"error.png" isCustomImage:NO time:1.0 aplhaBackground:NO isAutoDismis:YES];
+    [self showMessage:error detail:nil showView:view img:@"error.png" isCustomImage:NO time:1.0 dimBackground:NO isAutoDismis:YES];
 }
 + (void)showSuccess:(NSString *)Success {
     [self showSuccess:Success onView:nil];
 }
 + (void)showSuccess:(NSString *)Success onView:(UIView *)view {
-     [self showMessage:Success detail:nil showView:view img:@"success.png"  isCustomImage:NO time:1.0 aplhaBackground:NO isAutoDismis:YES];
+     [self showMessage:Success detail:nil showView:view img:@"success.png"  isCustomImage:NO time:1.0 dimBackground:NO isAutoDismis:YES];
 }
 + (void)showIcon:(NSString *)icon {
     [self showMessage:nil icon:icon];
@@ -107,7 +107,7 @@ static char ReLoadingBtnKey;
     [self showMessage:message icon:icon view:nil];
 }
 + (void)showMessage:(NSString *)message icon:(NSString *)icon view:(UIView *)view {
-    [self showMessage:message detail:nil showView:view img:icon isCustomImage:YES time:1.0 aplhaBackground:NO isAutoDismis:YES];
+    [self showMessage:message detail:nil showView:view img:icon isCustomImage:YES time:1.0 dimBackground:NO isAutoDismis:YES];
 }
 
 + (void)showAnimotionHUD {
@@ -121,7 +121,7 @@ static char ReLoadingBtnKey;
 }
 
 + (void)showAnimationHUDWithImages:(NSArray *)images title:(NSString *)title onView:(UIView *)view {
-    [self showAnimationHUDWithImages:images title:title showView:view aplhaBackground:NO];
+    [self showAnimationHUDWithImages:images title:title showView:view dimBackground:NO];
 }
 
 /*  有黑色背景 */
@@ -141,20 +141,20 @@ static char ReLoadingBtnKey;
     [self showBlackBackgroundHUDMessage:message deltail:deltail onView:nil];
 }
 + (void)showBlackBackgroundHUDMessage:(NSString *)message deltail:(NSString *)deltail onView:(UIView *)view {
-    MBProgressHUD *hud = [self showMessage:message detail:deltail showView:view img:nil isCustomImage:NO time:0.0 aplhaBackground:YES isAutoDismis:NO];
+    MBProgressHUD *hud = [self showMessage:message detail:deltail showView:view img:nil isCustomImage:NO time:0.0 dimBackground:YES isAutoDismis:NO];
     hud.mode = MBProgressHUDModeIndeterminate;
 }
 + (void)showBlackBackgroundError:(NSString *)error {
      [self showBlackBackgroundError:error onView:nil];
 }
 + (void)showBlackBackgroundError:(NSString *)error onView:(UIView *)view {
-    [self showMessage:error detail:nil showView:view img:@"error.png" isCustomImage:NO time:1.0 aplhaBackground:YES isAutoDismis:YES];
+    [self showMessage:error detail:nil showView:view img:@"error.png" isCustomImage:NO time:1.0 dimBackground:YES isAutoDismis:YES];
 }
 + (void)showBlackBackgroundSuccess:(NSString *)Success {
     [self showBlackBackgroundSuccess:Success onView:nil];
 }
 + (void)showBlackBackgroundSuccess:(NSString *)Success onView:(UIView *)view{
-    [self showMessage:Success detail:nil showView:view img:@"success.png" isCustomImage:NO time:1.0 aplhaBackground:YES isAutoDismis:YES];
+    [self showMessage:Success detail:nil showView:view img:@"success.png" isCustomImage:NO time:1.0 dimBackground:YES isAutoDismis:YES];
 }
 + (void)showBlackBackgroundIcon:(NSString *)icon {
     [self showBlackBackgroundMessage:nil icon:icon];
@@ -163,7 +163,7 @@ static char ReLoadingBtnKey;
     [self showBlackBackgroundMessage:message icon:icon view:nil];
 }
 + (void)showBlackBackgroundMessage:(NSString *)message icon:(NSString *)icon view:(UIView *)view {
-     [self showMessage:message detail:nil showView:view img:icon isCustomImage:YES time:1.0 aplhaBackground:YES isAutoDismis:YES];
+     [self showMessage:message detail:nil showView:view img:icon isCustomImage:YES time:1.0 dimBackground:YES isAutoDismis:YES];
 }
 
 + (void)showAnimotionBlackBackgroundHUD {
@@ -176,7 +176,7 @@ static char ReLoadingBtnKey;
     [self showAnimationBlackBackgroundHUDWithImages:images title:title toView:nil];
 }
 + (void)showAnimationBlackBackgroundHUDWithImages:(NSArray *)images title:(NSString *)title toView:(UIView *)view {
-    [self showAnimationHUDWithImages:images title:title showView:view aplhaBackground:YES];
+    [self showAnimationHUDWithImages:images title:title showView:view dimBackground:YES];
 }
 
 /*  隐藏  */
@@ -205,7 +205,7 @@ static char ReLoadingBtnKey;
     ![self hideHUDForView:view animated:NO] ? : [self showError:message onView:view];
 }
 
-+ (instancetype)showMessage:(NSString *)message detail:(NSString *)detail showView:(UIView *)view img:(NSString *)imgName isCustomImage:(BOOL)isCustomImage time:(float)time aplhaBackground:(BOOL)bg isAutoDismis:(BOOL)dismiss
++ (instancetype)showMessage:(NSString *)message detail:(NSString *)detail showView:(UIView *)view img:(NSString *)imgName isCustomImage:(BOOL)isCustomImage time:(float)time dimBackground:(BOOL)bg isAutoDismis:(BOOL)dismiss
 {
    MBProgressHUD *hud = view ?  [self showHUDAddedTo:view animated:YES] :[self showHUDAddedTo:kKeyWindowView animated:YES];
     hud.label.text = message;
@@ -248,7 +248,7 @@ static char ReLoadingBtnKey;
     [hud hideAnimated:YES afterDelay:1.5];
 }
 
-+ (void)showAnimationHUDWithImages:(NSArray *)images title:(NSString *)title showView:(UIView *)view aplhaBackground:(BOOL)bg {
++ (void)showAnimationHUDWithImages:(NSArray *)images title:(NSString *)title showView:(UIView *)view dimBackground:(BOOL)bg {
     UIImageView *actionImage = [[UIImageView alloc] init];
     actionImage.frame = CGRectMake(0, 0, WidthRateBase6P(338), HeightRatebase6P(345));
     images = images ? images : AnimationImgsArr;
@@ -264,6 +264,7 @@ static char ReLoadingBtnKey;
     hud.label.text = title;
     hud.label.font = kSystemFontOfSize(18);
     hud.label.textColor = [UIColor darkGrayColor];
+    hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
     hud.bezelView.backgroundColor = [UIColor clearColor];
     hud.removeFromSuperViewOnHide = YES;
     hud.mode = MBProgressHUDModeCustomView;

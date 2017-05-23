@@ -13,8 +13,6 @@
 #import <MJExtension/MJExtension.h>
 #import "NSString+NilString.h"
 
-#define PRD_SEARCH_HISTORY @"prd_search_history"
-
 @interface ProductSearchVC ()<UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UISearchBar *searchBar;
@@ -97,7 +95,7 @@ static NSString *ProductCellID = @"ProductCellID";
     
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     self.searchBar.tintColor = [UIColor blueColor];
-    self.searchBar.placeholder = @"输入您想要搜索的内容";
+    self.searchBar.placeholder = @"输入您想要搜索的产品名或编号";
     self.searchBar.delegate = self;
     [self.searchBar setImage:[UIImage imageNamed:@"search"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
     [self.searchBar setContentMode:UIViewContentModeLeft];
@@ -215,6 +213,9 @@ static NSString *ProductCellID = @"ProductCellID";
     cell.detailTextLabel.text = model.productName;
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
     cell.detailTextLabel.textColor = [UIColor blackColor];
+    if (indexPath.row == self.dataSource.count - 1) {
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
     return cell;
 }
 

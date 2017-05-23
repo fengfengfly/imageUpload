@@ -8,7 +8,7 @@
 
 #import "BaseView.h"
 #import "DeliverCountModel.h"
-
+#import "DrawLineView.h"
 typedef NS_ENUM(NSInteger, DeliverCountType){
     DeliverCountTypeProduct = 0,
     DeliverCountTypeCustomer
@@ -23,5 +23,6 @@ typedef NS_ENUM(NSInteger, DeliverCountType){
 @property (assign, nonatomic) NSInteger dataPage;
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (assign, nonatomic) DeliverCountType countType;
-
+@property (weak, nonatomic) IBOutlet DrawLineView *drawLineV;
+- (void)initDrawInfo;
 @end

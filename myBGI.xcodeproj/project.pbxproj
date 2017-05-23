@@ -11,12 +11,13 @@
 		E90D5D091EC8336E006B191D /* SingleSelectVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E90D5D081EC8336E006B191D /* SingleSelectVC.m */; };
 		E90D5D0B1EC8385F006B191D /* MoreQueryVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E90D5D0A1EC8385F006B191D /* MoreQueryVC.m */; };
 		E90D5D0E1EC863CB006B191D /* TimeTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = E90D5D0D1EC863CB006B191D /* TimeTypeSelectView.m */; };
-		E90D5D111EC86FD1006B191D /* SelectLineHideBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = E90D5D101EC86FD1006B191D /* SelectLineHideBtn.m */; };
 		E91163901EC2C1040088CD72 /* UIView+SelfController.m in Sources */ = {isa = PBXBuildFile; fileRef = E911638F1EC2C1040088CD72 /* UIView+SelfController.m */; };
 		E91ADE551ECAA17B00DE18C2 /* UIImage+Corner.m in Sources */ = {isa = PBXBuildFile; fileRef = E91ADE541ECAA17B00DE18C2 /* UIImage+Corner.m */; };
 		E91ADE581ECAD58100DE18C2 /* MyPlaceholderTF.m in Sources */ = {isa = PBXBuildFile; fileRef = E91ADE571ECAD58100DE18C2 /* MyPlaceholderTF.m */; };
 		E91CECC11EC457DC00941393 /* InputTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E91CECBF1EC457DC00941393 /* InputTFCell.m */; };
 		E91CECC21EC457DC00941393 /* InputTFCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E91CECC01EC457DC00941393 /* InputTFCell.xib */; };
+		E91E0E671ECC38AA004DDEB1 /* DrawLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = E91E0E661ECC38AA004DDEB1 /* DrawLineView.m */; };
+		E92370EC1ECD369800391B19 /* FFCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E92370EB1ECD369800391B19 /* FFCollectionView.m */; };
 		E9241C441ECA89870009C5C7 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = E9241C431ECA89870009C5C7 /* UIImage+FixOrientation.m */; };
 		E94089701EC164300003A8C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E940896F1EC164300003A8C0 /* main.m */; };
 		E940897B1EC164300003A8C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E940897A1EC164300003A8C0 /* Assets.xcassets */; };
@@ -102,6 +103,7 @@
 		E9408AAF1EC1663C0003A8C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9408AAD1EC1663C0003A8C0 /* Main.storyboard */; };
 		E9408AB11EC199870003A8C0 /* TZImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E9408AB01EC199870003A8C0 /* TZImagePickerController.bundle */; };
 		E9417DDE1EC5A4E70038294C /* UISearchBar+CustomColor.m in Sources */ = {isa = PBXBuildFile; fileRef = E9417DDD1EC5A4E70038294C /* UISearchBar+CustomColor.m */; };
+		E94ACFA41ECE985000A2D664 /* FZFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E94ACFA31ECE985000A2D664 /* FZFileManager.m */; };
 		E9E87F931EC2C9DF00C132B0 /* CalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = E9E87F921EC2C9DF00C132B0 /* CalendarView.m */; };
 		E9E87F9C1EC3171700C132B0 /* UserCenterVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E9E87F9B1EC3171700C132B0 /* UserCenterVC.m */; };
 		E9E87F9E1EC3173B00C132B0 /* UserCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9E87F9D1EC3173B00C132B0 /* UserCenter.storyboard */; };
@@ -132,8 +134,6 @@
 		E90D5D0A1EC8385F006B191D /* MoreQueryVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreQueryVC.m; sourceTree = "<group>"; };
 		E90D5D0C1EC863CB006B191D /* TimeTypeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeTypeSelectView.h; sourceTree = "<group>"; };
 		E90D5D0D1EC863CB006B191D /* TimeTypeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeTypeSelectView.m; sourceTree = "<group>"; };
-		E90D5D0F1EC86FD1006B191D /* SelectLineHideBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectLineHideBtn.h; sourceTree = "<group>"; };
-		E90D5D101EC86FD1006B191D /* SelectLineHideBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectLineHideBtn.m; sourceTree = "<group>"; };
 		E911638E1EC2C1040088CD72 /* UIView+SelfController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SelfController.h"; sourceTree = "<group>"; };
 		E911638F1EC2C1040088CD72 /* UIView+SelfController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SelfController.m"; sourceTree = "<group>"; };
 		E91ADE531ECAA17B00DE18C2 /* UIImage+Corner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Corner.h"; sourceTree = "<group>"; };
@@ -144,6 +144,10 @@
 		E91CECBE1EC457DC00941393 /* InputTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTFCell.h; sourceTree = "<group>"; };
 		E91CECBF1EC457DC00941393 /* InputTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputTFCell.m; sourceTree = "<group>"; };
 		E91CECC01EC457DC00941393 /* InputTFCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InputTFCell.xib; sourceTree = "<group>"; };
+		E91E0E651ECC38AA004DDEB1 /* DrawLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawLineView.h; sourceTree = "<group>"; };
+		E91E0E661ECC38AA004DDEB1 /* DrawLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawLineView.m; sourceTree = "<group>"; };
+		E92370EA1ECD369800391B19 /* FFCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFCollectionView.h; sourceTree = "<group>"; };
+		E92370EB1ECD369800391B19 /* FFCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFCollectionView.m; sourceTree = "<group>"; };
 		E9241C421ECA89870009C5C7 /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		E9241C431ECA89870009C5C7 /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
 		E940896B1EC164300003A8C0 /* myBGI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myBGI.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -303,6 +307,8 @@
 		E9408AB01EC199870003A8C0 /* TZImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TZImagePickerController.bundle; sourceTree = "<group>"; };
 		E9417DDC1EC5A4E70038294C /* UISearchBar+CustomColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UISearchBar+CustomColor.h"; sourceTree = "<group>"; };
 		E9417DDD1EC5A4E70038294C /* UISearchBar+CustomColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UISearchBar+CustomColor.m"; sourceTree = "<group>"; };
+		E94ACFA21ECE985000A2D664 /* FZFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZFileManager.h; sourceTree = "<group>"; };
+		E94ACFA31ECE985000A2D664 /* FZFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZFileManager.m; sourceTree = "<group>"; };
 		E9E87F911EC2C9DF00C132B0 /* CalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarView.h; sourceTree = "<group>"; };
 		E9E87F921EC2C9DF00C132B0 /* CalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarView.m; sourceTree = "<group>"; };
 		E9E87F9A1EC3171700C132B0 /* UserCenterVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCenterVC.h; sourceTree = "<group>"; };
@@ -437,9 +443,9 @@
 		E94089A51EC165560003A8C0 /* InfoQuery */ = {
 			isa = PBXGroup;
 			children = (
+				E94089B61EC165560003A8C0 /* Storyboard */,
 				E94089A61EC165560003A8C0 /* Controller */,
 				E94089B11EC165560003A8C0 /* Model */,
-				E94089B61EC165560003A8C0 /* Storyboard */,
 				E94089B81EC165560003A8C0 /* Tool */,
 				E94089B91EC165560003A8C0 /* View */,
 			);
@@ -508,12 +514,12 @@
 				E94089C71EC165560003A8C0 /* SampleCountView.h */,
 				E94089C81EC165560003A8C0 /* SampleCountView.m */,
 				E94089C91EC165560003A8C0 /* SampleCountView.xib */,
+				E91E0E651ECC38AA004DDEB1 /* DrawLineView.h */,
+				E91E0E661ECC38AA004DDEB1 /* DrawLineView.m */,
 				E9E87F911EC2C9DF00C132B0 /* CalendarView.h */,
 				E9E87F921EC2C9DF00C132B0 /* CalendarView.m */,
 				E90D5D0C1EC863CB006B191D /* TimeTypeSelectView.h */,
 				E90D5D0D1EC863CB006B191D /* TimeTypeSelectView.m */,
-				E90D5D0F1EC86FD1006B191D /* SelectLineHideBtn.h */,
-				E90D5D101EC86FD1006B191D /* SelectLineHideBtn.m */,
 				E91CECBE1EC457DC00941393 /* InputTFCell.h */,
 				E91CECBF1EC457DC00941393 /* InputTFCell.m */,
 				E91CECC01EC457DC00941393 /* InputTFCell.xib */,
@@ -524,9 +530,9 @@
 		E94089CA1EC165560003A8C0 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				E94089D31EC165560003A8C0 /* Storyboard */,
 				E94089CB1EC165560003A8C0 /* Controller */,
 				E94089D01EC165560003A8C0 /* Model */,
-				E94089D31EC165560003A8C0 /* Storyboard */,
 				E94089D51EC165560003A8C0 /* Tool */,
 				E94089D81EC165560003A8C0 /* View */,
 			);
@@ -580,9 +586,9 @@
 		E94089D91EC165560003A8C0 /* PictureCapture */ = {
 			isa = PBXGroup;
 			children = (
+				E94089F41EC165560003A8C0 /* Storyboard */,
 				E94089DA1EC165560003A8C0 /* Controller */,
 				E94089EB1EC165560003A8C0 /* Model */,
-				E94089F41EC165560003A8C0 /* Storyboard */,
 				E94089F61EC165560003A8C0 /* Tool */,
 				E94089F71EC165560003A8C0 /* View */,
 			);
@@ -663,6 +669,8 @@
 				E9408A071EC165560003A8C0 /* ProductListHeaderCell.h */,
 				E9408A081EC165560003A8C0 /* ProductListHeaderCell.m */,
 				E9408A091EC165560003A8C0 /* ProductListHeaderCell.xib */,
+				E92370EA1ECD369800391B19 /* FFCollectionView.h */,
+				E92370EB1ECD369800391B19 /* FFCollectionView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -735,6 +743,8 @@
 				E9408A591EC1656C0003A8C0 /* BaseHttpManager.m */,
 				E9408A5A1EC1656C0003A8C0 /* HttpManager.h */,
 				E9408A5B1EC1656C0003A8C0 /* HttpManager.m */,
+				E94ACFA21ECE985000A2D664 /* FZFileManager.h */,
+				E94ACFA31ECE985000A2D664 /* FZFileManager.m */,
 			);
 			path = ToolKit;
 			sourceTree = "<group>";
@@ -824,9 +834,9 @@
 		E9E87F941EC316F800C132B0 /* UserCenter */ = {
 			isa = PBXGroup;
 			children = (
+				E9E87F971EC316F800C132B0 /* Storyboard */,
 				E9E87F951EC316F800C132B0 /* Controller */,
 				E9E87F961EC316F800C132B0 /* Model */,
-				E9E87F971EC316F800C132B0 /* Storyboard */,
 				E9E87F981EC316F800C132B0 /* Tool */,
 				E9E87F991EC316F800C132B0 /* View */,
 			);
@@ -1085,6 +1095,7 @@
 				E9408A861EC1656C0003A8C0 /* UIView+SetRect.m in Sources */,
 				E9408A1A1EC165560003A8C0 /* SampleCountView.m in Sources */,
 				E9408A2E1EC165560003A8C0 /* EditMenuListView.m in Sources */,
+				E92370EC1ECD369800391B19 /* FFCollectionView.m in Sources */,
 				E9408A871EC1656C0003A8C0 /* UIView+SimplePopupView.m in Sources */,
 				E9408A381EC165560003A8C0 /* ProductListHeaderCell.m in Sources */,
 				E9408AA41EC165B60003A8C0 /* TZAssetModel.m in Sources */,
@@ -1094,6 +1105,7 @@
 				E9408A1E1EC165560003A8C0 /* UserModel.m in Sources */,
 				E9408A751EC1656C0003A8C0 /* MBProgressHUD+HYExtension.m in Sources */,
 				E9408A341EC165560003A8C0 /* PictureCaptureHeader.m in Sources */,
+				E94ACFA41ECE985000A2D664 /* FZFileManager.m in Sources */,
 				E9408A211EC165560003A8C0 /* CustomerListViewController.m in Sources */,
 				E9408A851EC1656C0003A8C0 /* SimplePopupView.m in Sources */,
 				E9408A791EC1656C0003A8C0 /* UIColor+HexColor.m in Sources */,
@@ -1138,10 +1150,10 @@
 				E91163901EC2C1040088CD72 /* UIView+SelfController.m in Sources */,
 				E9408A361EC165560003A8C0 /* ProductListHeader.m in Sources */,
 				E9408A7F1EC1656C0003A8C0 /* BaseHttpManager.m in Sources */,
+				E91E0E671ECC38AA004DDEB1 /* DrawLineView.m in Sources */,
 				E9408A321EC165560003A8C0 /* PicCaptureSectionHeader.m in Sources */,
 				E9408A161EC165560003A8C0 /* QueryCountCell.m in Sources */,
 				E9241C441ECA89870009C5C7 /* UIImage+FixOrientation.m in Sources */,
-				E90D5D111EC86FD1006B191D /* SelectLineHideBtn.m in Sources */,
 				E9408A761EC1656C0003A8C0 /* NSMutableDictionary+Safe.m in Sources */,
 				E9408A731EC1656C0003A8C0 /* BaseView.m in Sources */,
 				E9408A0D1EC165560003A8C0 /* QueryViewController.m in Sources */,

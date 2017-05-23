@@ -17,7 +17,7 @@
 @property (strong, nonatomic) UIView *contentView;
 @property (assign, nonatomic) CGRect dropBeginFrame;
 @property (assign, nonatomic) CGRect dropEndFrame;
-
+@property (copy, nonatomic) UIView *(^myHitTestBlock)(CGPoint point, UIEvent *event);
 - (instancetype)initWithFrame:(CGRect)frame contentFrame:(CGRect)contentframe;
 - (void)showWithDataSource:(NSArray *)dataSource;
 @end

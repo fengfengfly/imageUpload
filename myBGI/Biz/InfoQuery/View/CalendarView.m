@@ -22,12 +22,32 @@
     return self;
 }
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    if (self.myHitTestBlock) {
+        CGPoint contentPoint = [self.contentView convertPoint:point fromView:self];
+        if (![self.contentView pointInside:contentPoint withEvent:event]) {
+            
+            CGPoint windoPoint = [self convertPoint:point toView:nil];
+            UIView *myHitTestView = self.myHitTestBlock(windoPoint, event);
+            if (myHitTestView != nil) {
+                if (self.selectedBlock) {
+                    self.selectedBlock(nil, NO);
+                }
+                [self removeFromSuperview];
+                return myHitTestView;
+            }
+        }
+        
+    }
+    return [super hitTest:point withEvent:event];
+}
+
 - (void)showContent{
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
     self.dateFormatter.dateFormat = @"yyyy-MM-dd";
     self.dropBeginFrame = CGRectMake(0, -kCalendarH, self.contentView.frame.size.width, kCalendarH);
-    self.dropEndFrame = CGRectMake(0, 0.5, self.contentView.frame.size.width, kCalendarH);
+    self.dropEndFrame = CGRectMake(0, 0, self.contentView.frame.size.width, kCalendarH);
     
     FSCalendar *calendar = [[FSCalendar alloc] initWithFrame:self.dropBeginFrame];
     calendar.dataSource = self;
@@ -35,6 +55,7 @@
     calendar.scrollDirection = FSCalendarScrollDirectionHorizontal;
     calendar.backgroundColor = [UIColor whiteColor];
     calendar.appearance.todayColor = [UIColor whiteColor];
+    calendar.appearance.titleTodayColor = [UIColor blackColor];
     calendar.appearance.headerMinimumDissolvedAlpha = 0;
     calendar.appearance.headerTitleColor = kSubjectColor;
     calendar.appearance.weekdayTextColor = kSubjectColor;
@@ -62,7 +83,7 @@
     [UIView animateWithDuration:0.2 animations:^{
         self.calendar.frame = self.dropBeginFrame;
     } completion:^(BOOL finished) {
-        [super removeFromSuperview];
+        [self removeFromSuperview];
     }];
     
 }
@@ -90,7 +111,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         self.calendar.frame = self.dropBeginFrame;
     } completion:^(BOOL finished) {
-        [super removeFromSuperview];
+        [self removeFromSuperview];
     }];
     if (self.selectedBlock) {
         self.selectedBlock([self.dateFormatter stringFromDate:date], YES);

@@ -32,8 +32,8 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
-    [self.tableView setSeparatorColor:[UIColor groupTableViewBackgroundColor]];
-    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    [self.tableView setSeparatorColor:kSeparateLineColor];
+    self.tableView.backgroundColor = kBgColor;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -124,7 +124,6 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:UserCenterCellID];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:UserCenterCellID];
-        cell.textLabel.textColor = kBlackFontColor;
     }
     
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -135,6 +134,8 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
             
             NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
             cell.detailTextLabel.text = [NSString stringWithFormat:@"v%@", versionString];
+            cell.detailTextLabel.textColor = kGrayFontColor;
+            cell.textLabel.textColor = kBlackFontColor;
             [cell.detailTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.right.equalTo(cell).offset(-12);
                 make.centerY.equalTo(cell);
@@ -150,7 +151,7 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
         if (indexPath.row == 0) {
             UILabel *titleLabel = [[UILabel alloc] init];
             titleLabel.textAlignment = NSTextAlignmentCenter;
-            titleLabel.font = [UIFont systemFontOfSize:17];
+            titleLabel.font = kHugeFont;
             titleLabel.textColor = kSubjectColor;
             titleLabel.text = @"退出当前账号";
             [titleLabel sizeToFit];
@@ -158,7 +159,9 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
             [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.center.equalTo(cell);
             }];
+            cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
         }
+        
     }
     
 //    NSString  *imageStr = self.menuIconList[indexPath.section][indexPath.row];
@@ -167,6 +170,10 @@ static NSString *UserCenterCellID = @"UserCenterCellID";
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
+    view.backgroundColor = kBgColor;
 }
 
 /*

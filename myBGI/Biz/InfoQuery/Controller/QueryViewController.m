@@ -13,6 +13,8 @@
 #import "UserManager.h"
 #import "NSMutableDictionary+Safe.h"
 #import "HttpManager.h"
+#import "FZFileManager.h"
+
 #import "QuerySampleCell.h"
 
 #import "CustomerListViewController.h"
@@ -20,6 +22,7 @@
 #import "MoreQueryVC.h"
 #import "BaseNavigationController.h"
 
+#import "Masonry.h"
 #import "NSString+NilString.h"
 #import "UISearchBar+CustomColor.h"
 @interface QueryViewController ()<UITableViewDelegate, UITableViewDataSource, UIDocumentInteractionControllerDelegate, UISearchBarDelegate>
@@ -48,6 +51,7 @@
 @property (strong, nonatomic) UIWindow *tempWindow;
 @property (strong, nonatomic) UIView *tempMaskView;
 @property (weak, nonatomic) MoreQueryVC *moreQueryVC;
+@property (assign, nonatomic) NSInteger totalQuery;//查询到的总条数
 @end
 static NSString *QueryCellID = @"QueryCellID";
 @implementation QueryViewController
@@ -56,6 +60,7 @@ static NSString *QueryCellID = @"QueryCellID";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"进度查询";
+    self.totalQuery = 0;
     self.dataPage = 1;
     self.searchPage = 1;
     
@@ -235,6 +240,8 @@ static NSString *QueryCellID = @"QueryCellID";
     [param filterNilSetObject:[NSString ifNilStringWithNil:self.result] forKey:@"sampleImport.result"];
     
     [[HttpManager sharedManager] sendPostUrlRequestWithBodyURLString:kQuerySample parameters:param success:^(id mResponseObject) {
+        NSString *total = mResponseObject[@"total"];
+        self.totalQuery = total.integerValue;
         NSArray *rows = mResponseObject[@"rows"];
         NSArray *newDatas = [SampleImportModel mj_objectArrayWithKeyValuesArray:rows];
         if (self.dataPage == 1) {
@@ -288,6 +295,35 @@ static NSString *QueryCellID = @"QueryCellID";
     return cell;
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString *str = [NSString stringWithFormat:@"共找到%zd条记录",self.totalQuery];
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc]initWithString:str];
+    
+    //设置字体和设置字体的范围
+    [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14.0f] range:NSMakeRange(0, str.length)];
+    //添加文字颜色
+    [attrStr addAttribute:NSForegroundColorAttributeName value:kBlackFontColor range:NSMakeRange(0, str.length)];
+    //添加文字背景颜色
+    [attrStr addAttribute:NSForegroundColorAttributeName value:kSubjectColor range:NSMakeRange(3, str.length - 6)];
+   
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 20)];
+    label.backgroundColor = [UIColor clearColor];
+    //设置label的富文本
+    label.attributedText = attrStr;
+    //label高度自适应
+    [label sizeToFit];
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = kBgColor;
+    [view addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(view);
+        make.left.equalTo(view).offset(10);
+    }];
+    
+    return view;
+}
+
 #pragma -mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     SampleImportModel *model = self.dataSource[indexPath.row];
@@ -304,10 +340,7 @@ static NSString *QueryCellID = @"QueryCellID";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (self.dataSource.count > 0 && section == 0) {
-        return 15;
-    }
-    return 0;
+    return 30;
 }
 
 
@@ -319,13 +352,11 @@ static NSString *QueryCellID = @"QueryCellID";
     if (fileName == nil) {
         fileName = [urlStr lastPathComponent];
     }
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths lastObject];
-    
-    NSString *documentsDirectory = NSTemporaryDirectory();
+
+    NSString *dir = [FZFileManager homeDirWithSub:kFilePath_report];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:fileName]; //docPath为文件名
+    NSString *filePath = [dir stringByAppendingPathComponent:fileName]; //docPath为文件名
     
     if ([fileManager fileExistsAtPath:filePath]) {
         //文件已经存在,直接打开
@@ -349,7 +380,7 @@ static NSString *QueryCellID = @"QueryCellID";
         
         [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             [self hudSelfWithMessage:@"正在下载..."];
-            [[HttpManager sharedManager] downloadFileWithUrlStr:urlStr SavePath:documentsDirectory fileName:fileName progress:^(NSProgress *downloadProgress) {
+            [[HttpManager sharedManager] downloadFileWithUrlStr:urlStr SavePath:dir fileName:fileName progress:^(NSProgress *downloadProgress) {
                 
             } complete:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                 [self hideSelfHUD];
@@ -364,7 +395,6 @@ static NSString *QueryCellID = @"QueryCellID";
             }];
             
         }]];
-        
         
         [self presentViewController:alertController animated:YES completion:nil];
         

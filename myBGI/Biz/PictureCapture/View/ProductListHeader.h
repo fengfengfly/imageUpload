@@ -9,11 +9,13 @@
 #import "BaseView.h"
 #import "ProductModel.h"
 #import "ProductListHeaderCell.h"
-
+#import "FFCollectionView.h"
 #define kListHeaderH 70
+#define kListHeaderTopSpace 22
 
 @interface ProductListHeader : BaseView<UICollectionViewDelegate, UICollectionViewDataSource>
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet FFCollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (copy, nonatomic) void(^actionBlock)(NSIndexPath *indexPath);
+
 @end

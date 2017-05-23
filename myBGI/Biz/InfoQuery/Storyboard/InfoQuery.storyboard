@@ -72,10 +72,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Of-oA-D58">
-                                <rect key="frame" x="80" y="30" width="215" height="36"/>
+                                <rect key="frame" x="80" y="30" width="215" height="30"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Q9C-Ps-vUD">
-                                        <rect key="frame" x="0.0" y="0.0" width="215" height="37"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="215" height="31"/>
                                         <segments>
                                             <segment title="按产品"/>
                                             <segment title="按医院"/>
@@ -91,19 +91,19 @@
                                     <constraint firstAttribute="bottom" secondItem="Q9C-Ps-vUD" secondAttribute="bottom" id="HU5-vV-Eul"/>
                                     <constraint firstItem="Q9C-Ps-vUD" firstAttribute="top" secondItem="5Of-oA-D58" secondAttribute="top" id="bW7-v5-Pre"/>
                                     <constraint firstItem="Q9C-Ps-vUD" firstAttribute="leading" secondItem="5Of-oA-D58" secondAttribute="leading" id="epk-vF-RFb"/>
-                                    <constraint firstAttribute="height" constant="36" id="u4g-po-Zbc"/>
+                                    <constraint firstAttribute="height" constant="30" id="u4g-po-Zbc"/>
                                     <constraint firstAttribute="trailing" secondItem="Q9C-Ps-vUD" secondAttribute="trailing" id="vy6-cv-MkP"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eYf-PP-Kst" customClass="iCarousel">
-                                <rect key="frame" x="0.0" y="76" width="375" height="591"/>
+                                <rect key="frame" x="0.0" y="65" width="375" height="602"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="5Of-oA-D58" firstAttribute="leading" secondItem="wXc-Ml-tJ4" secondAttribute="leading" constant="80" id="A85-Ei-EJn"/>
-                            <constraint firstItem="eYf-PP-Kst" firstAttribute="top" secondItem="5Of-oA-D58" secondAttribute="bottom" constant="10" id="E5m-8K-39C"/>
+                            <constraint firstItem="eYf-PP-Kst" firstAttribute="top" secondItem="5Of-oA-D58" secondAttribute="bottom" constant="5" id="E5m-8K-39C"/>
                             <constraint firstItem="eYf-PP-Kst" firstAttribute="leading" secondItem="wXc-Ml-tJ4" secondAttribute="leading" id="E6n-6x-nte"/>
                             <constraint firstItem="5Of-oA-D58" firstAttribute="top" secondItem="atv-j6-f1j" secondAttribute="bottom" constant="10" id="Fot-ei-cSF"/>
                             <constraint firstAttribute="bottom" secondItem="eYf-PP-Kst" secondAttribute="bottom" id="dmh-xH-kIC"/>
@@ -155,18 +155,28 @@
                                 <rect key="frame" x="2" y="20" width="303" height="44"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="search"/>
                             </searchBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jct-X5-OuB">
+                                <rect key="frame" x="0.0" y="63" width="375" height="1"/>
+                                <color key="backgroundColor" red="0.92156862750000001" green="0.92156862750000001" blue="0.92156862750000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="6GF-Ml-1Uk"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="OUt-1e-vkh" firstAttribute="top" secondItem="gqp-Tc-QPz" secondAttribute="bottom" id="8qo-2e-4T8"/>
                             <constraint firstItem="gqp-Tc-QPz" firstAttribute="leading" secondItem="6CF-od-zns" secondAttribute="leading" constant="2" id="BIe-Ld-oy7"/>
+                            <constraint firstItem="Jct-X5-OuB" firstAttribute="bottom" secondItem="gqp-Tc-QPz" secondAttribute="bottom" id="HL9-1C-Wdo"/>
                             <constraint firstAttribute="trailing" secondItem="1wc-TL-7M7" secondAttribute="trailing" constant="10" id="I2U-iR-27I"/>
                             <constraint firstItem="1wc-TL-7M7" firstAttribute="leading" secondItem="gqp-Tc-QPz" secondAttribute="trailing" constant="10" id="OfY-YQ-fbV"/>
                             <constraint firstAttribute="trailing" secondItem="OUt-1e-vkh" secondAttribute="trailing" id="RU3-tE-feN"/>
                             <constraint firstItem="OUt-1e-vkh" firstAttribute="leading" secondItem="6CF-od-zns" secondAttribute="leading" id="c4M-fJ-pQ4"/>
                             <constraint firstItem="1wc-TL-7M7" firstAttribute="centerY" secondItem="gqp-Tc-QPz" secondAttribute="centerY" id="d2t-QK-oNs"/>
+                            <constraint firstAttribute="trailing" secondItem="Jct-X5-OuB" secondAttribute="trailing" id="iek-5O-R5M"/>
                             <constraint firstItem="iDK-ZB-bOa" firstAttribute="top" secondItem="OUt-1e-vkh" secondAttribute="bottom" id="m69-LN-3XT"/>
                             <constraint firstItem="gqp-Tc-QPz" firstAttribute="top" secondItem="AHj-S1-jt5" secondAttribute="bottom" id="mi8-ip-T3Z"/>
+                            <constraint firstItem="Jct-X5-OuB" firstAttribute="leading" secondItem="6CF-od-zns" secondAttribute="leading" id="yI6-b2-8CH"/>
                         </constraints>
                     </view>
                     <connections>
@@ -295,10 +305,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KA9-m3-VzL">
-                                <rect key="frame" x="80" y="30" width="215" height="36"/>
+                                <rect key="frame" x="80" y="30" width="215" height="30"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="eYM-m4-BBm">
-                                        <rect key="frame" x="0.0" y="0.0" width="215" height="37"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="215" height="31"/>
                                         <segments>
                                             <segment title="按产品"/>
                                             <segment title="按医院"/>
@@ -313,13 +323,13 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="eYM-m4-BBm" secondAttribute="trailing" id="1kw-jY-VZz"/>
                                     <constraint firstItem="eYM-m4-BBm" firstAttribute="top" secondItem="KA9-m3-VzL" secondAttribute="top" id="TGM-h1-RvB"/>
-                                    <constraint firstAttribute="height" constant="36" id="eKl-Lq-x7H"/>
+                                    <constraint firstAttribute="height" constant="30" id="eKl-Lq-x7H"/>
                                     <constraint firstAttribute="bottom" secondItem="eYM-m4-BBm" secondAttribute="bottom" id="idh-Ot-HcD"/>
                                     <constraint firstItem="eYM-m4-BBm" firstAttribute="leading" secondItem="KA9-m3-VzL" secondAttribute="leading" id="jYy-w4-7R2"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="njC-mH-o6B" customClass="iCarousel">
-                                <rect key="frame" x="0.0" y="76" width="375" height="591"/>
+                                <rect key="frame" x="0.0" y="65" width="375" height="602"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             </view>
                         </subviews>
@@ -329,7 +339,7 @@
                             <constraint firstItem="njC-mH-o6B" firstAttribute="leading" secondItem="iaS-pT-1Xr" secondAttribute="leading" id="bT4-MF-aKC"/>
                             <constraint firstAttribute="bottom" secondItem="njC-mH-o6B" secondAttribute="bottom" id="chV-nO-DvU"/>
                             <constraint firstItem="KA9-m3-VzL" firstAttribute="top" secondItem="1K0-eG-DG2" secondAttribute="bottom" constant="10" id="f3i-Gx-N3e"/>
-                            <constraint firstItem="njC-mH-o6B" firstAttribute="top" secondItem="KA9-m3-VzL" secondAttribute="bottom" constant="10" id="k9G-dD-97V"/>
+                            <constraint firstItem="njC-mH-o6B" firstAttribute="top" secondItem="KA9-m3-VzL" secondAttribute="bottom" constant="5" id="k9G-dD-97V"/>
                             <constraint firstAttribute="trailing" secondItem="njC-mH-o6B" secondAttribute="trailing" id="kpu-mm-fbv"/>
                             <constraint firstAttribute="trailing" secondItem="KA9-m3-VzL" secondAttribute="trailing" constant="80" id="oyN-M8-p0j"/>
                         </constraints>

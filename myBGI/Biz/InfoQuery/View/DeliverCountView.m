@@ -21,8 +21,9 @@
 #import "QueryCountCell.h"
 
 @implementation DeliverCountView
-static NSString *DeliverCountCellID = @"DeliverCountCellID";
 
+
+static NSString *DeliverCountCellID = @"DeliverCountCellID";
 -(void)awakeFromNib{
     [super awakeFromNib];
     self.dataPage = 1;
@@ -46,6 +47,89 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
     self.endTimeTF.text = [self makeTodayStr];
 }
 
+- (UIView *)myhitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    BOOL resultFlag = NO;
+    CGPoint myPoint = [self convertPoint:point fromView:[UIApplication sharedApplication].keyWindow];
+    
+    switch (self.drawLineV.drawIndex) {
+        case 0:
+           
+            break;
+        case 1:
+            if ([self.endTimeTF pointInside:[self.endTimeTF convertPoint:myPoint fromView:self] withEvent:event]) {
+                resultFlag = YES;
+            }
+            
+            break;
+        case 2:
+            if ([self.beginTimeTF pointInside:[self.beginTimeTF convertPoint:myPoint fromView:self] withEvent:event]) {
+                resultFlag = YES;
+            }
+           
+            break;
+        default:
+            break;
+    }
+    if (resultFlag == YES) {
+        
+        return [self hitTest:myPoint withEvent:event];
+    }
+    return nil;
+    
+}
+
+
+- (void)initDrawInfo{
+    //初始化轨迹点数组
+    CGFloat x0 = 0;
+    CGFloat x1 = self.beginTimeTF.frame.origin.x - 1;
+    CGFloat x2 = CGRectGetMaxX(self.beginTimeTF.frame) + 1;
+    CGFloat x3 = self.endTimeTF.frame.origin.x - 1;
+    CGFloat x4 = CGRectGetMaxX(self.endTimeTF.frame) + 1;
+    CGFloat x5 = SCREEN_WIDTH;
+    
+    CGFloat y0 = self.beginTimeTF.frame.origin.y - 1;
+    CGFloat y1 = CGRectGetHeight(self.drawLineV.bounds) - 1;
+    
+    CGPoint tempPointArray[3][6] = {{CGPointZero, CGPointZero, CGPointZero, CGPointZero,CGPointZero,CGPointZero},
+        {CGPointMake(x0, y1),CGPointMake(x1, y1),CGPointMake(x1, y0),CGPointMake(x2, y0),CGPointMake(x2, y1),CGPointMake(x5, y1)},
+        {CGPointMake(x0, y1),CGPointMake(x3, y1),CGPointMake(x3, y0),CGPointMake(x4, y0), CGPointMake(x4, y1), CGPointMake(x5, y1)}};
+    MyDrawInfo DrawInfo;
+    for (int i = 0; i < 3; i ++) {
+        for (int j = 0; j < 6; j ++) {
+            DrawInfo.array[i][j] = tempPointArray[i][j];
+        }
+    }
+    DrawInfo.didInit = YES;
+    self.drawLineV.drawInfo = DrawInfo;
+}
+
+- (void)redrawIndex:(NSInteger)index shouldDraw:(BOOL)shouldDraw{
+    self.drawLineV.shouldDraw = shouldDraw;
+    self.drawLineV.drawIndex = index;
+    [self.drawLineV setNeedsDisplay];
+    UIColor *bgColor = nil;
+    if (shouldDraw == YES) {
+        bgColor = [UIColor whiteColor];
+    }else{
+        bgColor = kBgColor;
+    }
+    switch (index) {
+        case 0:
+            
+            break;
+        case 1:
+            self.beginTimeTF.backgroundColor = bgColor;
+            break;
+        case 2:
+            self.endTimeTF.backgroundColor = bgColor;
+            break;
+        default:
+            break;
+    }
+    
+}
+
 
 - (NSString *)makeTodayStr{
     NSString *dateStr = nil;
@@ -60,6 +144,9 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
     CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds contentFrame:[self convertRect:self.tableView.frame toView:controller.view]];
     calendarV.willSelectBlock = willBlock;
     calendarV.selectedBlock = finishBlock;
+    calendarV.myHitTestBlock = ^UIView *(CGPoint point, UIEvent *event){
+        return [self myhitTest:point withEvent:event];
+    };
     [calendarV.calendar selectDate:[calendarV.dateFormatter dateFromString:date] scrollToDate:YES];
     [controller.view addSubview:calendarV];
     [calendarV showContent];
@@ -67,8 +154,8 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
     
 }
 
-- (IBAction)chooseBeginTimeClick:(UIButton *)sender {
-    sender.selected = YES;
+- (IBAction)beginTimeClick:(UIButton *)sender {
+    [self redrawIndex:1 shouldDraw:YES];
     [self showCalendarDateStr:self.beginTimeTF.text willSelected:^BOOL(NSString *willDateStr) {
         
         return YES;
@@ -77,13 +164,13 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
             
             self.beginTimeTF.text = dateStr;
         }
-        sender.selected = NO;
+        [self redrawIndex:1 shouldDraw:NO];
         
     }];
 }
 
-- (IBAction)chooseEndTimeClick:(UIButton *)sender {
-    sender.selected = YES;
+- (IBAction)endTimeClick:(UIButton *)sender {
+    [self redrawIndex:2 shouldDraw:YES];
     [self showCalendarDateStr:self.endTimeTF.text willSelected:^BOOL(NSString *willDateStr){
         
         return YES;
@@ -92,7 +179,7 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
             
             self.endTimeTF.text = dateStr;
         }
-        sender.selected = NO;
+        [self redrawIndex:2 shouldDraw:NO];
     }];
 }
 
@@ -182,10 +269,25 @@ static NSString *DeliverCountCellID = @"DeliverCountCellID";
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (section == 0 && self.dataSource.count != 0) {
+        return 15;
+    }
+    return 0;
+}
+
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
 }
+
+- (void)dealloc{
+#if DEBUG
+    NSLog(@"%s", __func__);
+#endif
+
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

@@ -14,7 +14,7 @@
 #import "CustomerSearchVC.h"
 #import "BaseNavigationController.h"
 #import "NSString+NilString.h"
-
+#import "Masonry.h"
 @interface CustomerListViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *searchTF;
 @property (weak, nonatomic) IBOutlet UIButton *searchBtn;
@@ -101,6 +101,7 @@ static NSString *CustomerCellID = @"customerCellID";
 - (void)configTableView{
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 20)];
     __weak typeof(self) weakSelf = self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -170,9 +171,29 @@ static NSString *CustomerCellID = @"customerCellID";
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
     cell.textLabel.textColor = [UIColor blackColor];
     cell.detailTextLabel.textColor = [UIColor blackColor];
+    if (indexPath.row == self.dataSource.count - 1) {
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
     return cell;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *sectionV = [[UIView alloc] init];
+    sectionV.backgroundColor = kBgColor;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 80, 20)];
+    label.font = [UIFont systemFontOfSize:14];
+    label.textColor = kBlackFontColor;
+    label.text = @"医院列表";
+    [label sizeToFit];
+    
+    [sectionV addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(sectionV).offset(10);
+        make.centerY.equalTo(sectionV);
+    }];
+    
+    return sectionV;
+}
 #pragma -mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     CustomerModel *model = self.dataSource[indexPath.row];
@@ -186,6 +207,9 @@ static NSString *CustomerCellID = @"customerCellID";
     return 44;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 30;
+}
 
 /*
 #pragma mark - Navigation

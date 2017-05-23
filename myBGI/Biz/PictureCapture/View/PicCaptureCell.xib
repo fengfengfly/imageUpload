@@ -30,9 +30,9 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GbI-bo-FJK">
                         <rect key="frame" x="0.0" y="0.0" width="75" height="85"/>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="at7-zb-Sc4">
+                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="at7-zb-Sc4">
                         <rect key="frame" x="55" y="65" width="20" height="20"/>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="20" id="BJJ-MR-Bdg"/>
                             <constraint firstAttribute="height" constant="20" id="hsy-wZ-oTj"/>
@@ -86,7 +86,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="check" width="15" height="15"/>
+        <image name="check" width="18" height="18"/>
         <image name="uncheck" width="15" height="15"/>
     </resources>
 </document>

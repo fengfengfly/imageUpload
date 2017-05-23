@@ -13,6 +13,7 @@
 #import "MJRefresh.h"
 #import <MJExtension/MJExtension.h>
 #import "NSString+NilString.h"
+#import "Masonry.h"
 
 #import "ProductListHeader.h"
 #import "ProductSearchVC.h"
@@ -32,6 +33,8 @@
 @property (assign, nonatomic) NSInteger searchPage;
 @property (strong, nonatomic) ProductListHeader *listHeader;
 
+@property (assign, nonatomic) BOOL confirm;
+
 @end
 
 @implementation ProductListViewController
@@ -41,6 +44,7 @@ static NSString *ProductCellID = @"ProductCellID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.confirm = NO;
     self.title = @"选择产品";
     self.dataPage = 1;
     self.searchPage = 1;
@@ -67,6 +71,27 @@ static NSString *ProductCellID = @"ProductCellID";
     self.originSelectedArray = self.selectedArray.mutableCopy;
 }
 
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    
+}
+
+
+- (void)calculateHeader{
+    
+    CGFloat collectionViewH = self.listHeader.collectionView.contentSize.height;
+    
+    if (self.tableView.tableHeaderView.frame.size.height != collectionViewH +kListHeaderTopSpace) {
+        CGRect frame = CGRectMake(0, 0, SCREEN_WIDTH, collectionViewH + kListHeaderTopSpace);
+        UIView *view=self.tableView.tableHeaderView;
+        view.frame = frame;
+        [self.tableView beginUpdates];
+        self.tableView.tableHeaderView = view;
+        [self.tableView endUpdates];
+    }
+    
+}
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     //    [super touchesBegan:touches withEvent:event];
 }
@@ -75,11 +100,21 @@ static NSString *ProductCellID = @"ProductCellID";
     // Dispose of any resources that can be recreated.
 }
 
-- (void)backBtnClick{
-    [super backBtnClick];
+- (void)willPop{
     if (self.chooseBlock) {
-        self.chooseBlock(self.originSelectedArray, YES);
+        if (self.confirm) {
+            self.chooseBlock(self.selectedArray, self.confirm);
+        }else{
+            
+            self.chooseBlock(self.originSelectedArray, self.confirm);
+        }
     }
+
+}
+
+- (void)backBtnClick{
+    self.confirm = NO;
+    [super backBtnClick];
 }
 
 #pragma mark set-getProperty
@@ -113,6 +148,7 @@ static NSString *ProductCellID = @"ProductCellID";
 - (void)configTableView{
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     if (self.allowMultiSelect) {
         self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -127,6 +163,9 @@ static NSString *ProductCellID = @"ProductCellID";
             [weakSelf.tableView reloadData];
             
         };
+        listHeader.collectionView.reSizeBlock = ^(){
+            [weakSelf calculateHeader];
+        };
         [header addSubview:listHeader];
         self.listHeader = listHeader;
         [listHeader mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -135,11 +174,10 @@ static NSString *ProductCellID = @"ProductCellID";
             make.right.equalTo(header);
             make.bottom.equalTo(header);
         }];
+        
     }
     
     self.tableView.allowsMultipleSelection = self.allowMultiSelect;
-//    self.tableView.editing = self.allowMultiSelect;
-    
     __weak typeof(self) weakSelf = self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         weakSelf.dataPage = 1;
@@ -225,7 +263,7 @@ static NSString *ProductCellID = @"ProductCellID";
         
     };
     BaseNavigationController *navigationController = [[BaseNavigationController alloc] initWithRootViewController:productSearchVC];
-    [controller.navigationController presentViewController:navigationController animated:YES completion:nil];
+    [controller.navigationController presentViewController:navigationController animated:NO completion:nil];
 }
 
 
@@ -244,6 +282,7 @@ static NSString *ProductCellID = @"ProductCellID";
         if (!checkResult) {
             [self.selectedArray addObject:model];
             [self.listHeader.collectionView reloadData];
+            
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
@@ -259,6 +298,10 @@ static NSString *ProductCellID = @"ProductCellID";
         }
     }
     
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -299,6 +342,9 @@ static NSString *ProductCellID = @"ProductCellID";
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
+    if (indexPath.row == self.dataSource.count - 1) {
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
     return cell;
 }
 
@@ -306,17 +352,14 @@ static NSString *ProductCellID = @"ProductCellID";
 {
     return UITableViewCellEditingStyleDelete|UITableViewCellEditingStyleInsert;
 }
-
 - (void)confirmBtnClick:(UIButton *)sender {
 //    NSArray *selPaths = [self.tableView indexPathsForSelectedRows];
 //    NSMutableArray *selArray = [NSMutableArray array];
 //    for (NSIndexPath *indexpath in selPaths) {
 //        [selArray addObject:self.dataSource[indexpath.row]];
 //    }
-    if (self.chooseBlock) {
-        self.chooseBlock(self.selectedArray, YES);
-    }
     
+    self.confirm = YES;
     [self.navigationController popViewControllerAnimated:YES];
 }
 

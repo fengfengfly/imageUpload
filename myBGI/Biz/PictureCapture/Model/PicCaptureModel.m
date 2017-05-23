@@ -11,6 +11,14 @@
 #import "UserManager.h"
 #import "SDImageCache.h"
 #import "NSString+NilString.h"
+#import "UIImage+Compression.h"
+
+@interface PicCaptureModel()
+@property (strong, nonatomic) CustomerModel *bakCustomer;
+@property (copy, nonatomic) NSMutableArray *bakProducts;
+
+@end
+
 @implementation PicCaptureModel
 - (CustomerModel *)customer{
     if (_customer == nil) {
@@ -32,9 +40,9 @@
 }
 
 - (void)savePicture:(UIImage *)image{
-    NSString *dir = kPicCachePath;
+    NSString *dir = [FZFileManager homeDirWithSub:kFilePath_upload];
 #if DEBUG
-    NSLog(@"%@", dir);
+    NSLog(@"dir--%@", dir);
 #endif
     NSString *dateStr = [self dateStrFromNowDate];
     NSString *fileNameBig = [NSString stringWithFormat:@"%@.jpg", dateStr];
@@ -45,11 +53,11 @@
     if (bigSaveResult) {
         self.picBigStr = filePathBig;
     }
-    BOOL smallSaveResult =[UIImageJPEGRepresentation(image, 0.2) writeToFile:filePathSmall atomically:YES];
+    UIImage *smallImage = [UIImage thumbnailWithImage:image size:CGSizeMake(244, 326)];
+    BOOL smallSaveResult =[UIImageJPEGRepresentation(smallImage, 1) writeToFile:filePathSmall atomically:YES];
     if (smallSaveResult) {
         self.picSmallStr = filePathSmall;
     }
-    
 }
 
 - (NSString *)productCodeStr{
@@ -184,6 +192,16 @@
     [[SDImageCache sharedImageCache] removeImageForKey:[self.picBigStr lastPathComponent] withCompletion:nil];
     [[SDImageCache sharedImageCache] removeImageForKey:[self.picSmallStr lastPathComponent] withCompletion:nil];
 
+}
+
+- (void)backUpSelf{
+    self.bakCustomer = self.customer;
+    self.bakProducts = self.productArray;
+}
+
+- (void)restoreSelf{
+    self.customer = self.bakCustomer;
+    self.productArray = self.bakProducts;
 }
 
 @end

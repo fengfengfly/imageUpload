@@ -14,7 +14,10 @@
     [super awakeFromNib];
     // Initialization code
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+    self.statusBgV.layer.masksToBounds = YES;
+    self.statusBgV.layer.cornerRadius = 2;
+    self.resultBgv.layer.masksToBounds = YES;
+    self.resultBgv.layer.cornerRadius = 2;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -22,7 +25,6 @@
 
     // Configure the view for the selected state
     self.productNameL.textColor = RGBColor(0, 150, 150, 1);
-    self.statusL.backgroundColor = RGBColor(0, 150, 150, 1);
     self.statusL.textColor = [UIColor whiteColor];
 }
 
@@ -38,8 +40,10 @@
         self.resultBgv.hidden = NO;
         self.resultL.text = model.result;
         UIColor *bgColor = [UIColor yellowColor];
-        if ([model.result containsString:@"高"]) {
-            bgColor = [UIColor redColor];
+        if ([model.result containsString:@"高"] || [model.result containsString:@"异"]) {
+            bgColor = kSubjectColor_Red;
+        }else if ([model.result containsString:@"正"]) {
+            bgColor = kBgColor;
         }
         self.resultBgv.backgroundColor = bgColor;
     }else{

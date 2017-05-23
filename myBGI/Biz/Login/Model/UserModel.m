@@ -15,6 +15,7 @@
 @synthesize passWord = _passWord;
 @synthesize userName = _userName;
 @synthesize realName = _realName;
+@synthesize rows = _rows;
 
 @synthesize isLogin = _isLogin;
 
@@ -113,6 +114,18 @@
         _userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
     }
     return _userName;
+}
+
+- (void)setRows:(NSArray *)rows{
+    [[NSUserDefaults standardUserDefaults] setObject:rows forKey:@"rows"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    _rows = rows;
+}
+-(NSArray *)rows{
+    if (_rows == nil || _rows.count == 0) {
+        _rows = [[NSUserDefaults standardUserDefaults] objectForKey:@"rows"];
+    }
+    return _rows;
 }
 
 

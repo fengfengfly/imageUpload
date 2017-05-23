@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "UserManager.h"
-
+#import "FZFileManager.h"
 #import "IQKeyboardManager.h"
 
 #import "LoginNaviController.h"
@@ -23,6 +23,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [self registerLoginNoti];
+    [self clearUploadCache];
+    
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
     [IQKeyboardManager sharedManager].shouldPlayInputClicks = YES;
@@ -40,6 +42,18 @@
     } else {
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
     }
+}
+
+#pragma mark - localFileManage
+- (void)clearUploadCache{
+    NSString *uploadCache = [FZFileManager homeDirWithSub:kFilePath_upload];
+    [FZFileManager asyncRemoveFilesAtPath:uploadCache confirm:^BOOL(NSDictionary *fileInfo) {
+#if DEBUG
+        NSLog(@"fileInfo--%@", fileInfo);
+#endif
+
+        return YES;
+    }];
 }
 
 #pragma mark - login changed

@@ -9,7 +9,7 @@
 
 #import "BaseView.h"
 #define kCaptureHeaderH 215
-
+#define kCaptureEditHeaderH 133
 typedef void(^UserInterectBlock)();
 @interface PictureCaptureHeader : BaseView
 @property (weak, nonatomic) IBOutlet UITextField *customerTF;

@@ -23,9 +23,33 @@ static NSString *CellID = @"CellID";
     return self;
 }
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    if (self.myHitTestBlock) {
+        CGPoint contentPoint = [self.contentView convertPoint:point fromView:self];
+        if (![self.contentView pointInside:contentPoint withEvent:event]) {
+            
+            CGPoint windoPoint = [self convertPoint:point toView:nil];
+            UIView *myHitTestView = self.myHitTestBlock(windoPoint, event);
+            if (myHitTestView != nil) {
+                if (self.selectedBlock) {
+                    self.selectedBlock(nil, NO);
+                }
+                [self removeFromSuperview];
+                return myHitTestView;
+            }
+        }
+        
+    }
+    
+    return [super hitTest:point withEvent:event];
+}
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     
-    self.selectedBlock(nil, NO);
+    if (self.selectedBlock) {
+        
+        self.selectedBlock(nil, NO);
+    }
     
     [UIView animateWithDuration:0.3 animations:^{
         self.tableView.frame = self.dropBeginFrame;
@@ -39,14 +63,14 @@ static NSString *CellID = @"CellID";
     CGFloat tableH = kTimeTypeCellH * 3;
     
     self.dropBeginFrame = CGRectMake(0, - tableH, self.contentView.frame.size.width, tableH);
-    self.dropEndFrame = CGRectMake(0, 0.5, self.contentView.frame.size.width, tableH);
+    self.dropEndFrame = CGRectMake(0, 0, self.contentView.frame.size.width, tableH);
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.dropBeginFrame];
     tableView.delegate = self;
     tableView.dataSource = self;
     [self.contentView addSubview:tableView];
     self.tableView = tableView;
-    
+    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
     [UIView animateWithDuration:0.2 animations:^{
         self.tableView.frame = self.dropEndFrame;
         self.contentView.backgroundColor = RGBColor(105, 105, 105, 0.4);
@@ -78,18 +102,22 @@ static NSString *CellID = @"CellID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellID];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellID];
-        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellID];
+        cell.textLabel.textAlignment = NSTextAlignmentLeft;
         cell.tintColor = kSubjectColor;
+        cell.textLabel.font = kMidFont;
     }
     if (indexPath.row == self.selectedIndex) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+         cell.textLabel.textColor = kSubjectColor;
         
     }else{
-        cell.accessoryType = UITableViewCellAccessoryNone;
+         cell.textLabel.textColor = kBlackFontColor;;
     }
     NSString *title = self.dataSource[indexPath.row];
     cell.textLabel.text = title;
+    if (indexPath.row == self.dataSource.count - 1) {
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
     return cell;
 }
 

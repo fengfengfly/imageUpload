@@ -38,11 +38,11 @@
     [self.carouselView reloadData];
 }
 
-- (void)viewDidLayoutSubviews{
-    [super viewDidLayoutSubviews];
-
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self.productView initDrawInfo];
+    [self.customerView initDrawInfo];
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

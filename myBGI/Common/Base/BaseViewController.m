@@ -65,7 +65,9 @@
     UIBarButtonItem *backBbi = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
     self.navigationItem.leftBarButtonItem = backBbi;
 }
-
+- (void)willPop{
+    
+}
 - (void)backBtnClick
 {
     [self.navigationController popViewControllerAnimated:YES];

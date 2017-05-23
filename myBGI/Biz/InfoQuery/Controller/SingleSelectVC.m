@@ -23,6 +23,7 @@ static NSString *CellID = @"CellID";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,6 +56,10 @@ static NSString *CellID = @"CellID";
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
     cell.textLabel.text = title;
     cell.textLabel.font = [UIFont systemFontOfSize:14];
+    cell.textLabel.textColor = kBlackFontColor;
+    if (indexPath.row == self.dataSource.count - 1) {
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
     return cell;
 }
 

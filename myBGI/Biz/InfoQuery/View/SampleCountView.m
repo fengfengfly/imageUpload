@@ -31,6 +31,7 @@
     // Drawing code
 }
 */
+
 static NSString *SampleCountCellID = @"SampleCountCellID";
 -(void)awakeFromNib{
     [super awakeFromNib];
@@ -60,31 +61,99 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
     self.timeTypeTF.text = type;
 }
 
-//方案一滚动选择录入时间类型
-- (void)addTimeTypePicker{
-    //初始化pickerView
+- (UIView *)myhitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    BOOL resultFlag = NO;
+    CGPoint myPoint = [self convertPoint:point fromView:[UIApplication sharedApplication].keyWindow];
     
-    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
-    pickerView.showsSelectionIndicator = YES;
-    pickerView.dataSource = self;
-    pickerView.delegate = self;
-    pickerView.backgroundColor = [UIColor whiteColor];
-    [pickerView selectRow:0  inComponent:0 animated:YES];
-    // set change the inputView (default is keyboard) to UIPickerView
-    self.timeTypeTF.inputView = pickerView;
-    self.timeTypeTF.delegate = self;
-    // add a toolbar with Cancel & Done button
-    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    toolBar.barStyle = UIBarStyleDefault;
-    toolBar.backgroundColor = [UIColor lightGrayColor];
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(doneInputStyle:)];
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelInputStyle:)];
-    UIBarButtonItem *flexibleButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    UIBarButtonItem *titleButton = [[UIBarButtonItem alloc] initWithTitle:@"请选择日期类型" style:UIBarButtonItemStylePlain target:nil action:nil];
-    titleButton.tintColor = [UIColor blackColor];
-    // the middle button is to make the Done button align to right
-    [toolBar setItems:@[cancelButton,flexibleButton,titleButton,flexibleButton,doneButton]];
-    self.timeTypeTF.inputAccessoryView = toolBar;
+    switch (self.drawLineV.drawIndex) {
+        case 0:
+            if ([self.beginTimeTF pointInside:[self.beginTimeTF convertPoint:myPoint fromView:self] withEvent:event]) {
+                resultFlag = YES;
+            }
+            if ([self.endTimeTF pointInside:[self.endTimeTF convertPoint:myPoint fromView:self] withEvent:event]) {
+                resultFlag = YES;
+            }
+            break;
+        case 1:
+            if ([self.endTimeTF pointInside:[self.endTimeTF convertPoint:myPoint fromView:self] withEvent:event]) {
+                resultFlag = YES;
+            }
+            if ([self.timeTypeTF pointInside:[self.timeTypeTF convertPoint:myPoint fromView:self] withEvent:event]) {
+                resultFlag = YES;
+            }
+            break;
+        case 2:
+            if ([self.beginTimeTF pointInside:[self.beginTimeTF convertPoint:myPoint fromView:self] withEvent:event]) {
+                resultFlag = YES;
+            }
+            if ([self.timeTypeTF pointInside:[self.timeTypeTF convertPoint:myPoint fromView:self] withEvent:event]) {
+                resultFlag = YES;
+            }
+            break;
+        default:
+            break;
+    }
+    if (resultFlag == YES) {
+        
+        return [self hitTest:myPoint withEvent:event];
+    }
+    return nil;
+}
+
+
+
+- (void)initDrawInfo{
+    //初始化轨迹点数组
+    CGFloat x0 = 0;
+    CGFloat x1 = self.timeTypeTF.frame.origin.x - 1;
+    CGFloat x2 = CGRectGetMaxX(self.timeTypeTF.frame) + 1;
+    CGFloat x3 = self.beginTimeTF.frame.origin.x - 1;
+    CGFloat x4 = CGRectGetMaxX(self.beginTimeTF.frame) + 1;
+    CGFloat x5 = self.endTimeTF.frame.origin.x - 1;
+    CGFloat x6 = CGRectGetMaxX(self.endTimeTF.frame) + 1;
+    CGFloat x7 = SCREEN_WIDTH;
+    
+    CGFloat y0 = self.timeTypeTF.frame.origin.y - 1;
+    CGFloat y1 =  CGRectGetHeight(self.drawLineV.bounds) - 1;
+    
+    CGPoint tempPointArray[3][6] = {{CGPointMake(x0, y1),CGPointMake(x1, y1),CGPointMake(x1, y0), CGPointMake(x2, y0),CGPointMake(x2, y1),CGPointMake(x7, y1)},
+        {CGPointMake(x0, y1),CGPointMake(x3, y1),CGPointMake(x3, y0),CGPointMake(x4, y0),CGPointMake(x4, y1),CGPointMake(x7, y1)},
+        {CGPointMake(x0, y1),CGPointMake(x5, y1),CGPointMake(x5, y0),CGPointMake(x6, y0),CGPointMake(x6, y1), CGPointMake(x7, y1)}};
+    
+    MyDrawInfo DrawInfo;
+    for (int i = 0; i < 3; i ++) {
+        for (int j = 0; j < 6; j ++) {
+            DrawInfo.array[i][j] = tempPointArray[i][j];
+        }
+    }
+    DrawInfo.didInit = YES;
+    self.drawLineV.drawInfo = DrawInfo;
+}
+
+- (void)redrawIndex:(NSInteger)index shouldDraw:(BOOL)shouldDraw{
+    self.drawLineV.shouldDraw = shouldDraw;
+    self.drawLineV.drawIndex = index;
+    [self.drawLineV setNeedsDisplay];
+    UIColor *bgColor = nil;
+    if (shouldDraw == YES) {
+        bgColor = [UIColor whiteColor];
+    }else{
+        bgColor = kBgColor;
+    }
+    switch (index) {
+        case 0:
+            self.timeTypeTF.backgroundColor = bgColor;
+            break;
+        case 1:
+            self.beginTimeTF.backgroundColor = bgColor;
+            break;
+        case 2:
+            self.endTimeTF.backgroundColor = bgColor;
+            break;
+        default:
+            break;
+    }
+    
 }
 
 - (NSString *)makeTodayStr{
@@ -111,13 +180,16 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
     CalendarView *calendarV = [[CalendarView alloc] initWithFrame:controller.view.bounds contentFrame:[self convertRect:self.tableView.frame toView:controller.view]];
     calendarV.willSelectBlock = willBlock;
     calendarV.selectedBlock = finishBlock;
+    calendarV.myHitTestBlock = ^UIView *(CGPoint point, UIEvent *event){
+        return [self myhitTest:point withEvent:event];
+    };
     [calendarV.calendar selectDate:[calendarV.dateFormatter dateFromString:date] scrollToDate:YES];
     [controller.view addSubview:calendarV];
     [calendarV showContent];
 }
 
 - (IBAction)beginTimeClick:(UIButton *)sender {
-    sender.selected = YES;
+    [self redrawIndex:1 shouldDraw:YES];
     [self showCalendarDateStr:self.beginTimeTF.text willSelected:^BOOL(NSString *willDateStr) {
        
         return YES;
@@ -126,13 +198,13 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
             
             self.beginTimeTF.text = dateStr;
         }
-        sender.selected = NO;
+        [self redrawIndex:1 shouldDraw:NO];
         
     }];
 }
 
 - (IBAction)timeTypeClick:(UIButton *)sender {
-    sender.selected = YES;
+    [self redrawIndex:0 shouldDraw:YES];
     UIViewController *controller = [self getCurrentViewController];
     TimeTypeSelectView *timeTypeView = [[TimeTypeSelectView alloc] initWithFrame:controller.view.bounds contentFrame:[self convertRect:self.tableView.frame toView:controller.view]];
     timeTypeView.selectedIndex = self.selectTypeIndex;
@@ -142,13 +214,17 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
             self.selectTypeIndex = indexPath.row;
             self.timeTypeTF.text = self.timeTypes[indexPath.row];
         }
-        sender.selected = NO;
+        [self redrawIndex:0 shouldDraw:NO];
     };
+    timeTypeView.myHitTestBlock = ^UIView *(CGPoint point, UIEvent *event){
+        return [self myhitTest:point withEvent:event];
+    };
+
     [controller.view addSubview:timeTypeView];
     [timeTypeView showWithDataSource:self.timeTypes];
 }
 - (IBAction)endTimeClick:(UIButton *)sender {
-    sender.selected = YES;
+    [self redrawIndex:2 shouldDraw:YES];
     [self showCalendarDateStr:self.endTimeTF.text willSelected:^BOOL(NSString *willDateStr){
         
         return YES;
@@ -157,7 +233,7 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
             
             self.endTimeTF.text = dateStr;
         }
-        sender.selected = NO;
+        [self redrawIndex:2 shouldDraw:NO];
         
     }];
 }
@@ -262,45 +338,18 @@ static NSString *SampleCountCellID = @"SampleCountCellID";
     
 }
 
-#pragma mark UIPickerView DataSource Method
-
-
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    NSInteger result = 0;
-    switch (component) {
-        case 0:
-            result = self.timeTypes.count;
-            break;
-        default:
-            break;
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (section == 0 && self.dataSource.count != 0) {
+        return 15;
     }
-    
-    return result;
+    return 0;
 }
 
-#pragma mark UIPickerView Delegate Method
+- (void)dealloc{
+#if DEBUG
+    NSLog(@"%s", __func__);
+#endif
 
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    NSString * title = nil;
-    switch (component) {
-        case 0:
-            title = self.timeTypes[row];
-            break;
-        default:
-            break;
-    }
-    
-    return title;
 }
 
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    self.selectTypeIndex = row;
-}
 @end

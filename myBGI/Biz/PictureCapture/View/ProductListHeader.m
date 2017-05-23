@@ -19,7 +19,6 @@ static NSString *CellID = @"CellID";
     
 }
 
-
 #pragma mark UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -28,7 +27,7 @@ static NSString *CellID = @"CellID";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    
+
     return self.dataSource.count;
 }
 
@@ -48,6 +47,7 @@ static NSString *CellID = @"CellID";
     [self.collectionView reloadData];
     if (self.actionBlock) {
         self.actionBlock(indexPath);
+        
     }
 }
 

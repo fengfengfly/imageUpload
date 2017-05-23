@@ -90,7 +90,6 @@
     
     return [sessionManager POST:bodyURLString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        
         NSNumber *success = responseObject[@"success"];
         
         if (success.integerValue == 1 || success == nil) {

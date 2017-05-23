@@ -12,8 +12,6 @@
 #import "UserManager.h"
 #import <MJExtension/MJExtension.h>
 
-#define CUS_SEARCH_HISTORY @"cus_search_history"
-
 @interface CustomerSearchVC ()<UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
@@ -96,7 +94,7 @@ static NSString *CustomerCellID = @"customerCellID";
     
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     self.searchBar.tintColor = [UIColor blueColor];
-    self.searchBar.placeholder = @"输入您想要搜索的内容";
+    self.searchBar.placeholder = @"输入您想要搜索的医院名或编号";
     self.searchBar.delegate = self;
     [self.searchBar setImage:[UIImage imageNamed:@"search"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
     self.navigationItem.titleView = self.searchBar;
@@ -217,6 +215,9 @@ static NSString *CustomerCellID = @"customerCellID";
     cell.detailTextLabel.text = model.customerName;
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
     cell.detailTextLabel.textColor = [UIColor blackColor];
+    if (indexPath.row == self.dataSource.count - 1) {
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
     return cell;
 }
 

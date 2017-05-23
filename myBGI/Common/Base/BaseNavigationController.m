@@ -21,6 +21,13 @@
     
 }
 
+- (UIViewController *)popViewControllerAnimated:(BOOL)animated{
+    BaseViewController *baseVC = (BaseViewController *)[super popViewControllerAnimated:animated];
+    [baseVC willPop];
+    return baseVC;
+    
+}
+
 - (void)pushViewController:(BaseViewController *)viewController animated:(BOOL)animated
 {
     if (self.childViewControllers.count > 0) { // 非根控制器

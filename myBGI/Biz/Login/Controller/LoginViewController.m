@@ -61,7 +61,7 @@
     
     CALayer *sublayer =[CALayer layer];
     sublayer.backgroundColor =[UIColor clearColor].CGColor;
-    sublayer.shadowOffset = CGSizeMake(0, 10);
+    sublayer.shadowOffset = CGSizeMake(0, 20);
     sublayer.shadowRadius =25;
     sublayer.shadowColor =RGBColor(167, 183, 184, 1).CGColor;
     sublayer.shadowOpacity =0.9;

@@ -15,7 +15,7 @@
     // Initialization code
     self.numL.textColor = [UIColor whiteColor];
     self.numBgV.layer.masksToBounds = YES;
-    self.numBgV.layer.cornerRadius = 12;
+    self.numBgV.layer.cornerRadius = 10;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
@@ -30,7 +30,7 @@
 
 - (void)checkShrink{
     if (self.isExpand) {
-        self.numBgV.backgroundColor = [UIColor redColor];
+        self.numBgV.backgroundColor = kSubjectColor_Red;
         self.indicatorBtn.selected = YES;
     }else{
         self.numBgV.backgroundColor = [UIColor grayColor];

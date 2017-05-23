@@ -8,13 +8,14 @@
 
 #import "BaseView.h"
 #import "DeliverCountModel.h"
+#import "DrawLineView.h"
 
 typedef NS_ENUM(NSInteger, SampleCountType) {
     SampleCountTypeProduct = 0,
     SampleCountTypeCustomer
 };
 
-@interface SampleCountView : BaseView<UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
+@interface SampleCountView : BaseView<UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *timeTypeTF;
 @property (weak, nonatomic) IBOutlet UITextField *beginTimeTF;
 @property (weak, nonatomic) IBOutlet UITextField *endTimeTF;
@@ -25,4 +26,6 @@ typedef NS_ENUM(NSInteger, SampleCountType) {
 @property (assign, nonatomic) NSInteger dataPage;
 @property (strong, nonatomic) NSArray *timeTypes;
 @property (assign, nonatomic) NSInteger selectTypeIndex;
+@property (weak, nonatomic) IBOutlet DrawLineView *drawLineV;
+- (void)initDrawInfo;
 @end

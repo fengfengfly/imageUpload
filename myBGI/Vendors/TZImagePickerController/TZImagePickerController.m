@@ -254,6 +254,10 @@
     [super pushViewController:viewController animated:animated];
 }
 
+- (void)dealloc{
+    
+}
+
 @end
 
 
@@ -365,5 +369,6 @@
         return image;
     }
 }
+
 
 @end

@@ -19,10 +19,10 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @property (assign, nonatomic) NSInteger expandSection;
-@property (strong, nonatomic) PicCaptureModel *addingModel;
+
 @property (assign, nonatomic) NSInteger selectStyleIndex;
 @property (strong, nonatomic) UIButton *selectedAllBtn;
-
+@property (strong, nonatomic) NSString *selfSectionCode;
 @end
 
 @implementation PictureCaptureSelectionVC
@@ -33,7 +33,10 @@ static NSString *PicCellID = @"PicCellID";
     // Do any additional setup after loading the view.
     self.title = @"选择编辑";
     [self configCollectionView];//已默认多选
-    
+    self.expandSection = 0;
+    PicSectionModel *model = self.dataSource.firstObject;
+    PicCaptureModel *capture = model.itemArray.firstObject;
+    self.selfSectionCode = capture.customer.customerCode;
     self.selectStyleIndex = 1;//双输
     //自定义navigationBar右边的按钮
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -50,12 +53,17 @@ static NSString *PicCellID = @"PicCellID";
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    NSIndexPath *defaultSelIndex = [NSIndexPath indexPathForRow:self.defaultSelRow inSection:0];
-    PicSectionModel *model = self.dataSource.firstObject;
-    if (model.itemArray.count == 1) {
-        self.selectedAllBtn.selected = YES;
+    //默认选中长按的对象
+    if (self.dataSource.count > 0 && self.defaultSelRow != -1) {
+        NSIndexPath *defaultSelIndex = [NSIndexPath indexPathForRow:self.defaultSelRow inSection:0];
+        PicSectionModel *model = self.dataSource.firstObject;
+        if (model.itemArray.count == 1) {
+            self.selectedAllBtn.selected = YES;
+        }
+        [self.collectionView selectItemAtIndexPath:defaultSelIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        self.defaultSelRow = -1;
     }
-    [self.collectionView selectItemAtIndexPath:defaultSelIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+    
     
 }
 
@@ -63,12 +71,14 @@ static NSString *PicCellID = @"PicCellID";
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-- (void)backBtnClick{
-    [super backBtnClick];
+- (void)willPop{
     if (self.finishBlock) {
         self.finishBlock();
     }
+}
+- (void)backBtnClick{
+    [super backBtnClick];
+    
 }
 
 - (void)turnMultiEditMode{
@@ -184,12 +194,11 @@ static NSString *PicCellID = @"PicCellID";
         }
     }
     
+    
     //移除空section
-    [self.dataSource removeObjectsAtIndexes:nullSectionIndexSet];
+    [self.dataSource removeAllObjects];
     
 }
-
-
 
 //编辑多个
 - (void)editCell:(NSArray<NSIndexPath *> *)senders{
@@ -198,39 +207,55 @@ static NSString *PicCellID = @"PicCellID";
     for (NSIndexPath *indexPath in senders) {//取出section中的item
         
         PicSectionModel *sectionModel = [self.dataSource objectAtIndex:indexPath.section];
-        [muArray addObject:sectionModel.itemArray[indexPath.row]];
+        PicCaptureModel *item = sectionModel.itemArray[indexPath.row];
+        [item backUpSelf];//需要编辑的对象备份属性
+        [muArray addObject:item];
     }
-    [self deleteDatas:senders];
+    [self deleteDatas:senders];//从数组删除要编辑的对象
     
     PicSectionModel *sectionModel = [PicSectionModel new];
     sectionModel.itemArray = muArray;
     NSMutableArray *dataSource = [NSMutableArray arrayWithObjects:sectionModel, nil];
     PicEditViewController *editVC = [[UIStoryboard storyboardWithName:@"PictureCapture" bundle:nil] instantiateViewControllerWithIdentifier:@"PicEditViewController"];
     editVC.dataSource = dataSource;
-    __weak typeof(self) weakSelf = self;
+    
     editVC.resultBlock = ^(BOOL haveChange, NSMutableArray *dataArray){
+        
         for (PicSectionModel *sectionModel in dataArray) {
             for (PicCaptureModel *model in sectionModel.itemArray) {
-                weakSelf.addingModel = model;
-                [weakSelf addModelToDataSource];
+                
+                [self addModelToDataSource:model];
             }
         }
-        if (self.finishBlock) {
-            self.finishBlock();
-        }
-//        [weakSelf.collectionView reloadData];
+        [self refreshSelfDataSource];
+        
     };
     [self.navigationController pushViewController:editVC animated:YES];
 }
-
+- (void)refreshSelfDataSource{
+   
+    for (PicSectionModel *section in self.origDataSource) {
+        PicCaptureModel *capture = section.itemArray.firstObject;
+        if ([capture.customer.customerCode isEqualToString:self.selfSectionCode]) {
+            [self.dataSource addObject:section];
+            break;
+        }
+    }
+    if (self.dataSource.count > 0) {
+        
+        [self.collectionView reloadData];
+        self.selectedAllBtn.selected = NO;
+    }else{
+        [self.navigationController popViewControllerAnimated:NO];
+    }
+}
 //添加到数据源
-- (void)addModelToDataSource{
+- (void)addModelToDataSource:(PicCaptureModel *)model{
     BOOL hasKnownSection = NO;
     for (PicSectionModel *sectionModel in self.origDataSource) {
         PicCaptureModel *knownModel = sectionModel.itemArray.firstObject;
-        if ([knownModel.customer.customerCode isEqualToString:self.addingModel.customer.customerCode]) {
-            [sectionModel.itemArray addObject:self.addingModel];
-            self.expandSection = [self.origDataSource indexOfObject:sectionModel];
+        if ([knownModel.customer.customerCode isEqualToString:model.customer.customerCode]) {
+            [sectionModel.itemArray addObject:model];
             hasKnownSection = YES;
             break;
         }
@@ -238,9 +263,8 @@ static NSString *PicCellID = @"PicCellID";
     if (hasKnownSection == NO) {
         
         PicSectionModel *sectionModel = [PicSectionModel new];
-        [sectionModel.itemArray addObject:self.addingModel];
-        [self.origDataSource addObject:sectionModel];
-        self.expandSection = [self.origDataSource indexOfObject:sectionModel];
+        [sectionModel.itemArray addObject:model];
+        [self.origDataSource insertObject:sectionModel atIndex:0];
     }
     
     

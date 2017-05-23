@@ -9,6 +9,7 @@
 #import "UIImage+GradientColor.h"
 
 @implementation UIImage (GradientColor)
+
 + (UIImage *)gradientImageRect:(CGRect)rect inputPoint0:(CGPoint)point0 inputPoint1:(CGPoint)point1 inputColor0:(UIColor *)color0 inputColor1:(UIColor *)color1{
     CIFilter *ciFilter = [CIFilter filterWithName:@"CILinearGradient"];
     CIVector *vector0 = [CIVector vectorWithX:rect.size.width * point0.x Y:rect.size.height * (1 - point0.y)];

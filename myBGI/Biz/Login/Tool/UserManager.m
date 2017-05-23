@@ -76,12 +76,16 @@ static UserManager *defaultManager = nil;
     self.userModel.isLogin = NO;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     //移除UserDefaults中存储的用户信息
+    [userDefaults removeObjectForKey:CUS_SEARCH_HISTORY];
+    [userDefaults removeObjectForKey:PRD_SEARCH_HISTORY];
     [userDefaults removeObjectForKey:@"id"];
     [userDefaults removeObjectForKey:@"loginId"];
     [userDefaults removeObjectForKey:@"passWord"];
     [userDefaults removeObjectForKey:@"realName"];
     [userDefaults removeObjectForKey:@"userName"];
     [userDefaults removeObjectForKey:@"isLogin"];
+    [userDefaults removeObjectForKey:@"rows"];
+    
     [userDefaults synchronize];
     //发送自动登陆状态通知
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];

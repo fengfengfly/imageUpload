@@ -38,7 +38,7 @@ static NSString *CellIDDetail = @"CellIDDetail";
     [self.tableView registerNib:[UINib nibWithNibName:@"InputTFCell" bundle:nil] forCellReuseIdentifier:CellIDTF];
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
+    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
     [self.resetBtn addTarget:self action:@selector(resetClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.confirmBtn addTarget:self action:@selector(confirmClick:) forControlEvents:UIControlEventTouchUpInside];
     

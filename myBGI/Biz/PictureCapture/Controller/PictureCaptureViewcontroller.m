@@ -61,13 +61,14 @@ typedef NS_ENUM(NSInteger, EditType) {
 
 @implementation PictureCaptureViewcontroller
 
-static NSString *SectionHeaderID = @"SectionHeaderID";
+static NSString *SectionHeaderID = @"HeaderID";
+static NSString *SectionFooterID = @"FooterID";
 static NSString *PicCellID = @"PicCellID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"拍照采集";
-    
+    self.expandSection = -1;
     self.captureHeader.customerTF.delegate = self;
     self.captureHeader.productTF.delegate = self;
     self.captureHeader.inputStyleTF.delegate = self;
@@ -297,7 +298,9 @@ static NSString *PicCellID = @"PicCellID";
 - (void)configCollectionView{
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
+    self.collectionView.backgroundColor = [UIColor whiteColor];
     self.collectionView.allowsMultipleSelection = NO;
+    
     [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass([PicCaptureSectionHeader class]) bundle:[NSBundle mainBundle]] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SectionHeaderID];
     [self.collectionView registerNib:[UINib nibWithNibName:@"PicCaptureCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:PicCellID];
     
@@ -412,32 +415,23 @@ static NSString *PicCellID = @"PicCellID";
 #endif
     }
     TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
-//    imagePickerVc.isSelectOriginalPhoto = _isSelectLogoOriginalPhoto;
-//    imagePickerVc.selectedAssets = _selectedLogoAssets; // optional, 可选的
     
-    // You can get the photos by block, the same as by delegate.
     [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
         
     }];
     
-    // Set the appearance
-    // 在这里设置imagePickerVc的外观
-    // imagePickerVc.navigationBar.barTintColor = [UIColor greenColor];
-    // imagePickerVc.oKButtonTitleColorDisabled = [UIColor lightGrayColor];
-    // imagePickerVc.oKButtonTitleColorNormal = [UIColor greenColor];
-    
-    // Set allow picking video & photo & originalPhoto or not
-    // 设置是否可以选择视频/图片/原图
-    // imagePickerVc.allowPickingVideo = NO;
-    // imagePickerVc.allowPickingImage = NO;
-    // imagePickerVc.allowPickingOriginalPhoto = NO;
     
     [self presentViewController:imagePickerVc animated:YES completion:nil];
 }
 
 - (void)sectionUploadBtnClick:(UIButton *)sender{
     NSInteger section = sender.tag;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"是否上传此医院下所有图片?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    if (self.expandSection != section) {
+        
+        self.expandSection = section;
+        [self.collectionView reloadData];
+    }
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"是否上传此医院下所有添加?" message:nil preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *finishAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
@@ -464,15 +458,16 @@ static NSString *PicCellID = @"PicCellID";
 //    UIImage *nowImage = [UIImage imageWithData:imageData];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"继续添加?" message:@"继续添加所选医院和产品的表单" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *finishAction = [UIAlertAction actionWithTitle:@"完成" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        UIImage *fixedOrientImg = [UIImage fixOrientation:image];
+        UIImage *fixedOrientImg = [UIImage fixOrientation:image];//防止旋转
         [self.addingModel savePicture:fixedOrientImg];
-        [self addModelToDataSource];
+        [self addModelToDataSource:self.addingModel];
         [self.collectionView reloadData];
         [picker dismissViewControllerAnimated:YES completion:nil];
     }];
     UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"继续" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.addingModel savePicture:image];
-        [self addModelToDataSource];
+        UIImage *fixedOrientImg = [UIImage fixOrientation:image];//防止旋转
+        [self.addingModel savePicture:fixedOrientImg];
+        [self addModelToDataSource:self.addingModel];
         
         __weak typeof(self) weakSelf = self;
         [picker dismissViewControllerAnimated:NO completion:^{
@@ -508,35 +503,50 @@ static NSString *PicCellID = @"PicCellID";
 //    self.addingModel.customer = model;
     [[TZImageManager manager] getOriginalPhotoWithAsset:assets.firstObject completion:^(UIImage *photo, NSDictionary *info) {
         [self.addingModel savePicture:photo];
-        [self addModelToDataSource];
+        [self addModelToDataSource:self.addingModel];
         [self.collectionView reloadData];
     }];
+    
     [picker dismissViewControllerAnimated:YES completion:nil];
     
 }
 
 #pragma mark UICollectionViewDataSource
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
-    PicCaptureSectionHeader *cell= nil;
+    
+    UICollectionReusableView *reusableV= nil;
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        cell = (PicCaptureSectionHeader *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SectionHeaderID forIndexPath:indexPath];
-        [cell.uploadBtn addTarget:self action:@selector(sectionUploadBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    cell.uploadBtn.tag = indexPath.section;
-    PicSectionModel *sectionModel = self.dataSource[indexPath.section];
-    __weak typeof(self) weakSelf = self;
-    [cell configHeaderSectionModel:sectionModel isExpand:(indexPath.section == self.expandSection) section:indexPath.section block:^void(NSInteger section, BOOL isExpand) {
-        if (isExpand) {
-            
-            weakSelf.expandSection = section;
+        PicCaptureSectionHeader *header = (PicCaptureSectionHeader *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SectionHeaderID forIndexPath:indexPath];
+        [header.uploadBtn addTarget:self action:@selector(sectionUploadBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        if (self.expandSection - 1 == indexPath.section) {
+            header.bottomSeparate.hidden = YES;
         }else{
-            weakSelf.expandSection = -1;
+            header.bottomSeparate.hidden = NO;
         }
-        [weakSelf.collectionView reloadData];
+        header.uploadBtn.tag = indexPath.section;
+        PicSectionModel *sectionModel = self.dataSource[indexPath.section];
+        __weak typeof(self) weakSelf = self;
+        [header configHeaderSectionModel:sectionModel isExpand:(indexPath.section == self.expandSection) section:indexPath.section block:^void(NSInteger section, BOOL isExpand) {
+            if (isExpand) {
+                
+                weakSelf.expandSection = section;
+            }else{
+                weakSelf.expandSection = -1;
+            }
+            [weakSelf.collectionView reloadData];
+            
+        }];
+        reusableV = header;
+    }else if (kind == UICollectionElementKindSectionFooter){
         
-    }];
-    return cell;
+        UICollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:SectionFooterID forIndexPath:indexPath];
+        footerview.backgroundColor = kBgColor;
+        reusableV = footerview;
+        
+    }
+    
+    return reusableV;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -607,7 +617,10 @@ static NSString *PicCellID = @"PicCellID";
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    return UIEdgeInsetsMake(5, 10, 5, 10);
+    if(self.expandSection != section){
+        return UIEdgeInsetsMake(0, 10, 0, 10);
+    }
+    return UIEdgeInsetsMake(10, 10, 5, 10);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
@@ -618,11 +631,24 @@ static NSString *PicCellID = @"PicCellID";
     
     //设置区头高度
     
-    CGSize size = CGSizeMake(SCREEN_WIDTH, 40);
+    CGSize size = CGSizeMake(SCREEN_WIDTH, 56);
     
     return size;
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
+    
+    CGSize size = CGSizeZero;
+    if (section == self.expandSection || section == self.expandSection - 1) {
+        
+        size = CGSizeMake(SCREEN_WIDTH, 5);
+    }
+    if (section == self.dataSource.count - 1 || self.expandSection == -1) {
+        size = CGSizeZero;
+    }
+    
+    return size;
+}
 
 #pragma mark UIPickerView DataSource Method
 
@@ -1016,8 +1042,7 @@ static NSString *PicCellID = @"PicCellID";
     editVC.resultBlock = ^(BOOL haveChange, NSMutableArray *dataArray){
         for (PicSectionModel *sectionModel in dataArray) {
             for (PicCaptureModel *model in sectionModel.itemArray) {
-                weakSelf.addingModel = model;
-                [weakSelf addModelToDataSource];
+                [weakSelf addModelToDataSource:model];
             }
         }
         [weakSelf.collectionView reloadData];
@@ -1025,12 +1050,12 @@ static NSString *PicCellID = @"PicCellID";
     [self.navigationController pushViewController:editVC animated:YES];
 }
 //添加到数据源
-- (void)addModelToDataSource{
+- (void)addModelToDataSource:(PicCaptureModel *)model{
     BOOL hasKnownSection = NO;
     for (PicSectionModel *sectionModel in self.dataSource) {
         PicCaptureModel *knownModel = sectionModel.itemArray.firstObject;
         if ([knownModel.customer.customerCode isEqualToString:self.addingModel.customer.customerCode]) {
-            [sectionModel.itemArray addObject:self.addingModel];
+            [sectionModel.itemArray addObject:model];
             self.expandSection = [self.dataSource indexOfObject:sectionModel];
             hasKnownSection = YES;
             break;
@@ -1039,8 +1064,8 @@ static NSString *PicCellID = @"PicCellID";
     if (hasKnownSection == NO) {
         
         PicSectionModel *sectionModel = [PicSectionModel new];
-        [sectionModel.itemArray addObject:self.addingModel];
-        [self.dataSource addObject:sectionModel];
+        [sectionModel.itemArray addObject:model];
+        [self.dataSource insertObject:sectionModel atIndex:0];
         self.expandSection = [self.dataSource indexOfObject:sectionModel];
     }
     [self addModelSuccess];

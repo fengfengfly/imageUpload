@@ -10,8 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "CustomerModel.h"
 #import "ProductModel.h"
-
-#define kPicCachePath NSTemporaryDirectory()
+#import "FZFileManager.h"
 
 typedef NS_ENUM(NSInteger, ReadType){
     singleRead = 1,
@@ -53,5 +52,6 @@ typedef void(^UploadFail)();
 - (NSString *)productCodeStr;
 - (NSString *)productNameStr;
 - (void)uploadIfSuccess:(UploadSuccess)uploadSuccess fail:(UploadFail)uploadFail;
-
+- (void)backUpSelf;
+- (void)restoreSelf;
 @end

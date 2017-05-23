@@ -13,6 +13,7 @@
 @interface BaseViewController : UIViewController
 
 - (void)initBackBarButtonItem;
+- (void)willPop;
 - (void)backBtnClick;
 
 - (void)showStatusBarErrorWithStatus:(NSString *)status;
