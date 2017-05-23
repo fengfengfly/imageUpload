@@ -56,7 +56,7 @@ static UserManager *defaultManager = nil;
             UserModel *model = [UserModel mj_objectWithKeyValues:mResponseObject[@"object"]];
             model.isLogin = YES;
             self.userModel = model;
-            
+            model.rows = mResponseObject[@"rows"];
             //发送自动登陆状态通知
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
             if (successBlock) {

@@ -9,7 +9,7 @@
 #import "MainTabBarController.h"
 #import "PictureCaptureViewcontroller.h"
 #import "InfoQueryViewController.h"
-
+#import "UserManager.h"
 @interface MainTabBarController ()
 
 @end
@@ -30,6 +30,16 @@
 //设置底部viewcontroller
 - (void)setViewControllrs
 {
+    NSMutableArray *fooRows = [NSMutableArray array];
+    [kUserManager.userModel.rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *dic = obj;
+        NSString *text = dic[@"text"];
+        if ([text isEqualToString:@"采集中心"]) {
+            text = @"拍照采集";
+        }
+        [fooRows addObject:text];
+    }];
+    
     //导航
     NSArray *navNameArr = @[@"PictureCaptureNavigationController",
                             @"InfoQueryNavigationController",
@@ -57,7 +67,11 @@
     //放置viewControllers
     NSMutableArray *vcArr = [NSMutableArray array];
     //设置tabBar的viewControllers
-    for (int i = 0; i < navNameArr.count; i++) {
+    for (int i = 0; i < vcTitleArr.count; i++) {
+        NSString *nameStr = vcTitleArr[i];
+        if (![fooRows containsObject:nameStr] && i != (vcTitleArr.count - 1)) {
+            continue;
+        }
         UINavigationController *navigationController = [[UIStoryboard storyboardWithName:sbNameArr[i] bundle:nil]  instantiateViewControllerWithIdentifier:navNameArr[i]];
         [vcArr addObject:navigationController];
         
