@@ -25,10 +25,10 @@
             </objects>
             <point key="canvasLocation" x="-654" y="-218"/>
         </scene>
-        <!--拍照采集-->
+        <!--采集中心-->
         <scene sceneID="d0w-at-fm4">
             <objects>
-                <viewController storyboardIdentifier="PictureCaptureViewcontroller" title="拍照采集" id="Vpq-7T-AjE" customClass="PictureCaptureViewcontroller" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PictureCaptureViewcontroller" title="采集中心" id="Vpq-7T-AjE" customClass="PictureCaptureViewcontroller" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bGm-Ru-9uP"/>
                         <viewControllerLayoutGuide type="bottom" id="fhv-ZI-Me3"/>
@@ -446,7 +446,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrowDown" width="17" height="11"/>
+        <image name="arrowDown" width="13" height="8"/>
         <image name="delete" width="12" height="15"/>
         <image name="edit" width="12" height="12"/>
         <image name="search" width="15" height="15"/>

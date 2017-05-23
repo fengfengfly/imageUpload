@@ -194,9 +194,8 @@ static NSString *PicCellID = @"PicCellID";
         }
     }
     
-    
     //移除空section
-    [self.dataSource removeAllObjects];
+    [self.dataSource removeObjectsAtIndexes:nullSectionIndexSet];
     
 }
 
@@ -212,6 +211,7 @@ static NSString *PicCellID = @"PicCellID";
         [muArray addObject:item];
     }
     [self deleteDatas:senders];//从数组删除要编辑的对象
+    [self.dataSource removeAllObjects];//清空编辑之后再更新
     
     PicSectionModel *sectionModel = [PicSectionModel new];
     sectionModel.itemArray = muArray;

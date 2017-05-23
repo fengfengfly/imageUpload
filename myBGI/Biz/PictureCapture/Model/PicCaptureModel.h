@@ -48,7 +48,7 @@ typedef void(^UploadFail)();
 @property (weak, nonatomic) id<PicCaptureUploadDelegate> uploadDelegate;
 @property (copy, nonatomic) UploadSuccess uploadSuccess;
 
-- (void)savePicture:(UIImage *)image;
+- (void)savePicture:(UIImage *)image serial:(NSInteger)serial;
 - (NSString *)productCodeStr;
 - (NSString *)productNameStr;
 - (void)uploadIfSuccess:(UploadSuccess)uploadSuccess fail:(UploadFail)uploadFail;

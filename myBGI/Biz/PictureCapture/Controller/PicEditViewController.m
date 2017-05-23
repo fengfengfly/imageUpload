@@ -236,8 +236,6 @@ static NSString *PicCellID = @"PicCellID";
     customerListVC.chooseBlock = ^(CustomerModel *model){
         if (![model.customerCode isEqualToString:self.captureHeader.customerTF.text]) {
             self.captureHeader.customerTF.text = model.customerName;
-//            self.currentModel.customer = model;
-//            [self changeSection];
             [self changeAllSection:model];
             
         }

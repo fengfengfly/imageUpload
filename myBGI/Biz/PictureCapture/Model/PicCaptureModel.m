@@ -39,14 +39,14 @@
     return _readNum;
 }
 
-- (void)savePicture:(UIImage *)image{
+- (void)savePicture:(UIImage *)image serial:(NSInteger)serial{
     NSString *dir = [FZFileManager homeDirWithSub:kFilePath_upload];
 #if DEBUG
     NSLog(@"dir--%@", dir);
 #endif
     NSString *dateStr = [self dateStrFromNowDate];
-    NSString *fileNameBig = [NSString stringWithFormat:@"%@.jpg", dateStr];
-    NSString *fileNameSmall = [NSString stringWithFormat:@"%@_s.jpg", dateStr];
+    NSString *fileNameBig = [NSString stringWithFormat:@"%zd-%@.jpg",serial, dateStr];
+    NSString *fileNameSmall = [NSString stringWithFormat:@"%zd-%@_s.jpg",serial, dateStr];
     NSString *filePathBig = [dir stringByAppendingPathComponent:fileNameBig];
     NSString *filePathSmall = [dir stringByAppendingPathComponent:fileNameSmall];
     BOOL bigSaveResult =[UIImageJPEGRepresentation(image, 1) writeToFile:filePathBig atomically:YES];

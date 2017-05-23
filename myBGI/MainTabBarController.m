@@ -34,9 +34,6 @@
     [kUserManager.userModel.rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSDictionary *dic = obj;
         NSString *text = dic[@"text"];
-        if ([text isEqualToString:@"采集中心"]) {
-            text = @"拍照采集";
-        }
         [fooRows addObject:text];
     }];
     
@@ -48,15 +45,13 @@
                            @"InfoQuery",
                            @"UserCenter"];
     //控制器名称
-    NSArray *vcTitleArr = @[@"拍照采集",
+    NSArray *vcTitleArr = @[@"采集中心",
                             @"查询统计",
                             @"我的"];
     //tabBarItem未选中时的图片
-    NSArray *vcImgArr = @[@"拍照采集",
-                          @"查询统计",
-                          @"我的"];
+    NSArray *vcImgArr = vcTitleArr;
     //tabBarItem选中时的图片
-    NSArray *vcSelectedImgArr = @[@"拍照采集选中",
+    NSArray *vcSelectedImgArr = @[@"采集中心选中",
                                   @"查询统计选中",
                                   @"我的选中"];
     //tabBarItem未选中时的文字颜色

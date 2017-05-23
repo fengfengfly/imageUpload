@@ -67,7 +67,7 @@ static NSString *PicCellID = @"PicCellID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"拍照采集";
+    self.title = @"采集中心";
     self.expandSection = -1;
     self.captureHeader.customerTF.delegate = self;
     self.captureHeader.productTF.delegate = self;
@@ -372,12 +372,15 @@ static NSString *PicCellID = @"PicCellID";
     [actionSheet showInView:self.view];
 }
 
-- (void)takePhoto{
+- (void)takePhoto:(BOOL)animated{
     
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera]) {
         self.ipc.sourceType = sourceType;
-        [self presentViewController:_ipc animated:YES completion:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self presentViewController:_ipc animated:animated completion:nil];
+        });
     } else {
 #if DEBUG
         NSLog(@"模拟器无法使用相机");
@@ -403,7 +406,7 @@ static NSString *PicCellID = @"PicCellID";
         [alertView show];
         
     }else {
-        [self takePhoto];
+        [self takePhoto:YES];
     }
     
 }
@@ -414,7 +417,7 @@ static NSString *PicCellID = @"PicCellID";
         return;
 #endif
     }
-    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
+    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:8 delegate:self];
     
     [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
         
@@ -452,34 +455,41 @@ static NSString *PicCellID = @"PicCellID";
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-//    UIImage *compressImage = [image imageCompressForTargetSize:CGSizeMake(1920, 1080)];
-    
-//    NSData *imageData = UIImageJPEGRepresentation(compressImage, 0.00001);
-//    UIImage *nowImage = [UIImage imageWithData:imageData];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"继续添加?" message:@"继续添加所选医院和产品的表单" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *finishAction = [UIAlertAction actionWithTitle:@"完成" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         UIImage *fixedOrientImg = [UIImage fixOrientation:image];//防止旋转
-        [self.addingModel savePicture:fixedOrientImg];
+        [self.addingModel savePicture:fixedOrientImg serial:0];
         [self addModelToDataSource:self.addingModel];
         [self.collectionView reloadData];
         [picker dismissViewControllerAnimated:YES completion:nil];
     }];
     UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"继续" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UIImage *fixedOrientImg = [UIImage fixOrientation:image];//防止旋转
-        [self.addingModel savePicture:fixedOrientImg];
-        [self addModelToDataSource:self.addingModel];
         
-        __weak typeof(self) weakSelf = self;
-        [picker dismissViewControllerAnimated:NO completion:^{
-            [weakSelf takePhoto];
+        //关闭相册界面
+        [UIView animateWithDuration:0.001 animations:^{
+            [picker dismissViewControllerAnimated:NO completion:nil];
+        } completion:^(BOOL finished){
+            //重新打开相机
+            [self presentViewController:picker animated:NO completion:nil];
         }];
+        
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            
+            UIImage *fixedOrientImg = [UIImage fixOrientation:image];//防止旋转
+            [self.addingModel savePicture:fixedOrientImg serial:0];
+            [self addModelToDataSource:self.addingModel];
+        });
         
     }];
     [alertController addAction:finishAction];
     [alertController addAction:continueAction];
-    [picker presentViewController:alertController animated:YES completion:^{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-    }];
+        [picker presentViewController:alertController animated:YES completion:^{
+            
+        }];
+    });
 }
 
 #pragma mark TZImagePickerControllerDelegate
@@ -501,13 +511,18 @@ static NSString *PicCellID = @"PicCellID";
 //    model.customerName=@"123";
 //    model.customerCode=@"123";
 //    self.addingModel.customer = model;
-    [[TZImageManager manager] getOriginalPhotoWithAsset:assets.firstObject completion:^(UIImage *photo, NSDictionary *info) {
-        [self.addingModel savePicture:photo];
-        [self addModelToDataSource:self.addingModel];
-        [self.collectionView reloadData];
+    [self hudSelfWithMessage:@"正在加载..."];
+    [assets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[TZImageManager manager] getOriginalPhotoWithAsset:obj completion:^(UIImage *photo, NSDictionary *info) {
+            [self.addingModel savePicture:photo serial:idx];
+            [self addModelToDataSource:self.addingModel];
+            if (idx == assets.count - 1) {
+                [self.collectionView reloadData];
+                [self hideSelfHUD];
+            }
+        }];
+        
     }];
-    
-    [picker dismissViewControllerAnimated:YES completion:nil];
     
 }
 
