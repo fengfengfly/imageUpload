@@ -8,8 +8,12 @@
 
 #import "MBProgressHUD.h"
 
-@interface MBProgressHUD (HYExtension)
+@class HYReLoadingButton;
 
+@interface MBProgressHUD (HYExtension)
+@property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) UIView *bgView;
+@property (nonatomic, strong) HYReLoadingButton *reLoadingBtn;
 /* 没有黑色背景 */
 + (void)showHUD;
 + (void)showHUDOnView:(UIView *)view;

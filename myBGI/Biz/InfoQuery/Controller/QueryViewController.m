@@ -32,10 +32,10 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSMutableArray *searchResult;
-@property (strong, nonatomic) NSMutableArray *dataSource;
+@property (strong, readonly, nonatomic) NSMutableArray *dataSource;
 @property (assign, nonatomic) NSInteger dataPage;
 @property (assign, nonatomic) NSInteger searchPage;
-@property (assign, nonatomic) BOOL isSearchResult;
+@property (assign, nonatomic) BOOL isSearchSampleNum;
 
 @property (strong, nonatomic) NSString *sampleNumStr;
 @property (strong, nonatomic) NSString *productCode;
@@ -45,7 +45,7 @@
 @property (strong, nonatomic) NSString *phoneNum;
 @property (strong, nonatomic) NSString *result;
 
-@property (strong, nonatomic) NSArray *stepsList;//返回字段对照表
+@property (strong, nonatomic) NSArray *stepsList;//网络返回字段对照表
 @property (strong, nonatomic) NSArray *stepsListUp;//搜索上传字段对照表
 @property (strong, nonatomic) NSArray *resultsList;
 @property (strong, nonatomic) UIWindow *tempWindow;
@@ -114,9 +114,6 @@ static NSString *QueryCellID = @"QueryCellID";
     return _searchResult;
 }
 - (NSMutableArray *)dataSource{
-    if (self.isSearchResult) {
-        return self.searchResult;
-    }
     return self.dataArray;
 }
 
@@ -152,11 +149,12 @@ static NSString *QueryCellID = @"QueryCellID";
 }
 - (void)searchBtnClick:(id )sender {
     if (self.searchBar.text.length == 0) {
-        [self showStatusBarWarningWithStatus:@"请输入查询的样品编号"];
+        [self showStatusBarWarningWithStatus:@"请输入查询样品的编号"];
         return;
     }
     [MBProgressHUD showAnimationHUDWithImages:nil title:nil onView:self.view];
-    self.productCode = self.searchBar.text;
+    self.sampleNumStr = self.searchBar.text;
+    self.isSearchSampleNum = YES;
     [self.tableView.mj_header beginRefreshing];
 }
 - (IBAction)moreBtnClick:(UIButton *)sender {
@@ -206,6 +204,7 @@ static NSString *QueryCellID = @"QueryCellID";
 - (void)finishQueryMore:(id)sender{
     
     [MBProgressHUD showAnimationHUDWithImages:nil title:nil onView:self.view];
+    self.isSearchSampleNum = NO;
     [self.tableView.mj_header beginRefreshing];
 }
 
@@ -231,13 +230,18 @@ static NSString *QueryCellID = @"QueryCellID";
                            [NSString stringWithFormat:@"%zd",self.dataPage], @"page",
                            @"20", @"rows",
                            nil];
-    [param filterNilSetObject:[NSString ifNilStringWithNil:self.sampleNumStr]  forKey:@"sampleImport.sampleNumStr"];
-    [param filterNilSetObject:[NSString ifNilStringWithNil:self.productCode]  forKey:@"sampleImport.productCode"];
-    [param filterNilSetObject:[NSString ifNilStringWithNil:self.sampleName] forKey:@"sampleImport.sampleName"];
-    [param filterNilSetObject:[NSString ifNilStringWithNil:self.customerCode] forKey:@"sampleImport.customerCode"];
-    [param filterNilSetObject:[NSString ifNilStringWithNil:self.step] forKey:@"sampleImport.step"];
-    [param filterNilSetObject:[NSString ifNilStringWithNil:self.phoneNum] forKey:@"sampleImport.phoneNum"];
-    [param filterNilSetObject:[NSString ifNilStringWithNil:self.result] forKey:@"sampleImport.result"];
+    if (self.isSearchSampleNum) {
+        
+        [param filterNilSetObject:[NSString ifNilStringWithNil:self.sampleNumStr]  forKey:@"sampleImport.sampleNumStr"];
+    }else{
+        
+        [param filterNilSetObject:[NSString ifNilStringWithNil:self.productCode]  forKey:@"sampleImport.productCodeStr"];
+        [param filterNilSetObject:[NSString ifNilStringWithNil:self.sampleName] forKey:@"sampleImport.sampleName"];
+        [param filterNilSetObject:[NSString ifNilStringWithNil:self.customerCode] forKey:@"sampleImport.customerCode"];
+        [param filterNilSetObject:[NSString ifNilStringWithNil:self.step] forKey:@"sampleImport.step"];
+        [param filterNilSetObject:[NSString ifNilStringWithNil:self.phoneNum] forKey:@"sampleImport.phoneNum"];
+        [param filterNilSetObject:[NSString ifNilStringWithNil:self.result] forKey:@"sampleImport.result"];
+    }
     
     [[HttpManager sharedManager] sendPostUrlRequestWithBodyURLString:kQuerySample parameters:param success:^(id mResponseObject) {
         NSString *total = mResponseObject[@"total"];
@@ -297,7 +301,8 @@ static NSString *QueryCellID = @"QueryCellID";
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSString *str = [NSString stringWithFormat:@"共找到%zd条记录",self.totalQuery];
+    NSString *searchType = self.isSearchSampleNum ? @"编号查询" : @"查询筛选";
+    NSString *str = [NSString stringWithFormat:@"共找到%zd条记录-%@",self.totalQuery, searchType];
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc]initWithString:str];
     
     //设置字体和设置字体的范围
@@ -305,7 +310,7 @@ static NSString *QueryCellID = @"QueryCellID";
     //添加文字颜色
     [attrStr addAttribute:NSForegroundColorAttributeName value:kBlackFontColor range:NSMakeRange(0, str.length)];
     //添加文字背景颜色
-    [attrStr addAttribute:NSForegroundColorAttributeName value:kSubjectColor range:NSMakeRange(3, str.length - 6)];
+    [attrStr addAttribute:NSForegroundColorAttributeName value:kSubjectColor range:NSMakeRange(3, str.length - 6 - (searchType.length + 1))];
    
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 20)];
     label.backgroundColor = [UIColor clearColor];
@@ -403,10 +408,12 @@ static NSString *QueryCellID = @"QueryCellID";
 
 -(void)openDocxWithPath:(NSString *)filePath {
     
-    UIDocumentInteractionController *doc= [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:filePath]];
-    
+    UIDocumentInteractionController *doc = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:filePath]];
     doc.delegate = self;
-    [doc presentPreviewAnimated:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [doc presentPreviewAnimated:YES];
+    });
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

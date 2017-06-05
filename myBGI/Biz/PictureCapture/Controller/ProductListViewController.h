@@ -15,4 +15,5 @@ typedef void(^ProductChoose)(NSMutableArray *productArray, BOOL isConfirm);//isC
 @property (assign, nonatomic) BOOL allowMultiSelect;
 @property (strong, nonatomic) NSMutableArray *selectedArray;
 @property (strong, nonatomic) NSMutableArray *originSelectedArray;
+@property (assign, nonatomic) BOOL showClearBtn;
 @end

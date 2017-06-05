@@ -70,6 +70,7 @@ static NSString *CellIDDetail = @"CellIDDetail";
     [self.tableView reloadData];
 }
 
+
 #pragma mark Action
 - (void)cancelClick:(UIButton *)sender{
     if (self.backBlock) {
@@ -111,9 +112,14 @@ static NSString *CellIDDetail = @"CellIDDetail";
 - (void)showCustomers:(NSIndexPath *)indexPath{
     
     CustomerListViewController *customerListVC = [[UIStoryboard storyboardWithName:@"PictureCapture" bundle:nil] instantiateViewControllerWithIdentifier:@"CustomerListViewController"];
-    
+    customerListVC.showClearBtn = YES;
     customerListVC.chooseBlock = ^(CustomerModel *model){
-        self.customerCode = model.customerCode;
+        if(model != nil){
+            
+            self.customerCode = model.customerCode;
+        }else{
+            self.customerCode = nil;
+        }
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
     
@@ -123,12 +129,17 @@ static NSString *CellIDDetail = @"CellIDDetail";
 - (void)showProducts:(NSIndexPath *)indexPath{
     
     ProductListViewController *productListVC = [[UIStoryboard storyboardWithName:@"PictureCapture" bundle:nil] instantiateViewControllerWithIdentifier:@"ProductListViewController"];
+    productListVC.showClearBtn = YES;
     productListVC.allowMultiSelect = NO;
     productListVC.chooseBlock = ^(NSMutableArray *productArray, BOOL isConfirm){
         if (isConfirm == YES) {
-            
-            ProductModel *model = productArray.firstObject;
-            self.productCode = model.productCode;
+            if (productArray.count == 0) {
+                self.productCode = nil;
+            }else{
+                
+                ProductModel *model = productArray.firstObject;
+                self.productCode = model.productCode;
+            }
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
     };
@@ -210,6 +221,9 @@ static NSString *CellIDDetail = @"CellIDDetail";
         inputCell.textField.text = value;
         inputCell.textField.placeholder = placeholder;
         [inputCell.textField setValue:kGrayFontColor forKeyPath:@"_placeholderLabel.textColor"];
+        if(indexPath.row == 1){
+            inputCell.textField.keyboardType = UIKeyboardTypePhonePad;
+        }
         cell = inputCell;
         
     }else{
@@ -222,15 +236,16 @@ static NSString *CellIDDetail = @"CellIDDetail";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         NSString *detailText = nil;
-        if (value.length > 0) {
+        if (value.length > 0) {//有值则赋值
             cell.detailTextLabel.textColor = kSubjectColor;
-            if (indexPath.row == 4) {
+            if (indexPath.row == 4) {//row==4时查表赋值
                 detailText = self.stepsListUp[value.integerValue + 1];
-            }else{
+            }else{//直接赋值
                 
                 detailText = value;
             }
-        }else{
+            
+        }else{//没有值设占位符
             detailText = placeholder;
             cell.detailTextLabel.textColor = kGrayFontColor;
         }

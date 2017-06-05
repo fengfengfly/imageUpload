@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger, EditType) {
     EditTypeSingle,
     EditTypeMulti
 };
-@interface PictureCaptureViewcontroller ()<UICollectionViewDelegate, UICollectionViewDataSource, TZImagePickerControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPickerViewDataSource,UIPickerViewDelegate, UIActionSheetDelegate, UIScrollViewDelegate>
+@interface PictureCaptureViewcontroller ()<UICollectionViewDelegate, UICollectionViewDataSource, TZImagePickerControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPickerViewDataSource,UIPickerViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIImagePickerController *ipc;
 
@@ -362,16 +362,6 @@ static NSString *PicCellID = @"PicCellID";
     [self.captureHeader.inputStyleTF resignFirstResponder];
 }
 
-- (void)addPicture:(UIButton *)sender{
-    
-    if (self.captureHeader.customerTF.text.length == 0) {
-        [self showStatusBarWarningWithStatus:@"请先选择表单的医院"];
-        return;
-    }
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"请选择图片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"相册", @"拍照", nil];
-    [actionSheet showInView:self.view];
-}
-
 - (void)takePhoto:(BOOL)animated{
     
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -391,10 +381,10 @@ static NSString *PicCellID = @"PicCellID";
 
 
 - (void)cameraClick:(UIButton *)sender {
-    if (self.captureHeader.customerTF.text.length == 0) {
-        [self showStatusBarWarningWithStatus:@"请先选择表单的医院"];
+    if ([self isVoidInput]) {
         return;
     }
+    
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if(authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied){
         
@@ -411,11 +401,8 @@ static NSString *PicCellID = @"PicCellID";
     
 }
 - (void)albumClick:(UIButton *)sender {
-    if (self.captureHeader.customerTF.text.length == 0) {
-        [self showStatusBarWarningWithStatus:@"请先选择表单的医院"];
-#if kOffLineDebug == 0
+    if ([self isVoidInput]) {
         return;
-#endif
     }
     TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:8 delegate:self];
     
@@ -427,6 +414,22 @@ static NSString *PicCellID = @"PicCellID";
     [self presentViewController:imagePickerVc animated:YES completion:nil];
 }
 
+- (BOOL)isVoidInput{
+    if (self.captureHeader.customerTF.text.length == 0) {
+        [self showStatusBarWarningWithStatus:@"请先选择表单的医院"];
+#if kOffLineDebug == 0
+        return YES;
+#endif
+    }
+    if (self.captureHeader.productTF.text.length == 0) {
+        [self showStatusBarWarningWithStatus:@"产品不能为空"];
+#if kOffLineDebug == 0
+        return YES;
+#endif
+    }
+    return NO;
+}
+
 - (void)sectionUploadBtnClick:(UIButton *)sender{
     NSInteger section = sender.tag;
     if (self.expandSection != section) {
@@ -434,7 +437,7 @@ static NSString *PicCellID = @"PicCellID";
         self.expandSection = section;
         [self.collectionView reloadData];
     }
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"是否上传此医院下所有添加?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"是否上传此医院下全部?" message:nil preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *finishAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
@@ -451,11 +454,10 @@ static NSString *PicCellID = @"PicCellID";
 }
 
 #pragma mark - UIImagePickerControllerDelegate
-
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"继续添加?" message:@"继续添加所选医院和产品的表单" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"继续添加?" message:@"是否继续添加当前所选医院和产品的表单照片" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *finishAction = [UIAlertAction actionWithTitle:@"完成" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         UIImage *fixedOrientImg = [UIImage fixOrientation:image];//防止旋转
         [self.addingModel savePicture:fixedOrientImg serial:0];
@@ -464,7 +466,7 @@ static NSString *PicCellID = @"PicCellID";
         [picker dismissViewControllerAnimated:YES completion:nil];
     }];
     UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"继续" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
+
         //关闭相册界面
         [UIView animateWithDuration:0.001 animations:^{
             [picker dismissViewControllerAnimated:NO completion:nil];
@@ -705,24 +707,6 @@ static NSString *PicCellID = @"PicCellID";
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
     self.selectStyleIndex = row;
-}
-
-#pragma mark UIActionSheetDelegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    switch (buttonIndex) {
-        case 0:
-            [self albumClick:nil];
-            break;
-        case 1:
-            [self cameraClick:nil];
-            break;
-        case 2:
-            
-            break;
-            
-        default:
-            break;
-    }
 }
 
 #pragma mark Model EditAction

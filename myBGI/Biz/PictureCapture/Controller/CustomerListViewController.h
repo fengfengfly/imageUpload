@@ -11,4 +11,5 @@
 typedef void(^ChooseCustomer)(CustomerModel *model);
 @interface CustomerListViewController : BaseViewController
 @property (copy, nonatomic) ChooseCustomer chooseBlock;
+@property (assign, nonatomic) BOOL showClearBtn;
 @end

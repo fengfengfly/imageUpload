@@ -22,6 +22,7 @@ typedef void(^CallBackBlock)(BOOL doConfirm, NSArray *keyValues);
 @property (copy, nonatomic) NSString *step;
 @property (copy, nonatomic) NSString *result;
 
+
 @property (strong, nonatomic) NSArray *stepsListUp;//搜索上传字段对照表
 @property (strong, nonatomic) NSArray *resultsList;//结果列表
 

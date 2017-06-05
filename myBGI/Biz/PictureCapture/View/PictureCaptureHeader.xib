@@ -96,7 +96,7 @@
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrowRight" translatesAutoresizingMaskIntoConstraints="NO" id="Qne-b6-RtC">
-                            <rect key="frame" x="399" y="-9" width="11" height="18"/>
+                            <rect key="frame" x="401" y="-6.5" width="8" height="13"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -107,12 +107,6 @@
                         <constraint firstAttribute="height" id="n8b-4j-aCw"/>
                         <constraint firstItem="6De-sd-kjA" firstAttribute="top" relation="lessThanOrEqual" secondItem="VBQ-55-AYY" secondAttribute="top" constant="5" id="n8r-Fy-9BP"/>
                     </constraints>
-                    <variation key="default">
-                        <mask key="subviews">
-                            <exclude reference="6De-sd-kjA"/>
-                            <exclude reference="Qne-b6-RtC"/>
-                        </mask>
-                    </variation>
                 </view>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bIR-ez-DID">
                     <rect key="frame" x="10" y="121" width="399" height="0.5"/>
@@ -186,6 +180,7 @@
                 <constraint firstItem="Cil-cY-eze" firstAttribute="bottom" secondItem="Lvm-IP-UF9" secondAttribute="bottom" id="oeL-MB-Vos"/>
                 <constraint firstItem="Lvm-IP-UF9" firstAttribute="top" secondItem="bIR-ez-DID" secondAttribute="bottom" constant="18" id="s7R-Q4-pmw"/>
                 <constraint firstAttribute="trailing" secondItem="rX8-PY-xdv" secondAttribute="trailing" id="s8X-Ry-Tn7"/>
+                <constraint firstItem="Qne-b6-RtC" firstAttribute="trailing" secondItem="rPT-3L-sC3" secondAttribute="trailing" id="tRH-tm-HHK"/>
                 <constraint firstItem="Lvm-IP-UF9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="y3B-hV-X33"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>

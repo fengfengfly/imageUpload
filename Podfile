@@ -20,6 +20,7 @@ pod 'MJRefresh'
 #pod 'PopoverView'
 #pod 'XLForm', '3.2' #个人资料填写UI
 pod 'FSCalendar' #日历
+pod 'iVersion' #版本更新提示
 
 #pod 'YYText'
 #pod 'SVProgressHUD'

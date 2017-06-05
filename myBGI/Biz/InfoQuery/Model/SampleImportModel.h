@@ -12,6 +12,7 @@
 @property (strong, nonatomic) NSString *sampleName;
 @property (strong, nonatomic) NSString *sampleNum;
 @property (strong, nonatomic) NSString *phoneNum;
+@property (strong, nonatomic) NSString *connectPhone;
 @property (strong, nonatomic) NSString *productName;
 @property (strong, nonatomic) NSString *customerCode;
 @property (assign, nonatomic) NSInteger status;

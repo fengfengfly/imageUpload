@@ -74,9 +74,6 @@
     sessionManager.requestSerializer.timeoutInterval = 10.f;
     [sessionManager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
     
-//    if (!isData) {
-//        [sessionManager.requestSerializer setValue: @"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-//    }
     if(isHttpReq){
         sessionManager.requestSerializer = [AFHTTPRequestSerializer serializer];; //（未加密）此处规定请求格式
     }else{
@@ -122,12 +119,9 @@
     
     //1.创建会话管理者
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:baseURLString]];
-//    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-//    [manager.requestSerializer setValue: @"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
+    
     manager.responseSerializer = [AFJSONResponseSerializer serializer]; //（未加密）此处规定返回格式
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", nil];
-    
-    //    NSDictionary *dictM = @{}
     //2.发送post请求上传文件
     /*
      第一个参数:请求路径
@@ -148,9 +142,6 @@
          第二个参数:服务器规定的
          第三个参数:该文件上传到服务器以什么名称保存
          */
-        //[formData appendPartWithFileData:imageData name:@"file" fileName:@"xxxx.png" mimeType:@"image/png"];
-        
-        //[formData appendPartWithFileURL:[NSURL fileURLWithPath:@"/Users/Cehae/Desktop/Snip20160227_128.png"] name:@"file" fileName:@"123.png" mimeType:@"image/png" error:nil];
         dataBlock(formData);
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {

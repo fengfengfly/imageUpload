@@ -31,7 +31,7 @@
 - (void)configCellWithModel:(SampleImportModel *)model{
     self.sampleNumL.text = model.sampleNum;
     self.sampleNameL.text = model.sampleName;
-    self.phoneNumL.text = model.phoneNum;
+    self.phoneNumL.text = model.phoneNum.length > 0 ? model.phoneNum : model.connectPhone;
     self.productNameL.text = model.productName;
     self.customerCodeL.text = model.customerCode;
     

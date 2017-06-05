@@ -105,8 +105,10 @@
         if ([mError isKindOfClass:[NSString class]]) {
             
             [MBProgressHUD hiddenWithMessage:(NSString *)mError];
+        }else{
+            
+            [MBProgressHUD hiddenWithMessage:@"登录失败请重试"];
         }
-        [MBProgressHUD hiddenWithMessage:@"登录失败请重试"];
         
     }];
 }

@@ -110,8 +110,7 @@
             [self.uploadDelegate beginUploadPic];
         }
         [formData appendPartWithFileURL:[NSURL fileURLWithPath:self.picBigStr] name:@"file" error:nil];
-//        NSData *data = UIImagePNGRepresentation(self.picture);
-//        [formData appendPartWithFileData:data name:@"file" fileName:fileName mimeType:@"image/jpeg"];
+        
     } progress:^(id progress) {
         if ([self.uploadDelegate respondsToSelector:@selector(uploadProgress:)]) {
             [self.uploadDelegate uploadProgress:progress];

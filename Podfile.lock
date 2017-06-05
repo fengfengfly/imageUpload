@@ -17,6 +17,7 @@ PODS:
   - FSCalendar (2.7.6)
   - iCarousel (1.8.3)
   - IQKeyboardManager (4.0.9)
+  - iVersion (1.11.5)
   - JDStatusBarNotification (1.5.5)
   - KMNavigationBarTransition (1.0.0)
   - Masonry (1.0.2)
@@ -32,6 +33,7 @@ DEPENDENCIES:
   - FSCalendar
   - iCarousel
   - IQKeyboardManager
+  - iVersion
   - JDStatusBarNotification
   - KMNavigationBarTransition
   - Masonry
@@ -45,6 +47,7 @@ SPEC CHECKSUMS:
   FSCalendar: feef792968ca0166bafc93e02fcd840b07d256e5
   iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
   IQKeyboardManager: 322c7405df3eb5f7e50dede32ea937bf3d4364e0
+  iVersion: 3a93a89259eb3b52b0a8ba52c46a0027fa6b4d30
   JDStatusBarNotification: 2b4f29bd68a60d7aa2f190b5265f1ce59c18aaf8
   KMNavigationBarTransition: b3fb8337f7a1e4542add07fd6c45fb9980794d59
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
@@ -53,6 +56,6 @@ SPEC CHECKSUMS:
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
 
-PODFILE CHECKSUM: ecbafcd2f4c37dfb57f9bba5551c8c0a91b475a7
+PODFILE CHECKSUM: 73573485ec9e6e76d33d1f6dd50c37fda128d7d3
 
 COCOAPODS: 1.2.1

@@ -58,7 +58,22 @@ static dispatch_queue_t FZFileManagerQueue;
     return newPath;
 }
 
+#pragma mark - 文件大小
++ (double)folderSizeAtPath:(NSString *)path
+{
+    double folderSize = 0.0;
+    NSDirectoryEnumerator *enumerate = [kNSFM enumeratorAtPath:path];
+    for (NSString *fileName in enumerate)
+    {
+        NSString *filePath = [path stringByAppendingPathComponent:fileName];
+        folderSize += [kNSFM attributesOfItemAtPath:filePath error:nil].fileSize;
+    }
+    return folderSize;
+}
+
+
 #pragma mark - 删除
+
 + (BOOL)removeFileAtPath:(NSString *)path
 {
     NSError *error;

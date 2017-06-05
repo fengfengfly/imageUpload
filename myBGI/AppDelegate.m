@@ -24,7 +24,7 @@
     // Override point for customization after application launch.
     [self registerLoginNoti];
     [self clearUploadCache];
-    
+    [self clearReportCache];
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
     [IQKeyboardManager sharedManager].shouldPlayInputClicks = YES;
@@ -44,17 +44,6 @@
     }
 }
 
-#pragma mark - localFileManage
-- (void)clearUploadCache{
-    NSString *uploadCache = [FZFileManager homeDirWithSub:kFilePath_upload];
-    [FZFileManager asyncRemoveFilesAtPath:uploadCache confirm:^BOOL(NSDictionary *fileInfo) {
-#if DEBUG
-        NSLog(@"fileInfo--%@", fileInfo);
-#endif
-
-        return YES;
-    }];
-}
 
 #pragma mark - login changed
 
@@ -72,6 +61,33 @@
         LoginNaviController *loginNavigationController = [[UIStoryboard storyboardWithName:@"Login" bundle:nil] instantiateViewControllerWithIdentifier:@"LoginNaviController"];
         self.window.rootViewController = loginNavigationController;
     }
+}
+
+#pragma mark - localFileManage
+- (void)clearUploadCache{
+    NSString *uploadCache = [FZFileManager homeDirWithSub:kFilePath_upload];
+    [FZFileManager asyncRemoveFilesAtPath:uploadCache confirm:^BOOL(NSDictionary *fileInfo) {
+#if DEBUG
+        NSLog(@"fileInfo--%@", fileInfo);
+#endif
+        return YES;
+    }];
+}
+
+- (void)clearReportCache{
+    NSString *reportCachePath = [FZFileManager homeDirWithSub:kFilePath_report];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        double folderSize = [FZFileManager folderSizeAtPath:reportCachePath];
+#if DEBUG
+        NSLog(@"reportCache--%lf", folderSize);
+#endif
+        //如果缓存超过50M删除缓存
+        if (folderSize > 52428800) {
+            [FZFileManager asyncRemoveFilesAtPath:reportCachePath confirm:^BOOL(NSDictionary *fileInfo) {
+                return YES;
+            }];
+        }
+    });
 }
 
 

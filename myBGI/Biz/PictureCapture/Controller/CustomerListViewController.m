@@ -43,6 +43,19 @@ static NSString *CustomerCellID = @"customerCellID";
     
     self.searchBtn.layer.cornerRadius = 5;
     self.searchBtn.layer.masksToBounds = YES;
+    
+    if (self.showClearBtn) {//右上角显示不选择按钮
+        //自定义navigationBar右边的按钮
+        UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        rightBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+        [rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [rightBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
+        UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+        [rightBtn setTitle:@"不选" forState:(UIControlStateNormal)];
+        [rightBtn addTarget:self action:@selector(clearBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.rightBarButtonItem = rightBarItem;
+        [rightBtn sizeToFit];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -80,6 +93,13 @@ static NSString *CustomerCellID = @"customerCellID";
         return self.searchResult;
     }
     return self.dataArray;
+}
+- (void)clearBtnClick:(id)sender{
+    
+    if (self.chooseBlock) {
+        self.chooseBlock(nil);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 - (IBAction)searchBtnClick:(UIButton *)sender {
 //    [self.searchTF resignFirstResponder];

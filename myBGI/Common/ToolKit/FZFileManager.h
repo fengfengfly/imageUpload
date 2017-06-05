@@ -12,11 +12,19 @@
 
 + (BOOL)makeDirIfNeed:(NSString*)path;
 
+/**
+ 从根目录拼接并生成目录路径
+
+ @param subPath 子路径
+ @return 最终路径
+ */
 + (NSString *)homeDirWithSub:(NSString *)subPath;
 
 + (NSString*)documentDirWithSub:(NSString*)subPath;
 
 + (NSString*)cacheDirWithSub:(NSString*)subPath;
+
++ (double)folderSizeAtPath:(NSString *)path;
 
 + (BOOL)removeFileAtPath:(NSString *)path;
 

@@ -35,11 +35,6 @@ static CGFloat const margin = 10.0f;
 @implementation HYReLoadingButton
 @end
 
-@interface MBProgressHUD (HYExtension)
-@property (nonatomic, strong) MBProgressHUD *hud;
-@property (nonatomic, strong) UIView *bgView;
-@property (nonatomic, strong) HYReLoadingButton *reLoadingBtn;
-@end
 
 @implementation MBProgressHUD (HYExtension)
 

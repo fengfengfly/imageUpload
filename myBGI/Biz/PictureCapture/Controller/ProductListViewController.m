@@ -59,16 +59,23 @@ static NSString *ProductCellID = @"ProductCellID";
     //自定义navigationBar右边的按钮
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     rightBtn.titleLabel.font = [UIFont systemFontOfSize:16];
-    [rightBtn setTitle:@"确定" forState:(UIControlStateNormal)];
     [rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [rightBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
-    [rightBtn sizeToFit];
     UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
-    [rightBtn addTarget:self action:@selector(confirmBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = rightBarItem;
-    rightBtn.hidden = !self.allowMultiSelect;
-    
-    self.originSelectedArray = self.selectedArray.mutableCopy;
+    if (self.showClearBtn) {//右上角显示不选择按钮
+        [rightBtn setTitle:@"不选" forState:(UIControlStateNormal)];
+        [rightBtn addTarget:self action:@selector(clearBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.rightBarButtonItem = rightBarItem;
+        [rightBtn sizeToFit];
+    }else{//右上角显示确定按钮
+        [rightBtn setTitle:@"确定" forState:(UIControlStateNormal)];
+        [rightBtn addTarget:self action:@selector(confirmBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.rightBarButtonItem = rightBarItem;
+        rightBtn.hidden = !self.allowMultiSelect;
+        
+        self.originSelectedArray = self.selectedArray.mutableCopy;
+        [rightBtn sizeToFit];
+    }
 }
 
 - (void)viewDidLayoutSubviews{
@@ -352,13 +359,18 @@ static NSString *ProductCellID = @"ProductCellID";
 {
     return UITableViewCellEditingStyleDelete|UITableViewCellEditingStyleInsert;
 }
+- (void)clearBtnClick:(UIButton *)btn{
+    if (self.selectedArray != nil) {
+        [self.selectedArray removeAllObjects];
+    }
+    self.confirm = YES;
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (void)confirmBtnClick:(UIButton *)sender {
-//    NSArray *selPaths = [self.tableView indexPathsForSelectedRows];
-//    NSMutableArray *selArray = [NSMutableArray array];
-//    for (NSIndexPath *indexpath in selPaths) {
-//        [selArray addObject:self.dataSource[indexpath.row]];
-//    }
-    
+    if (self.selectedArray.count == 0) {
+        [self showStatusBarWarningWithStatus:@"所选产品不能为空"];
+        return;
+    }
     self.confirm = YES;
     [self.navigationController popViewControllerAnimated:YES];
 }
