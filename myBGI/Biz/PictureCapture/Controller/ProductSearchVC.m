@@ -12,11 +12,11 @@
 #import "MJRefresh.h"
 #import <MJExtension/MJExtension.h>
 #import "NSString+NilString.h"
-
+#import "SearchHistoryView.h"
 @interface ProductSearchVC ()<UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UISearchBar *searchBar;
-@property (strong, nonatomic) NSMutableArray *historys;
+@property (strong, nonatomic) SearchHistoryView *historyView;
 @property (strong, nonatomic) NSMutableArray *searchResults;
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (assign, nonatomic) BOOL isResult;
@@ -33,24 +33,21 @@ static NSString *ProductCellID = @"ProductCellID";
     [self configTableView];
     self.isResult = YES;
     self.dataPage = 1;
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     NSArray *array = [[NSUserDefaults standardUserDefaults] objectForKey:PRD_SEARCH_HISTORY];
-    [self.historys removeAllObjects];
-    [self.historys addObjectsFromArray:array];
-    [self.tableView reloadData];
+    [self.historyView.historys removeAllObjects];
+    [self.historyView.historys addObjectsFromArray:array];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self.searchBar becomeFirstResponder];
-    
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -87,9 +84,11 @@ static NSString *ProductCellID = @"ProductCellID";
 
 - (void)buildView
 {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
+    CGRect frame = CGRectMake(0, 0, kWindowWith, self.view.frame.size.height);
+    self.view.frame = frame;
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SCREEN_HEIGHT - 64)];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
     [self.view addSubview:self.tableView];
-    
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:(UIBarButtonItemStylePlain) target:self action:@selector(rightBarButtonItem)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     
@@ -110,13 +109,19 @@ static NSString *ProductCellID = @"ProductCellID";
 
 #pragma mark Setter -- Getter
 
-- (NSMutableArray *)historys
-{
-    if (_historys == nil) {
-        _historys = [NSMutableArray array];
+- (UIView *)historyView{
+    if (_historyView == nil) {
+        _historyView = [[SearchHistoryView alloc] initWithFrame:self.view.bounds];
+        _historyView.backgroundColor = RGBColor(53, 53, 53, 0.5);
+        _historyView.historyKey = PRD_SEARCH_HISTORY;
+        __weak typeof(self) weakSelf = self;
+        _historyView.selBlock = ^(NSString *text){
+            weakSelf.searchBar.text = text;
+            [weakSelf searchBarSearchButtonClicked:weakSelf.searchBar];
+        };
+        [self.view addSubview:_historyView];
     }
-    
-    return _historys;
+    return _historyView;
 }
 
 - (NSMutableArray *)searchResults{
@@ -130,7 +135,7 @@ static NSString *ProductCellID = @"ProductCellID";
     if (self.isResult) {
         return self.searchResults;
     }
-    return self.historys;
+    return self.historyView.historys;
 }
 
 - (void)reloadDataSource{
@@ -174,21 +179,29 @@ static NSString *ProductCellID = @"ProductCellID";
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     if (searchBar.text.length > 0) {
-        [self.historys removeObject:searchBar.text];
+        [self.historyView.historys removeObject:searchBar.text];
         
-        if (self.historys.count >= 8) {
-            [self.historys removeLastObject];
+        if (self.historyView.historys.count >= 8) {
+            [self.historyView.historys removeLastObject];
         }
-        [self.historys insertObject:searchBar.text atIndex:0];
-        [[NSUserDefaults standardUserDefaults] setValue:self.historys forKey:PRD_SEARCH_HISTORY];
+        [self.historyView.historys insertObject:searchBar.text atIndex:0];
+        [[NSUserDefaults standardUserDefaults] setValue:self.historyView.historys forKey:PRD_SEARCH_HISTORY];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        
     }
     self.dataPage = 1;
-    [MBProgressHUD showAnimotionHUDOnView:self.view];
+    [self hudSelfWithMessage:@"正在加载..."];
     [self reloadDataSource];
 }
 
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+    [self.historyView.tableView reloadData];
+    [self hideSelfHUD];
+    self.historyView.hidden = NO;
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar{
+    self.historyView.hidden = YES;
+}
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *searchTF;
 @property (weak, nonatomic) IBOutlet UIButton *searchBtn;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) BaseNavigationController *searchVC;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSMutableArray *searchResult;
 @property (assign, nonatomic) BOOL isSearchResult;
@@ -83,7 +84,6 @@ static NSString *ProductCellID = @"ProductCellID";
     
 }
 
-
 - (void)calculateHeader{
     
     CGFloat collectionViewH = self.listHeader.collectionView.contentSize.height;
@@ -116,7 +116,6 @@ static NSString *ProductCellID = @"ProductCellID";
             self.chooseBlock(self.originSelectedArray, self.confirm);
         }
     }
-
 }
 
 - (void)backBtnClick{
@@ -192,7 +191,6 @@ static NSString *ProductCellID = @"ProductCellID";
     }];
     
     self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        
         [weakSelf reloadDataSource];
     }];
 }
@@ -255,22 +253,25 @@ static NSString *ProductCellID = @"ProductCellID";
     
     UIViewController *controller = self;
     ProductSearchVC *productSearchVC = [[UIStoryboard storyboardWithName:@"PictureCapture" bundle:nil] instantiateViewControllerWithIdentifier:@"ProductSearchVC"];
+    
+    __weak typeof(self) weakSelf = self;
     productSearchVC.chooseBlock = ^(ProductModel *model){
-        if (![self containModel:model inArray:self.selectedArray remove:NO]) {
-            [self.selectedArray addObject:model];
-            
-            if (self.allowMultiSelect == YES) {//如果多选刷新界面
-                
-                [self.listHeader.collectionView reloadData];
-                [self.tableView reloadData];
+        if (![weakSelf containModel:model inArray:weakSelf.selectedArray remove:NO]) {
+            [weakSelf.selectedArray addObject:model];
+            if (weakSelf.allowMultiSelect == YES) {//如果多选刷新界面
+                [weakSelf.listHeader.collectionView reloadData];
+                [weakSelf.tableView reloadData];
             }else{//如果单选直接确定选择
-                [self confirmBtnClick:nil];
+                [weakSelf confirmBtnClick:nil];
             }
         }
         
     };
-    BaseNavigationController *navigationController = [[BaseNavigationController alloc] initWithRootViewController:productSearchVC];
-    [controller.navigationController presentViewController:navigationController animated:NO completion:nil];
+    if (self.searchVC == nil) {
+        self.searchVC = [[BaseNavigationController alloc] initWithRootViewController:productSearchVC];
+    }
+    
+    [controller.navigationController presentViewController:self.searchVC animated:NO completion:nil];
 }
 
 
@@ -375,6 +376,11 @@ static NSString *ProductCellID = @"ProductCellID";
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)dealloc{
+    if (self.searchVC) {
+        [self.searchVC dismissViewControllerAnimated:NO completion:nil];
+    }
+}
 /*
 #pragma mark - Navigation
 

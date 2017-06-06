@@ -70,7 +70,6 @@ static NSString *CellIDDetail = @"CellIDDetail";
     [self.tableView reloadData];
 }
 
-
 #pragma mark Action
 - (void)cancelClick:(UIButton *)sender{
     if (self.backBlock) {

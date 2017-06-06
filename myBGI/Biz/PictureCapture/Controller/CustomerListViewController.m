@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *searchTF;
 @property (weak, nonatomic) IBOutlet UIButton *searchBtn;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) BaseNavigationController *searchVC;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSMutableArray *searchResult;
 @property (strong, nonatomic, readonly) NSMutableArray *dataSource;
@@ -63,7 +64,9 @@ static NSString *CustomerCellID = @"customerCellID";
     
 }
 - (void)dealloc{
-    
+    if (self.searchVC) {
+        [self.searchVC dismissViewControllerAnimated:NO completion:nil];
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -108,14 +111,18 @@ static NSString *CustomerCellID = @"customerCellID";
     UIViewController *controller = self;
     
     CustomerSearchVC *customerSearchVC = [[UIStoryboard storyboardWithName:@"PictureCapture" bundle:nil] instantiateViewControllerWithIdentifier:@"CustomerSearchVC"];
+    __weak typeof(self) weakSelf = self;
     customerSearchVC.chooseBlock = ^(CustomerModel *model){
-        if (self.chooseBlock) {
-            [self.navigationController popViewControllerAnimated:NO];
-            self.chooseBlock(model);
+        if (weakSelf.chooseBlock) {
+            [weakSelf.navigationController popViewControllerAnimated:NO];
+            weakSelf.chooseBlock(model);
         }
     };
-    BaseNavigationController *navigationController = [[BaseNavigationController alloc] initWithRootViewController:customerSearchVC];
-    [controller.navigationController presentViewController:navigationController animated:NO completion:nil];
+    if (self.searchVC == nil) {
+        
+        self.searchVC = [[BaseNavigationController alloc] initWithRootViewController:customerSearchVC];
+    }
+    [controller.navigationController presentViewController:self.searchVC animated:NO completion:nil];
 }
 
 - (void)configTableView{
@@ -230,6 +237,7 @@ static NSString *CustomerCellID = @"customerCellID";
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 30;
 }
+
 
 /*
 #pragma mark - Navigation

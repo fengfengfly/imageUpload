@@ -12,6 +12,7 @@
 		E90D5D0B1EC8385F006B191D /* MoreQueryVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E90D5D0A1EC8385F006B191D /* MoreQueryVC.m */; };
 		E90D5D0E1EC863CB006B191D /* TimeTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = E90D5D0D1EC863CB006B191D /* TimeTypeSelectView.m */; };
 		E91163901EC2C1040088CD72 /* UIView+SelfController.m in Sources */ = {isa = PBXBuildFile; fileRef = E911638F1EC2C1040088CD72 /* UIView+SelfController.m */; };
+		E91669D11EE55AE800017FFD /* SearchHistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = E91669D01EE55AE800017FFD /* SearchHistoryView.m */; };
 		E91ADE551ECAA17B00DE18C2 /* UIImage+Corner.m in Sources */ = {isa = PBXBuildFile; fileRef = E91ADE541ECAA17B00DE18C2 /* UIImage+Corner.m */; };
 		E91ADE581ECAD58100DE18C2 /* MyPlaceholderTF.m in Sources */ = {isa = PBXBuildFile; fileRef = E91ADE571ECAD58100DE18C2 /* MyPlaceholderTF.m */; };
 		E91CECC11EC457DC00941393 /* InputTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E91CECBF1EC457DC00941393 /* InputTFCell.m */; };
@@ -136,6 +137,8 @@
 		E90D5D0D1EC863CB006B191D /* TimeTypeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeTypeSelectView.m; sourceTree = "<group>"; };
 		E911638E1EC2C1040088CD72 /* UIView+SelfController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SelfController.h"; sourceTree = "<group>"; };
 		E911638F1EC2C1040088CD72 /* UIView+SelfController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SelfController.m"; sourceTree = "<group>"; };
+		E91669CF1EE55AE800017FFD /* SearchHistoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchHistoryView.h; sourceTree = "<group>"; };
+		E91669D01EE55AE800017FFD /* SearchHistoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchHistoryView.m; sourceTree = "<group>"; };
 		E91ADE531ECAA17B00DE18C2 /* UIImage+Corner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Corner.h"; sourceTree = "<group>"; };
 		E91ADE541ECAA17B00DE18C2 /* UIImage+Corner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Corner.m"; sourceTree = "<group>"; };
 		E91ADE561ECAD58100DE18C2 /* MyPlaceholderTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPlaceholderTF.h; sourceTree = "<group>"; };
@@ -671,6 +674,8 @@
 				E9408A091EC165560003A8C0 /* ProductListHeaderCell.xib */,
 				E92370EA1ECD369800391B19 /* FFCollectionView.h */,
 				E92370EB1ECD369800391B19 /* FFCollectionView.m */,
+				E91669CF1EE55AE800017FFD /* SearchHistoryView.h */,
+				E91669D01EE55AE800017FFD /* SearchHistoryView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1148,6 +1153,7 @@
 				E9408AAA1EC165B60003A8C0 /* TZPhotoPreviewController.m in Sources */,
 				E9408A121EC165560003A8C0 /* DeliverCountView.m in Sources */,
 				E91163901EC2C1040088CD72 /* UIView+SelfController.m in Sources */,
+				E91669D11EE55AE800017FFD /* SearchHistoryView.m in Sources */,
 				E9408A361EC165560003A8C0 /* ProductListHeader.m in Sources */,
 				E9408A7F1EC1656C0003A8C0 /* BaseHttpManager.m in Sources */,
 				E91E0E671ECC38AA004DDEB1 /* DrawLineView.m in Sources */,

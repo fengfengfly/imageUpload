@@ -11,12 +11,13 @@
 #import "HttpManager.h"
 #import "UserManager.h"
 #import <MJExtension/MJExtension.h>
+#import "SearchHistoryView.h"
 
 @interface CustomerSearchVC ()<UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UISearchBar *searchBar;
-@property (strong, nonatomic) NSMutableArray *historys;
+@property (strong, nonatomic) SearchHistoryView *historyView;
 @property (strong, nonatomic) NSMutableArray *searchResults;
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (assign, nonatomic) BOOL isResult;
@@ -39,16 +40,14 @@ static NSString *CustomerCellID = @"customerCellID";
 {
     [super viewWillAppear:animated];
     NSArray *array = [[NSUserDefaults standardUserDefaults] objectForKey:CUS_SEARCH_HISTORY];
-    [self.historys removeAllObjects];
-    [self.historys addObjectsFromArray:array];
-    [self.tableView reloadData];
+    [self.historyView.historys removeAllObjects];
+    [self.historyView.historys addObjectsFromArray:array];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self.searchBar becomeFirstResponder];
-    
     
 }
 
@@ -86,7 +85,11 @@ static NSString *CustomerCellID = @"customerCellID";
 
 - (void)buildView
 {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
+    CGRect frame = CGRectMake(0, 0, kWindowWith, self.view.frame.size.height);
+    self.view.frame = frame;
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SCREEN_HEIGHT - 64)];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
     [self.view addSubview:self.tableView];
     
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:(UIBarButtonItemStylePlain) target:self action:@selector(rightBarButtonItem)];
@@ -107,14 +110,19 @@ static NSString *CustomerCellID = @"customerCellID";
 }
 
 #pragma mark Setter -- Getter
-
-- (NSMutableArray *)historys
-{
-    if (_historys == nil) {
-        _historys = [NSMutableArray array];
+- (UIView *)historyView{
+    if (_historyView == nil) {
+        _historyView = [[SearchHistoryView alloc] initWithFrame:self.view.bounds];
+        _historyView.backgroundColor = RGBColor(53, 53, 53, 0.5);
+        _historyView.historyKey = CUS_SEARCH_HISTORY;
+        __weak typeof(self) weakSelf = self;
+        _historyView.selBlock = ^(NSString *text){
+            weakSelf.searchBar.text = text;
+            [weakSelf searchBarSearchButtonClicked:weakSelf.searchBar];
+        };
+        [self.view addSubview:_historyView];
     }
-    
-    return _historys;
+    return _historyView;
 }
 
 - (NSMutableArray *)searchResults{
@@ -128,14 +136,13 @@ static NSString *CustomerCellID = @"customerCellID";
     if (self.isResult) {
         return self.searchResults;
     }
-    return self.historys;
+    return self.historyView.historys;
 }
 
 - (void)reloadDataSource{
     
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:
-                           @"true", @"sampleBase.needPermission",
-                           self.searchBar.text,@"sampleBase.customerSimpleQuery",
+                           @"true", @"sampleBase.needPermission",self.searchBar.text,@"sampleBase.customerSimpleQuery",
                            kUserManager.userModel.token, @"token",
                            [NSNumber numberWithInteger:self.dataPage], @"page",
                            [NSNumber numberWithInteger:20], @"rows",
@@ -176,19 +183,29 @@ static NSString *CustomerCellID = @"customerCellID";
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     if (searchBar.text.length > 0) {
-        [self.historys removeObject:searchBar.text];
+        [self.historyView.historys removeObject:searchBar.text];
         
-        if (self.historys.count >= 8) {
-            [self.historys removeLastObject];
+        if (self.historyView.historys.count >= 8) {
+            [self.historyView.historys removeLastObject];
         }
-        [self.historys insertObject:searchBar.text atIndex:0];
-        [[NSUserDefaults standardUserDefaults] setValue:self.historys forKey:CUS_SEARCH_HISTORY];
+        [self.historyView.historys insertObject:searchBar.text atIndex:0];
+        [[NSUserDefaults standardUserDefaults] setValue:self.historyView.historys forKey:CUS_SEARCH_HISTORY];
         [[NSUserDefaults standardUserDefaults] synchronize];
-
+        [self.searchBar resignFirstResponder];
     }
     self.dataPage = 1;
     [self hudSelfWithMessage:@"正在加载..."];
     [self reloadDataSource];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+    [self.historyView.tableView reloadData];
+    [self hideSelfHUD];
+    self.historyView.hidden = NO;
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar{
+    self.historyView.hidden = YES;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -234,99 +251,7 @@ static NSString *CustomerCellID = @"customerCellID";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 44;
 }
-/*
-#pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    NSString *text = self.historys[indexPath.row];
-    if (text.length > 0) {
-        [self.historys removeObject:text];
-        
-        if (self.historys.count >= 8) {
-            [self.historys removeLastObject];
-        }
-        [self.historys insertObject:text atIndex:0];
-        [[NSUserDefaults standardUserDefaults] setValue:self.historys forKey:CUS_SEARCH_HISTORY];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-    }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 45;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 30;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 80;
-}
-
-- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-    headerView.backgroundColor = [UIColor whiteColor];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(15, 5, 200, 20)];
-    label.text = @"历史搜索";
-    label.font = [UIFont systemFontOfSize:15];
-    [headerView addSubview:label];
-    
-    return headerView;
-}
-
-- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 60)];
-    UIButton *clearHistoryBtn = [[UIButton alloc] initWithFrame:CGRectMake(50, 20, SCREEN_WIDTH - 100, 40)];
-    [clearHistoryBtn setTitleColor:kGrayFontColor forState:(UIControlStateNormal)];
-    [clearHistoryBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
-    [clearHistoryBtn setTitle:@"清空历史搜索" forState:(UIControlStateNormal)];
-    clearHistoryBtn.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    clearHistoryBtn.layer.borderWidth = 0.5;
-    clearHistoryBtn.backgroundColor = [UIColor whiteColor];
-    [clearHistoryBtn addTarget:self action:@selector(clearHistoryBtnClick) forControlEvents:(UIControlEventTouchUpInside)];
-    [footerView addSubview:clearHistoryBtn];
-    
-    return footerView;
-}
-
-- (void)clearHistoryBtnClick
-{
-    [[NSUserDefaults standardUserDefaults] setValue:@[] forKey:CUS_SEARCH_HISTORY];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [self.historys removeAllObjects];
-    [self.tableView reloadData];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return self.historys.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *cellId = @"cellId";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:(UITableViewCellStyleDefault) reuseIdentifier:cellId];
-        cell.textLabel.font = [UIFont systemFontOfSize:15];
-    }
- 
-    cell.textLabel.text = self.historys[indexPath.row];
- 
-    return cell;
-}
-*/
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
