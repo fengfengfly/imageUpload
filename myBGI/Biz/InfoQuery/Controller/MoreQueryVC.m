@@ -114,7 +114,6 @@ static NSString *CellIDDetail = @"CellIDDetail";
     customerListVC.showClearBtn = YES;
     customerListVC.chooseBlock = ^(CustomerModel *model){
         if(model != nil){
-            
             self.customerCode = model.customerCode;
         }else{
             self.customerCode = nil;

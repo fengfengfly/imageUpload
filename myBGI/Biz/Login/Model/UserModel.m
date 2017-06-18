@@ -34,7 +34,7 @@
 
 - (BOOL)isLogin{
     if (_isLogin == NO) {
-        _isLogin = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogin"];
+        _isLogin = [[NSUserDefaults standardUserDefaults] boolForKey:@"isLogin"];
     }
     return _isLogin;
 }

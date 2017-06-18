@@ -20,6 +20,7 @@
 
 @implementation DeliverCountViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -89,7 +90,6 @@
             carouselView = self.productView;
             self.productView.frame = self.carouselView.frame;
             
-
         }
             break;
             

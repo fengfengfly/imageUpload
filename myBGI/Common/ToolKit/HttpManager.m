@@ -190,8 +190,8 @@
         if (error) {
 
         }else {
-            NSString *name = [filePath path];
 #if DEBUG
+            NSString *name = [filePath path];
             NSLog(@"finish_filePath -- %@", name);
 #endif
         }

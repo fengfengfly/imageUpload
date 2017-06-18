@@ -211,7 +211,7 @@ static NSString *reuseCell = @"popViewCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 #if DEBUG
-    NSLog(@"click：%ld",indexPath.row);
+    NSLog(@"click：%zd",indexPath.row);
     
 #endif
 

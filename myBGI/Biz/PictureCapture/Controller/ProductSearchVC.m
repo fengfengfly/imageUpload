@@ -187,10 +187,12 @@ static NSString *ProductCellID = @"ProductCellID";
         [self.historyView.historys insertObject:searchBar.text atIndex:0];
         [[NSUserDefaults standardUserDefaults] setValue:self.historyView.historys forKey:PRD_SEARCH_HISTORY];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        [self.searchBar resignFirstResponder];
     }
     self.dataPage = 1;
     [self hudSelfWithMessage:@"正在加载..."];
     [self reloadDataSource];
+    
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
