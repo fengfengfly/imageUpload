@@ -902,6 +902,7 @@ static NSString *PicCellID = @"PicCellID";
     __weak typeof(self) weakSelf = self;
     [model uploadIfSuccess:^{
         [weakSelf hideSelfHUD];
+        [weakSelf hudSelfTextMessage:@"上传成功!"];
         [itemArray removeObject:model];
         if (itemArray.count == 0) {
             
@@ -910,6 +911,7 @@ static NSString *PicCellID = @"PicCellID";
         [weakSelf.collectionView reloadData];
     } fail:^{
         [weakSelf hideSelfHUD];
+        [weakSelf hudSelfTextMessage:@"上传失败!"];
         [weakSelf.collectionView reloadData];
     }];
 }
@@ -925,12 +927,14 @@ static NSString *PicCellID = @"PicCellID";
             [tempArray addObject:dic];
         }
         BOOL isLast = NO;
-        NSInteger flag = 0;
+        NSInteger count = tempArray.count;
+        NSInteger flag = 1;
+        NSInteger __block failCount = 0;
         // 创建信号量，并且设置值为0
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
         for (NSDictionary *dic in tempArray) {
             
-            if (flag == tempArray.count - 1) {
+            if (flag == tempArray.count) {
                 isLast = YES;
             }
 #if DEBUG
@@ -945,6 +949,7 @@ static NSString *PicCellID = @"PicCellID";
             [model uploadIfSuccess:^{
                 if (isLast) {
                     [weakSelf hideSelfHUD];
+                    [weakSelf hudSelfTextMessage:[NSString stringWithFormat:@"全部%zd张,成功%zd张,失败%zd张!", count, count-failCount, failCount]];
                 }
                 [itemArray removeObject:model];
                 if (itemArray.count == 0) {
@@ -954,8 +959,10 @@ static NSString *PicCellID = @"PicCellID";
                 dispatch_semaphore_signal(semaphore);
                 [weakSelf.collectionView reloadData];
             } fail:^{
+                failCount ++;
                 if (isLast) {
                     [weakSelf hideSelfHUD];
+                    [weakSelf hudSelfTextMessage:[NSString stringWithFormat:@"全部%zd张,成功%zd张,失败%zd张!", count, count-failCount, failCount]];
                 }
                 dispatch_semaphore_signal(semaphore);
                 [weakSelf.collectionView reloadData];

@@ -1318,7 +1318,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 65E922G3MZ;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREFIX_HEADER = "$(SRCROOT)/myBGI/Config/PrefixHeader.pch";
 				INFOPLIST_FILE = myBGI/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1336,7 +1336,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 65E922G3MZ;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREFIX_HEADER = "$(SRCROOT)/myBGI/Config/PrefixHeader.pch";
 				INFOPLIST_FILE = myBGI/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
